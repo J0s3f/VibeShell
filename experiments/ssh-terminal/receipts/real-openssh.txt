@@ -1,0 +1,176 @@
+vibeshell SSH and terminal spike receipts
+generated: 2026-10-03T17:42:42Z
+image:    localhost/vibeshell-a03-ssh-terminal-sshspike:local
+base:     docker.io/library/golang:1.27.1-bookworm@sha256:69a7b9788769bec032d238959b61854e9ae87f57be9029ec04e9885fabf99195
+container: vibeshell-a03-ssh-terminal-sshspike
+client:   OpenSSH_9.2p1 Debian-2+deb12u10, OpenSSL 3.0.20 7 Apr 2026
+python:   Python 3.11.2
+PASS  go test -race -- exit 0 (receipt go-test-race.txt)
+
+$ printf 'exit 3\r' | ssh -tt -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR ada@127.0.0.1; echo "client exit $?"
+  welcome user=ada terminal= size=80x24 pty=true
+  exit 3
+  client exit 3
+  [podman exit 0]
+PASS  public auth: no password prompt, exit status 3 -- output matched
+
+$ printf 'exit 0\r' | ssh -T -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR ada@127.0.0.1; echo "client exit $?"
+  welcome user=ada terminal= size=80x24 pty=false
+  exit 0
+  client exit 0
+  [podman exit 0]
+PASS  public auth: a client with no pty gets the documented default size -- output matched
+
+$ printf 'ls\r' | ssh -tt -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR ada@127.0.0.1; echo "client exit $?"
+  welcome user=ada terminal= size=80x24 pty=true
+  unknown-command ls
+  resize 80x24
+  eof err=<nil>
+  client exit 0
+  [podman exit 0]
+PASS  public auth: end of input is an SSH EOF, exit status 0 -- output matched
+
+$ ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ada@127.0.0.1 ls -la; echo "client exit $?"
+  exec is not supported: vibeshell serves interactive shell sessions only
+  exec request failed on channel 0
+  client exit 255
+  [podman exit 0]
+PASS  exec is refused -- output matched
+
+$ timeout 20 ssh -s -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ada@127.0.0.1 sftp; echo "client exit $?"
+  subsystem is not supported: vibeshell serves interactive shell sessions only
+  subsystem request failed on channel 0
+  client exit 255
+  [podman exit 0]
+PASS  a requested subsystem (ssh -s) is refused -- output matched
+PASS  the server refuses exec and subsystem with a reason -- logged
+
+$ timeout 40 python3 /workspace/agentsocket.py ssh -A -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ada@127.0.0.1 ls < /dev/null
+  ssh-agent forwarding is not supported
+  exec request failed on channel 0
+  [podman exit 255]
+PASS  agent forwarding is refused but the session continues -- output matched
+PASS  the server refuses agent forwarding before the exec -- logged
+
+$ timeout 40 python3 /workspace/forwardcheck.py --port 2222 --user ada
+  [forward] ssh -f -N -L 19999:127.0.0.1:19998 -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ada@127.0.0.1
+  [forward] local listener accepted a connection
+  [forward] read error after connecting: [Errno 104] Connection reset by peer
+  [forward] read 0 bytes: b''
+  [forward] the forward was closed without data, which is how a refused direct-tcpip channel reaches a client
+  [podman exit 0]
+PASS  a used local forward is refused at the direct-tcpip channel -- output matched
+PASS  the server refuses the direct-tcpip channel -- logged
+
+$ timeout 90 python3 /workspace/ptyclient.py --port 2222 --user ada --initial 24x80 --resize-to 40x132 --fragment "$(printf '\033[A')" --send-hex 03 --send-text 'exit 0\r' --server-log /tmp/spike-server.log
+  [pty] window 24x80
+  [pty] command ssh -v -tt -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ada@127.0.0.1
+  [pty] welcome: OpenSSH_9.2p1 Debian-2+deb12u10, OpenSSL 3.0.20 7 Apr 2026\r\r\ndebug1: Reading configuration data /etc/ssh/ssh_config\r\r\ndebug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/*.conf matched no files\r\r\ndebug1: /etc/ssh/ssh_config line 21: Applying options for *\r\r\ndebug1: Connecting to 127.0.0.1 [127.0.0.1] port 2222.\r\r\ndebug1: Connection established.\r\r\ndebug1: identity file /root/.ssh/id_rsa type -1\r\r\ndebug1: identity file /root/.ssh/id_rsa-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_ecdsa type -1\r\r\ndebug1: identity file /root/.ssh/id_ecdsa-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_ecdsa_sk type -1\r\r\ndebug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_ed25519 type -1\r\r\ndebug1: identity file /root/.ssh/id_ed25519-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_ed25519_sk type -1\r\r\ndebug1: identity file /root/.ssh/id_ed25519_sk-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_xmss type -1\r\r\ndebug1: identity file /root/.ssh/id_xmss-cert type -1\r\r\ndebug1: identity file /root/.ssh/id_dsa type -1\r\r\ndebug1: identity file /root/.ssh/id_dsa-cert type -1\r\r\ndebug1: Local version string SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u10\r\r\ndebug1: Remote protocol version 2.0, remote software version vibeshell_spike\r\r\ndebug1: compat_banner: no match: vibeshell_spike\r\r\ndebug1: Authenticating to 127.0.0.1:2222 as 'ada'\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory\r\r\ndebug1: SSH2_MSG_KEXINIT sent\r\r\ndebug1: SSH2_MSG_KEXINIT received\r\r\ndebug1: kex: algorithm: curve25519-sha256\r\r\ndebug1: kex: host key algorithm: ssh-ed25519\r\r\ndebug1: kex: server->client cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none\r\r\ndebug1: kex: client->server cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none\r\r\ndebug1: expecting SSH2_MSG_KEX_ECDH_REPLY\r\r\ndebug1: SSH2_MSG_KEX_ECDH_REPLY received\r\r\ndebug1: Server host key: ssh-ed25519 SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory\r\r\ndebug1: checking without port identifier\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory\r\r\ndebug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory\r\r\nWarning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.\r\r\ndebug1: ssh_packet_send2_wrapped: resetting send seqnr 3\r\r\ndebug1: rekey out after 134217728 blocks\r\r\ndebug1: SSH2_MSG_NEWKEYS sent\r\r\ndebug1: expecting SSH2_MSG_NEWKEYS\r\r\ndebug1: ssh_packet_read_poll2: resetting read seqnr 3\r\r\ndebug1: SSH2_MSG_NEWKEYS received\r\r\ndebug1: rekey in after 134217728 blocks\r\r\ndebug1: Will attempt key: /root/.ssh/id_rsa \r\r\ndebug1: Will attempt key: /root/.ssh/id_ecdsa \r\r\ndebug1: Will attempt key: /root/.ssh/id_ecdsa_sk \r\r\ndebug1: Will attempt key: /root/.ssh/id_ed25519 \r\r\ndebug1: Will attempt key: /root/.ssh/id_ed25519_sk \r\r\ndebug1: Will attempt key: /root/.ssh/id_xmss \r\r\ndebug1: Will attempt key: /root/.ssh/id_dsa \r\r\ndebug1: SSH2_MSG_EXT_INFO received\r\r\ndebug1: kex_input_ext_info: server-sig-algs=<ssh-ed25519,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-256,rsa-sha2-512,ssh-rsa,ssh-dss>\r\r\ndebug1: kex_input_ext_info: ping@openssh.com (unrecognised)\r\r\ndebug1: SSH2_MSG_SERVICE_ACCEPT received\r\r\nAuthenticated to 127.0.0.1 ([127.0.0.1]:2222) using "none".\r\r\ndebug1: channel 0: new session [client-session] (inactive timeout: 0)\r\r\ndebug1: Entering interactive session.\r\r\ndebug1: pledge: network\r\r\ndebug1: Sending environment.\r\ndebug1: channel 0: setting env LC_CTYPE = "C.UTF-8"\r\ndebug1: pledge: fork\r\nwelcome user=ada terminal=xterm-256color size=80x24 pty=true\r\nenv LC_CTYPE=C.UTF-8\r\nresize 80x24\r\n
+  [pty] sent b'\x1b[A' one byte at a time
+  [pty] fragment result: key up\r\n
+  [pty] window 40x132 (ssh sends window-change on SIGWINCH)
+  [pty] resize result: resize 132x40\r\n
+  [pty] sent bytes 03
+  [pty] raw result: key ctrl+c\r\ninterrupt ctrl-c\r\n
+  [pty] sent text b'exit 0\r'
+  [pty] text result: debug1: client_input_channel_req: channel 0 rtype exit-status reply 0\r\nexit 0\r\ndebug1: channel 0: free: client-session, nchannels 1\r\r\nConnection to 127.0.0.1 closed.\r\r\nTransferred: sent 2368, received 1656 bytes, in 2.1 seconds\r\r\nBytes per second: sent 1108.0, received 774.9\r\r\ndebug1: Exit status 0\r\r\n
+  [pty] tail: 
+  [pty] ssh exited with status 0
+  [pty] server log:
+  time=2026-10-03T17:42:59.565Z level=INFO msg="spike server listening" addr=127.0.0.1:2222 mode=public host_key=/tmp/spike_host_key fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.442Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.443Z level=INFO msg="pty requested" user=ada terminal=" 80x24" modes_bytes=1 pixels=0x0
+  time=2026-10-03T17:43:00.443Z level=INFO msg="shell started" user=ada terminal=" 80x24"
+  time=2026-10-03T17:43:00.978Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.979Z level=INFO msg="shell started" user=ada terminal="no-pty 80x24"
+  time=2026-10-03T17:43:01.474Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:01.475Z level=INFO msg="pty requested" user=ada terminal=" 80x24" modes_bytes=1 pixels=0x0
+  time=2026-10-03T17:43:01.475Z level=INFO msg="shell started" user=ada terminal=" 80x24"
+  time=2026-10-03T17:43:01.986Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:01.987Z level=INFO msg="channel request refused" user=ada type=exec reason="exec is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:01.988Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:02.498Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:02.499Z level=INFO msg="channel request refused" user=ada type=subsystem reason="subsystem is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:02.500Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:03.998Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:03.999Z level=INFO msg="channel request refused" user=ada type=auth-agent-req@openssh.com reason="ssh-agent forwarding is not supported"
+  time=2026-10-03T17:43:03.999Z level=DEBUG msg="env accepted" user=ada name=LC_CTYPE
+  time=2026-10-03T17:43:03.999Z level=INFO msg="channel request refused" user=ada type=exec reason="exec is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:04.000Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:04.998Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:05.149Z level=INFO msg="channel refused" type=direct-tcpip reason="vibeshell opens interactive session channels only; direct-tcpip is not supported"
+  time=2026-10-03T17:43:05.149Z level=INFO msg="channel refused" type=direct-tcpip reason="vibeshell opens interactive session channels only; direct-tcpip is not supported"
+  time=2026-10-03T17:43:06.190Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:06.191Z level=INFO msg="pty requested" user=ada terminal="xterm-256color 80x24" modes_bytes=261 pixels=0x0
+  time=2026-10-03T17:43:06.191Z level=DEBUG msg="env accepted" user=ada name=LC_CTYPE
+  time=2026-10-03T17:43:06.191Z level=INFO msg="shell started" user=ada terminal="xterm-256color 80x24"
+  time=2026-10-03T17:43:07.324Z level=DEBUG msg="window change" user=ada terminal="xterm-256color 132x40"
+  [podman exit 0]
+PASS  pty resize, fragmented key, and Ctrl-C over a real pty -- output matched
+PASS  the server records the window-change a real client sent -- logged
+
+--- spike server log: public mode ---
+  time=2026-10-03T17:42:59.565Z level=INFO msg="spike server listening" addr=127.0.0.1:2222 mode=public host_key=/tmp/spike_host_key fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.442Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.443Z level=INFO msg="pty requested" user=ada terminal=" 80x24" modes_bytes=1 pixels=0x0
+  time=2026-10-03T17:43:00.443Z level=INFO msg="shell started" user=ada terminal=" 80x24"
+  time=2026-10-03T17:43:00.978Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:00.979Z level=INFO msg="shell started" user=ada terminal="no-pty 80x24"
+  time=2026-10-03T17:43:01.474Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:01.475Z level=INFO msg="pty requested" user=ada terminal=" 80x24" modes_bytes=1 pixels=0x0
+  time=2026-10-03T17:43:01.475Z level=INFO msg="shell started" user=ada terminal=" 80x24"
+  time=2026-10-03T17:43:01.986Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:01.987Z level=INFO msg="channel request refused" user=ada type=exec reason="exec is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:01.988Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:02.498Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:02.499Z level=INFO msg="channel request refused" user=ada type=subsystem reason="subsystem is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:02.500Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:03.998Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:03.999Z level=INFO msg="channel request refused" user=ada type=auth-agent-req@openssh.com reason="ssh-agent forwarding is not supported"
+  time=2026-10-03T17:43:03.999Z level=DEBUG msg="env accepted" user=ada name=LC_CTYPE
+  time=2026-10-03T17:43:03.999Z level=INFO msg="channel request refused" user=ada type=exec reason="exec is not supported: vibeshell serves interactive shell sessions only"
+  time=2026-10-03T17:43:04.000Z level=DEBUG msg="channel closed before a shell was requested" user=ada
+  time=2026-10-03T17:43:04.998Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:05.149Z level=INFO msg="channel refused" type=direct-tcpip reason="vibeshell opens interactive session channels only; direct-tcpip is not supported"
+  time=2026-10-03T17:43:05.149Z level=INFO msg="channel refused" type=direct-tcpip reason="vibeshell opens interactive session channels only; direct-tcpip is not supported"
+  time=2026-10-03T17:43:06.190Z level=DEBUG msg="public session accepted" user=ada fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:06.191Z level=INFO msg="pty requested" user=ada terminal="xterm-256color 80x24" modes_bytes=261 pixels=0x0
+  time=2026-10-03T17:43:06.191Z level=DEBUG msg="env accepted" user=ada name=LC_CTYPE
+  time=2026-10-03T17:43:06.191Z level=INFO msg="shell started" user=ada terminal="xterm-256color 80x24"
+  time=2026-10-03T17:43:07.324Z level=DEBUG msg="window change" user=ada terminal="xterm-256color 132x40"
+
+$ test "$(ASKPASS_FILE=/tmp/spike-password /tmp/askpass.sh)" = 'open sesame' && echo askpass-ok
+  askpass-ok
+  [podman exit 0]
+PASS  the askpass helper supplies the stored password -- output matched
+
+$ printf 'exit 0\r' | SSH_ASKPASS=/tmp/askpass.sh SSH_ASKPASS_REQUIRE=force ASKPASS_FILE=/tmp/spike-password ssh -tt -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o PreferredAuthentications=password grace@127.0.0.1; echo "client exit $?"
+  welcome user=grace terminal= size=80x24 pty=true
+  exit 0
+  client exit 0
+  [podman exit 0]
+PASS  password mode: correct password is accepted -- output matched
+
+$ SSH_ASKPASS=/tmp/askpass.sh SSH_ASKPASS_REQUIRE=force ASKPASS_FILE=/tmp/spike-wrong-password ssh -tt -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o NumberOfPasswordPrompts=1 -o PreferredAuthentications=password grace@127.0.0.1; echo "client exit $?"
+  grace@127.0.0.1: Permission denied (password).
+  client exit 255
+  [podman exit 0]
+PASS  password mode: wrong password is refused -- output matched
+
+$ ssh -T -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR grace@127.0.0.1 </dev/null; echo "client exit $?"
+  grace@127.0.0.1: Permission denied (password).
+  client exit 255
+  [podman exit 0]
+PASS  password mode: a client with no password is refused -- output matched
+
+--- spike server log: password mode ---
+  time=2026-10-03T17:43:11.573Z level=INFO msg="spike server listening" addr=127.0.0.1:2222 mode=password host_key=/tmp/spike_host_key fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:13.754Z level=DEBUG msg="password session accepted" user=grace fingerprint=SHA256:GcTuzu3P8/fc52OsAHZbMosNGmcva2/qICEY8/Kqqi8
+  time=2026-10-03T17:43:13.754Z level=INFO msg="pty requested" user=grace terminal=" 80x24" modes_bytes=1 pixels=0x0
+  time=2026-10-03T17:43:13.755Z level=INFO msg="shell started" user=grace terminal=" 80x24"
+  time=2026-10-03T17:43:14.291Z level=INFO msg="password session refused" user=grace remote=127.0.0.1:44108 reason="authentication refused: wrong password"
+  time=2026-10-03T17:43:14.292Z level=INFO msg="handshake refused" remote=127.0.0.1:44108 error="[ssh: no auth passed yet, authentication refused: authentication refused: wrong password]"
+  time=2026-10-03T17:43:14.803Z level=INFO msg="handshake refused" remote=127.0.0.1:44124 error="[ssh: no auth passed yet]"
+PASS  terminal and transport probes -- exit 0 (receipt probes.txt)
+
+result: all checks passed

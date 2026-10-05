@@ -1,0 +1,3 @@
+gofmt -l output (empty above): exit=0
+go vet: PASS
+go build: PASS

@@ -1,0 +1,10 @@
+{
+  "class": "quota_exhausted",
+  "message": "account quota exhausted for product console until reset",
+  "route_id": "rte_0123456789ABCDEFGHJKMNPQRS",
+  "account_id": "acc_0123456789ABCDEFGHJKMNPQRS",
+  "retry_after_ms": 600000,
+  "status_code": 429,
+  "raw_error": "quota exceeded (redacted)",
+  "timestamp": 1798732800000
+}

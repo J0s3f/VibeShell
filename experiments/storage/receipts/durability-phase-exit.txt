@@ -1,0 +1,2 @@
+ending the process without closing the database; the committed frames are
+still only in the write-ahead log, which is what the read phase recovers from

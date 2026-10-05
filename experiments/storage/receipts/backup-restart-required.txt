@@ -1,0 +1,5 @@
+The cross-container backup and restore proof is not produced by this test.
+Run experiments/restart-spike.ps1 from the checkout root; it runs
+SPIKE_PHASE=backup-write, replaces the container, runs
+SPIKE_PHASE=restore, replaces it again, and runs
+SPIKE_PHASE=restore-verify.

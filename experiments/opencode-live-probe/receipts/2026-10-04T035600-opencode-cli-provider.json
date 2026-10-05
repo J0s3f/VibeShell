@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-04T03:56:00Z",
+  "mode": "live",
+  "redacted": true,
+  "experiment": "opencode-cli-provider-end-to-end",
+  "service": "cmd/vibeshell run (real SSH listener; CLI provider via the authenticated OpenCode CLI)",
+  "route": {
+    "provider": "opencode",
+    "kind": "cli",
+    "product": "console",
+    "protocol": "chat",
+    "model": "mimo-v2.6-flash-free",
+    "binary": "/root/.opencode/bin/opencode",
+    "cli_invocation": "opencode run -m opencode/mimo-v2.6-flash-free --format json <prompt>"
+  },
+  "steps": [
+    {
+      "step": "config-validation",
+      "observed": "the loader accepted a cli provider (base_url is the CLI binary path, protocols [\"chat\"]) and a credential-less account (permitted_products [\"console\"], no secret_ref)",
+      "result": "configuration is valid: snapshot 0: auth=public sharing=true tiers=[motd-cli-primary motd-free-primary motd-free-fallback generation] accounts=2 secrets=1"
+    },
+    {
+      "step": "motd-via-cli-provider",
+      "route_id": "rte_0123456789ABCDEFGHJKMNPQRT",
+      "account_id": "acc_0123456789ABCDEFGHJKMNPQRT",
+      "request_result": "success",
+      "duration_ms": 12194,
+      "observed": "the composed registry dispatched the MOTD request to the cli-kind provider, which invoked the authenticated OpenCode CLI and returned assistant text; the rendered MOTD was presented over real SSH"
+    }
+  ],
+  "verified": [
+    "config.Provider.Kind selects the implementation, and the loader validates the cli and credential-less-account rules",
+    "provider.Registry dispatches a route to the CLI adapter rather than the HTTP gateway",
+    "the CLI adapter runs the OpenCode CLI with -m <provider>/<model> --format json and collects the assistant text",
+    "a credential-less account is accepted for routing and is not registered with the HTTP gateway",
+    "the MOTD was generated through the CLI provider end-to-end in the composed service"
+  ],
+  "limits": [
+    "one CLI model (mimo-v2.6-flash-free) was exercised; the CLI is the client for the Console free tier that the direct HTTP API rejects with 403 FreeTierError",
+    "the CLI is a subprocess per request (~12s in this run); latency and concurrency remain bounded by the existing admission gate",
+    "this receipt contains no API key or CLI OAuth token"
+  ]
+}

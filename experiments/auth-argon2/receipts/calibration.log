@@ -1,0 +1,17 @@
+=== RUN   TestCalibrationReport
+    measure_test.go:97: host: NumCPU=4 GOMAXPROCS=4
+    measure_test.go:98: target: median duration in [100ms, 250ms]
+    measure_test.go:99: parameters                       hash size    duration
+    measure_test.go:121: m=16384,t=2,p=1                  16 MiB       n=7 min=19.270ms median=21.284ms mean=21.085ms max=22.862ms
+    measure_test.go:121: m=19456,t=2,p=1                  19 MiB       n=7 min=22.917ms median=23.862ms mean=25.145ms max=30.043ms
+    measure_test.go:121: m=32768,t=3,p=2                  32 MiB       n=7 min=34.007ms median=39.500ms mean=38.454ms max=43.347ms
+    measure_test.go:121: m=65536,t=3,p=3                  64 MiB       n=7 min=66.356ms median=78.174ms mean=75.379ms max=82.673ms
+    measure_test.go:121: m=65536,t=4,p=4                  64 MiB       n=7 min=69.662ms median=79.860ms mean=78.324ms max=83.473ms
+    measure_test.go:121: m=131072,t=3,p=4                 128 MiB      n=7 min=119.535ms median=125.849ms mean=131.756ms max=167.635ms  <- in target
+    measure_test.go:121: m=131072,t=4,p=4                 128 MiB      n=7 min=147.925ms median=162.430ms mean=171.203ms max=242.440ms  <- in target
+    measure_test.go:121: m=196608,t=3,p=4                 192 MiB      n=7 min=409.935ms median=514.200ms mean=494.504ms max=564.240ms
+    measure_test.go:121: m=262144,t=3,p=4                 256 MiB      n=7 min=437.009ms median=555.874ms mean=546.047ms max=679.232ms
+    measure_test.go:126: recommended default: m=131072,t=3,p=4
+--- PASS: TestCalibrationReport (13.91s)
+PASS
+ok  	j0s.at/vibeshell/experiments/auth-argon2	14.009s

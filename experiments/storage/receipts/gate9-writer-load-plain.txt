@@ -1,0 +1,26 @@
+Gate 9: writer load
+===================
+captured (UTC)             2026-10-03T14:59:37Z
+run label                  plain
+turn shape                 one 4096 byte file, one event, its command and path index rows
+turns per run              240
+concurrent submitters      4
+queue capacity             8
+
+synchronous-FULL
+turns committed            240 in 0.440s
+turns per second           546.0
+commit latency             mean 1.81ms, max 7.37ms
+turn body latency          p50 0.28ms, p95 0.40ms, p99 0.55ms
+queue                      capacity 8, max depth 8, rejected 0, failures 0
+volume                     1531904 bytes, 366 pages of 4096
+
+synchronous-NORMAL
+turns committed            240 in 0.174s
+turns per second           1376.2
+commit latency             mean 0.71ms, max 13.42ms
+turn body latency          p50 0.20ms, p95 0.35ms, p99 0.61ms
+queue                      capacity 8, max depth 8, rejected 0, failures 0
+volume                     1531904 bytes, 366 pages of 4096
+FULL costs                 60.3% of the NORMAL rate on this machine
+limits                     rough figures on this container's volume; not a capacity limit, and the race-detector run's timings are inflated

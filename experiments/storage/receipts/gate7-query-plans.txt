@@ -1,0 +1,13 @@
+Gate 7e: query plans
+====================
+subtree range        SEARCH path_index USING INDEX path_index_key (path_key>? AND path_key<?)
+exact path           SEARCH path_index USING INDEX path_index_path (path=?)
+prefix LIKE          SEARCH path_index USING INDEX path_index_key (path_key>? AND path_key<?)
+substring LIKE       SCAN path_index USING COVERING INDEX path_index_path
+exact command        SEARCH command_index USING INDEX command_index_exact (command=?)
+normalized command   SEARCH command_index USING INDEX command_index_normalized (normalized_command=?)
+session transcript   SEARCH events USING INDEX events_user_time (session_id=?)
+full-text search     SCAN transcript_fts VIRTUAL TABLE INDEX 0:M2
+subtree range plan         SEARCH path_index USING INDEX path_index_key (path_key>? AND path_key<?)
+substring plan             SCAN path_index USING COVERING INDEX path_index_path
+conclusion                 prefix, exact, and session lookups are index searches; a substring LIKE falls back to a scan of the covering index, which is why the key range was chosen

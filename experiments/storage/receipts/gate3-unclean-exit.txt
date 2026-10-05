@@ -1,0 +1,14 @@
+Gate 3d: state left by an unclean exit
+======================================
+database                   /state/spike/TestSynchronousFullSurvivesForcedExit/unclean.db
+synchronous                2
+while connected            3 entries
+  unclean.db               4096 bytes
+  unclean.db-shm           32768 bytes
+  unclean.db-wal           193672 bytes
+after an uncheckpointed commit 3 entries
+  unclean.db               4096 bytes
+  unclean.db-shm           32768 bytes
+  unclean.db-wal           201912 bytes
+visible to a second connection true
+note                       the restart phase reopens this state; recovery is SQLite's own, driven by the log next to the database

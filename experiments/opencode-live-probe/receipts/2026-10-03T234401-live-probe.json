@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-03T23:43:58Z",
+  "mode": "live",
+  "catalogues": [
+    {
+      "product": "console",
+      "url": "https://opencode.ai/inference/v1/models",
+      "status": 200,
+      "bytes": 6860,
+      "sha256": "dae41cfd628361dc",
+      "count": 82
+    },
+    {
+      "product": "go",
+      "url": "https://opencode.ai/zen/go/v1/models",
+      "status": 200,
+      "bytes": 3569,
+      "sha256": "e558f4a07bec8e79",
+      "count": 43
+    }
+  ],
+  "probes": [
+    {
+      "product": "console",
+      "protocol": "chat",
+      "model": "fledge-alpha-free",
+      "status": 404,
+      "latency_ms": 119,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "gateway: status=404 category=model_not_found retryable=false: request failed with status 404"
+    },
+    {
+      "product": "go",
+      "protocol": "chat",
+      "model": "longcat-2.5-preview-free",
+      "status": 200,
+      "latency_ms": 2087,
+      "stream_decode_ok": true,
+      "tool_params_accepted": true,
+      "tool_calls_observed": 0
+    },
+    {
+      "product": "console",
+      "protocol": "responses",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    },
+    {
+      "product": "go",
+      "protocol": "responses",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    },
+    {
+      "product": "console",
+      "protocol": "messages",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    },
+    {
+      "product": "go",
+      "protocol": "messages",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    },
+    {
+      "product": "console",
+      "protocol": "gemini",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    },
+    {
+      "product": "go",
+      "protocol": "gemini",
+      "model": "",
+      "latency_ms": 0,
+      "stream_decode_ok": false,
+      "tool_params_accepted": false,
+      "tool_calls_observed": 0,
+      "error": "no eligible free model with this protocol"
+    }
+  ],
+  "redacted": true
+}

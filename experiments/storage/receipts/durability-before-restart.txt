@@ -1,0 +1,16 @@
+Gate 3a: durable write phase
+============================
+phase                      (unphased run)
+captured (UTC)             2026-10-03T14:59:43Z
+database                   /state/spike/durability/vibeshell.db
+committed content hash     7c5f3211ad03aca04f1cf21d9acf5b49d6297fc62f74b46b2998798a925be2ba
+journal_mode               wal
+synchronous                2
+wal_autocheckpoint         1000
+state directory (connection open) 3 entries
+  vibeshell.db             4096 bytes
+  vibeshell.db-shm         32768 bytes
+  vibeshell.db-wal         201912 bytes
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0

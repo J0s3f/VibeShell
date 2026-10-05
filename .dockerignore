@@ -1,0 +1,23 @@
+# Build context exclusions. Keeps local research clones, other agents'
+# checkouts, receipts, generated output, and credentials out of image builds.
+.git
+.github
+.gitignore
+.gitattributes
+.research
+.worktrees
+.dev
+secrets
+data
+out
+dist
+coverage
+config.local.*
+*.key
+*.pem
+docs
+scripts
+experiments
+*.md
+*.test
+*.prof

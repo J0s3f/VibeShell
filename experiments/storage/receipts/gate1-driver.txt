@@ -1,0 +1,47 @@
+Gate 1: driver and SQLite version
+=================================
+captured (UTC)             2026-10-03T14:59:43Z
+database                   /state/spike/TestDriverAndSQLiteVersion/driver.db
+
+toolchain
+go                         go1.27.1
+driver module              v1.60.1
+build setting CGO_ENABLED      1
+
+database/sql
+registered drivers         1 entries
+  sqlite
+
+SQLite build
+sqlite_version()           3.53.4
+sqlite_source_id()         2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc
+page_size                  4096
+max_page_count             4294967294
+encoding                   UTF-8
+journal_mode               wal
+wal_autocheckpoint         1000
+
+compile options of interest
+compile options            56
+option ENABLE_FTS5       true
+option ENABLE_FTS4       false
+option ENABLE_FTS3       false
+option ENABLE_JSON1      false
+option ENABLE_MATH_FUNCTIONS true
+
+schema
+table contents             rows 0
+table nodes                rows 0
+table directory_revisions  rows 0
+table events               rows 0
+table command_index        rows 0
+table path_index           rows 0
+table search_docs          rows 0
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+
+state volume
+mount point                /state
+filesystem                 ext4
+source                     /dev/sdd

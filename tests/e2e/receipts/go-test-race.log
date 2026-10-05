@@ -1,0 +1,117 @@
+# VibeShell SSH acceptance receipt: go test driver (PLAN 15.5 D04)
+#
+# command:  go test -race -count=1 ./tests/e2e/...
+# date:     2026-10-03T18:47:42Z
+# go:       go version go1.27.1 linux/amd64
+# kernel:   Linux 6.18.33.2-microsoft-standard-WSL2 x86_64
+#
+# The test runs tests/e2e/ssh-acceptance.sh, so this is the same acceptance
+# run under the race detector with a port derived from the test process PID.
+
+=== RUN   TestSSHAcceptanceSuite
+    acceptance_test.go:60: acceptance suite output:
+        === VibeShell SSH acceptance suite ===
+        repository: /workspace
+        work directory: /tmp/vibeshell-e2e-test-3545850716
+        ssh client: OpenSSH_9.2p1 Debian-2+deb12u10, OpenSSL 3.0.20 7 Apr 2026
+        go: go version go1.27.1 linux/amd64
+        
+        --- build ---
+        PASS  build service binary and acceptance tool
+        
+        --- configure (public 127.0.0.1:23172, secure 127.0.0.1:23173) ---
+        prepared public.json (127.0.0.1:23172) and secure.json (127.0.0.1:23173) in /tmp/vibeshell-e2e-test-3545850716
+        PASS  prepare strict-JSON configurations and owner-only password file
+        PASS  password file is owner-only (-rw-------)
+        
+        --- validate configuration ---
+        PASS  public configuration validates
+        PASS  secure configuration validates
+        
+        --- public mode: none authentication, MOTD, prompt ---
+        PASS  service starts and binds 127.0.0.1:23172
+        PASS  public none auth connects and shows the MOTD
+        PASS  MOTD truthfully reports the unavailable generator
+        PASS  shell prompt is the familiar user@host:dir form
+        
+        --- simulated identity commands ---
+        PASS  pwd reports the simulated home directory
+        PASS  whoami reports the public principal
+        PASS  uname reports the configured system name
+        PASS  uname -a reports the simulated kernel identity
+        
+        --- unknown command: truthful unavailable, no fake success ---
+        PASS  unknown command reports generation unavailable
+        PASS  unknown command names the command it refused
+        PASS  unknown command does not fake a shell result
+        PASS  session still answers after an unknown command
+        
+        --- PTY and window-change ---
+        PASS  the client negotiated a pty (pty-req accepted)
+              (window-change via the scripted x/crypto/ssh client)
+              resize ok pty=100x40 window-change=120x50 session-survived=true cwd=/home/alice
+        PASS  window-change is accepted and the session survives (exit 0)
+        
+        --- refused exec, subsystem, and forwarding ---
+        PASS  exec request is refused by the client
+        PASS  exec refusal exits non-zero (exit 255)
+        PASS  subsystem request is refused by the client
+        PASS  subsystem refusal exits non-zero (exit 255)
+        PASS  remote port forwarding is refused
+        PASS  forwarding refusal exits non-zero (exit 255)
+        PASS  direct-tcpip channel (ssh -W) is refused
+        PASS  no forwarded byte reached the shell
+        PASS  the server logged the refused direct-tcpip channel
+        PASS  the server logged the refused tcpip-forward request
+        
+        --- Ctrl-C ---
+        PASS  Ctrl-C echoes the interrupt
+        PASS  Ctrl-C discards the pending line instead of running it
+        PASS  session still answers after Ctrl-C
+        
+        --- second session and restart durability ---
+        PASS  first session answered the identity commands
+        PASS  durable event store is readable while the service is stopped (exit 0)
+              summary events=163 sessions=6 users=1 closed=6
+        PASS  sessions are durably recorded (163 events in 6 sessions)
+        PASS  service restarts against the same database
+        PASS  reconnected session reports the same home directory
+        PASS  reconnected session reports the same principal
+              summary events=214 sessions=7 users=1 closed=7
+        PASS  restart preserves the durable record and extends it (163 -> 214 events)
+        PASS  a reconnect appends a new session rather than a new world (6 -> 7 sessions)
+              durable identities across public alice sessions: usr_YJP5CBHTZGZV1J6PHPDNGGKNSW
+        PASS  every public alice session maps to one durable identity
+        PASS  every session recorded a durable session.end (7/7)
+        
+        --- secure mode: password authentication ---
+        PASS  secure-mode service starts on 127.0.0.1:23173
+        PASS  secure alice authenticates with the correct password
+        PASS  secure alice cannot authenticate with bob's password
+        PASS  a wrong password is refused (exit 255)
+        PASS  an unknown secure user cannot authenticate
+        PASS  an unknown secure user is refused (exit 255)
+        PASS  a disabled secure user cannot authenticate
+        PASS  a disabled user is refused even with the correct password (exit 255)
+        PASS  secure mode refuses the public none method (exit 255)
+              secure-mode identity: usr_DPPJK9C0XYVK0HTETVGWZBRMEM
+              public-mode identity: usr_YJP5CBHTZGZV1J6PHPDNGGKNSW
+        PASS  secure and public identity namespaces do not collide
+        PASS  every secure session records the secure auth mode (1/1)
+        PASS  every secure session recorded a durable session.end (1/1)
+        
+        --- internal status surface (no second public port) ---
+              subsystem   status     detail
+              config      healthy    validated /tmp/vibeshell-e2e-test-3545850716/public.json
+              presentation healthy   MOTD prompt /tmp/vibeshell-e2e-test-3545850716/prompts/motd.txt
+              storage     healthy    schema v2, 214 events
+              provider    degraded   no account configured; generation unavailable
+              ssh         ready      listen 127.0.0.1:23172
+        
+        === RESULT: 54/54 checks passed ===
+        === ACCEPTANCE: PASS ===
+        work directory kept at /tmp/vibeshell-e2e-test-3545850716
+--- PASS: TestSSHAcceptanceSuite (40.89s)
+PASS
+ok  	j0s.at/vibeshell/tests/e2e	41.907s
+?   	j0s.at/vibeshell/tests/e2e/fixtures	[no test files]

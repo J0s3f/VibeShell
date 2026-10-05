@@ -1,0 +1,6 @@
+{
+  "category": "denied",
+  "code": "sharing_disabled",
+  "message": "shared read denied while sharing is disabled",
+  "details": { "scope": "shared", "policy_revision": "7" }
+}

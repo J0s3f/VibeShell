@@ -1,0 +1,32 @@
+{
+  "request": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "messages": [
+      { "role": "user", "content": "uname -a\n" }
+    ],
+    "max_tokens": 4096,
+    "deadline_ms": 120000,
+    "request_id": "req-quota-001"
+  },
+  "result": {
+    "request_id": "req-quota-001",
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "message": { "role": "assistant", "content": "" },
+    "finish_reason": "error",
+    "usage": { "prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0 },
+    "error": {
+      "class": "quota_exhausted",
+      "message": "account quota exhausted for product console until reset",
+      "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "retry_after_ms": 600000,
+      "status_code": 429,
+      "raw_error": "quota exceeded (redacted)",
+      "timestamp": 1798732800000
+    },
+    "latency_ms": 410,
+    "timestamp": 1798732800000
+  }
+}

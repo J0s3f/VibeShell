@@ -1,0 +1,20 @@
+{
+  "input": {
+    "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "user_id": "usr_GFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "event": "paste",
+    "sequence": 40,
+    "terminal": { "type": "xterm-256color", "cols": 100, "rows": 30 },
+    "text": "printf '%s' 'Grüße, 世界 🌍 — naïve café' | base64 > bündel.bin\n"
+  },
+  "output": {
+    "kind": "frames",
+    "frames": [
+      { "text": "" },
+      { "content_ref": { "hash": "cnt_EFJ9KQ2M4XP7DBTVZC6HJFRSNW", "size": 40, "media_type": "text/plain; charset=utf-8" } }
+    ],
+    "prompt": "alice@gaia:~/projects$ ",
+    "outcome": "completed",
+    "exit_status": 0
+  }
+}

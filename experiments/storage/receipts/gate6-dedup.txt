@@ -1,0 +1,13 @@
+Gate 6b: content is stored once and shared
+==========================================
+shared blob                65536 bytes, ad52805e1c65
+copy-a.bin commit          accepted
+copy-b.bin commit          accepted
+content rows for the hash  1
+nodes referencing it       2
+re-presented in a rebase   accepted
+one byte different         d77d4328259a is a separate blob; contents rows now 2
+distinct payload bytes     131072
+database and log bytes     572496
+files referencing content  2
+conclusion                 three files share one stored blob; a single changed byte produces a second blob

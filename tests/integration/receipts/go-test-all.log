@@ -1,0 +1,27 @@
+ok  	j0s.at/vibeshell/cmd/vibeshell	1.043s
+ok  	j0s.at/vibeshell/internal/adapters/config	1.494s
+ok  	j0s.at/vibeshell/internal/adapters/opencode	1.590s
+ok  	j0s.at/vibeshell/internal/adapters/sandbox	77.402s
+ok  	j0s.at/vibeshell/internal/adapters/sqlite	5.627s
+ok  	j0s.at/vibeshell/internal/adapters/ssh	2.601s
+?   	j0s.at/vibeshell/internal/adapters/ssh/testserver	[no test files]
+ok  	j0s.at/vibeshell/internal/admin	1.185s
+ok  	j0s.at/vibeshell/internal/application	1.295s
+ok  	j0s.at/vibeshell/internal/apps	1.091s
+ok  	j0s.at/vibeshell/internal/buildinfo	1.064s
+ok  	j0s.at/vibeshell/internal/domain	1.307s
+ok  	j0s.at/vibeshell/internal/export	1.286s
+ok  	j0s.at/vibeshell/internal/interactions	1.519s
+ok  	j0s.at/vibeshell/internal/observability	1.249s
+?   	j0s.at/vibeshell/internal/ports	[no test files]
+ok  	j0s.at/vibeshell/internal/presentation	1.075s
+ok  	j0s.at/vibeshell/internal/routing	1.126s
+ok  	j0s.at/vibeshell/internal/simulation	1.057s
+ok  	j0s.at/vibeshell/internal/system	1.017s
+?   	j0s.at/vibeshell/internal/terminal	[no test files]
+ok  	j0s.at/vibeshell/internal/terminal/editor	1.021s
+ok  	j0s.at/vibeshell/internal/terminal/input	1.040s
+ok  	j0s.at/vibeshell/internal/terminal/renderer	1.038s
+ok  	j0s.at/vibeshell/internal/terminal/screen	1.050s
+ok  	j0s.at/vibeshell/tests/contract	1.389s
+ok  	j0s.at/vibeshell/tests/integration	1.926s

@@ -1,0 +1,5 @@
+Gate 5e: distinguishable conflict reasons
+=========================================
+revision from the future   storage: conflict on seed-0000 (revision): revision is 1, the turn read 100
+node that does not exist   storage: conflict on absent (revision): the node was removed by another turn
+parent directory without a revision storage: conflict on no-such-dir (directory listing): parent directory has no membership revision

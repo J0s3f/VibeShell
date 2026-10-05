@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "identity": {
+    "system_name": "VibeOS",
+    "shell_name": "VibeShell",
+    "hostname": "gaia"
+  },
+  "ssh": {
+    "listen_port": 2222,
+    "host_key_file": "/var/lib/vibeshell/ssh_host_ed25519_key"
+  },
+  "auth": {
+    "mode": "secure",
+    "password_file": "/var/lib/vibeshell/passwords"
+  },
+  "sharing": {
+    "enabled": false,
+    "policy_revision": 7
+  },
+  "tiers": [
+    { "name": "tier1-named-free", "routes": ["opencode/console/example-free-model"] },
+    { "name": "tier2-auto-free", "routes": ["opencode/console/auto-free"], "auto_free": true, "account_pool": "free-pool" },
+    { "name": "tier3-go", "routes": ["opencode-go/example-cheap-model"] }
+  ],
+  "persistence": {
+    "database_path": "/var/lib/vibeshell/vibeshell.db",
+    "durability": "FULL"
+  },
+  "prompts": {
+    "motd": "prompts/v1/motd.txt",
+    "shell_behavior": "prompts/v1/shell-behavior.txt",
+    "app_generation": "prompts/v1/app-generation.txt",
+    "app_extension": "prompts/v1/app-extension.txt",
+    "world_materialization": "prompts/v1/world-materialization.txt",
+    "summary_repair": "prompts/v1/summary-repair.txt",
+    "motd_line_budget": 12
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "identity": {
+    "system_name": "VibeOS",
+    "shell_name": "VibeShell",
+    "hostname": "vibeshell.example"
+  },
+  "ssh": {
+    "listen_port": 2222,
+    "host_key_file": "/etc/vibeshell/host_key",
+    "max_connections": 512,
+    "idle_timeout_ms": 300000
+  },
+  "auth": {
+    "mode": "secure",
+    "password_file": "/etc/vibeshell/passwords.argon2",
+    "max_attempts_per_connection": 5
+  },
+  "sharing": {
+    "enabled": true,
+    "policy_revision": 3
+  },
+  "tiers": [
+    {
+      "name": "named-free",
+      "routes": [
+        "opencode/ling-3.1-flash-free",
+        "opencode/deepseek-v4.1-flash-free",
+        "opencode/qwen3.6-flash-free"
+      ]
+    },
+    {
+      "name": "free-discovery",
+      "auto_free": true,
+      "routes": ["opencode/-free"]
+    },
+    {
+      "name": "go-native",
+      "routes": [
+        "opencode-go/ling-3.1-flash",
+        "opencode-go/deepseek-v4.1-flash"
+      ]
+    },
+    {
+      "name": "cheap-payg",
+      "routes": ["zen/gpt-5.1-nano", "zen/minimax-m3-turbo"],
+      "account_pool": "payg-accounts"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "opencode-primary",
+      "quota_group": "team-a",
+      "permitted_products": ["opencode", "opencode-go"],
+      "secret_ref": "{file:accounts/opencode-primary.key}"
+    },
+    {
+      "id": "zen-payg",
+      "quota_group": "payg",
+      "permitted_products": ["zen"],
+      "secret_ref": "{env:VIBESHELL_ZEN_API_KEY_FAKE}"
+    }
+  ],
+  "limits": {
+    "turn_deadline_ms": 120000,
+    "max_attempts": 4,
+    "max_output_bytes": 1048576,
+    "max_content_bytes": 4194304
+  },
+  "persistence": {
+    "database_path": "/var/lib/vibeshell/world.db",
+    "durability": "FULL",
+    "backup_dir": "/var/backups/vibeshell"
+  },
+  "providers": {
+    "opencode": {
+      "enabled": true,
+      "endpoint": "https://opencode.example.internal",
+      "protocols": ["opencode"]
+    },
+    "opencode-go": {
+      "enabled": true,
+      "endpoint": "https://opencode-go.example.internal",
+      "protocols": ["opencode-go"]
+    },
+    "zen": {
+      "enabled": true,
+      "endpoint": "https://zen.example.internal",
+      "protocols": ["zen"]
+    }
+  },
+  "prompts": {
+    "motd": "prompts/motd.md",
+    "shell": "prompts/shell.md",
+    "app_generate": "prompts/app_generate.md",
+    "app_extend": "prompts/app_extend.md",
+    "world": "prompts/world.md",
+    "summary": "prompts/summary.md",
+    "repair": "prompts/repair.md"
+  },
+  "discovery": {
+    "refresh_ms": 60000,
+    "stale_after_ms": 600000,
+    "metadata_source": "https://catalogue.example.internal/routes.json"
+  },
+  "inference": {
+    "request_timeout_ms": 30000,
+    "max_tokens_per_turn": 65536,
+    "max_concurrent": 64,
+    "queue_depth": 256
+  },
+  "operations": {
+    "log_level": "info",
+    "shutdown_grace_ms": 5000
+  }
+}

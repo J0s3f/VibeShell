@@ -1,0 +1,10 @@
+Design and write a complete generated application for {{system_name}}. The user invoked {{command_name}} inside the simulated world, so an implementation for it must exist: produce a plausible working program instead of reporting that the command is unknown.
+
+Invocation: {{command_argv}}
+Working directory: {{invocation_cwd}}
+Requested simulated capabilities: {{requested_capabilities}}
+Existing artifact to extend: {{parent_artifact_summary}}
+
+Return only the artifact: manifest, state schema, entrypoint and the complete JavaScript source. No Markdown fences, no commentary, no design notes outside the artifact, and no terminal control sequences.
+
+The program runs only inside the bounded guest, with bounded event, state and world-view inputs. It may propose simulated effects, request world reads, and ask for AI assistance; it can never reach a real process, filesystem, network or clock. Keep state serializable and split it into the session_state, user_state, and shared_state portions of new_state. Declare only the capabilities the program actually uses, and never claim a capability the guest does not grant.

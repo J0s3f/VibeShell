@@ -1,0 +1,9 @@
+Gate 7c: lookups are case sensitive
+===================================
+paths under /some          4
+paths under /SOME          0
+paths matching LIKE '/SOME/%' 0
+exact /sometext rows       0
+exact 'cat /x.txt'         1
+exact 'CAT /x.txt'         0
+conclusion                 case_sensitive_like is effective even though the driver reports no value for it

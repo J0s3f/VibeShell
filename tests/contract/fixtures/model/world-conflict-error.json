@@ -1,0 +1,29 @@
+{
+  "request": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "messages": [
+      { "role": "user", "content": "printf 'plan\\n' > /home/alice/notes.txt\n" }
+    ],
+    "max_tokens": 4096,
+    "deadline_ms": 120000,
+    "request_id": "req-world-conflict-001"
+  },
+  "result": {
+    "request_id": "req-world-conflict-001",
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "message": { "role": "assistant", "content": "" },
+    "finish_reason": "error",
+    "usage": { "prompt_tokens": 640, "completion_tokens": 0, "total_tokens": 640 },
+    "error": {
+      "class": "world_conflict",
+      "message": "staged write expected revision 3 of /home/alice/notes.txt but the committed revision is 4; re-read and re-evaluate",
+      "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "timestamp": 1798732804000
+    },
+    "latency_ms": 980,
+    "timestamp": 1798732804000
+  }
+}

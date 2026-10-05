@@ -1,0 +1,4 @@
+{
+  "action": "command",
+  "command": "echo 'Grüße, 世界 🌙 — naïve café' | wc -c"
+}

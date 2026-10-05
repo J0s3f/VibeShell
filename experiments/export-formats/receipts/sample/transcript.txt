@@ -1,0 +1,26 @@
+VibeShell research transcript — LOSSY PROJECTION
+This transcript is derived from the canonical event stream and
+intentionally drops: exact payload bytes, checksums, provenance
+detail, transport byte streams, and timing beyond ordering.
+Full-screen (alternate screen) output appears as labelled screen
+snapshots; cursor motion and styling is not preserved.
+---
+== SESSION ses_00000000000000000000000001 start: user=usr_00000000000000000000000001 auth=secure term=xterm-256color 80x24 sharing=false ==
+[USER INPUT] command: ls -la
+[TERMINAL OUTPUT] frame=f_0001 bytes=96:
+drwxr-xr-x 2 user user 4096 Oct  3 00:00 .
+-rw-r--r-- 1 user user   42 Oct  3 00:00 README.md
+[PROMPT] cwd=/home/user exit=0 "user@vibeos:~$ "
+[SCREEN TRANSITION] mode line -> app (full-screen content is not preserved by this projection)
+[SCREEN SNAPSHOT: alt screen] frame=f_0002 bytes=43:
+<ESC>H<ESC>[2J>[top] rows=24 cols=80 (alt screen)
+[SCREEN TRANSITION] mode app -> line (full-screen content is not preserved by this projection)
+[MODEL] request route=rte_0000000000000000000000000A
+[FAILURE] model.error: upstream timeout after 30s
+[INTERRUPTION] user cancelled the running operation
+[TERMINAL] window resized to 120x40
+[TOOL] tool.request
+[WORLD] world.commit rev=0
+[APP] app.activated
+[CONTEXT] context.summary
+[STATUS] session ses_00000000000000000000000001 has NO recorded end: connection incomplete/disconnected; no successful ending was recorded or reconstructed.

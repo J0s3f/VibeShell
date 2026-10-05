@@ -1,0 +1,9 @@
+{
+  "version_id": "av_0123456789ABCDEFGHJKMNPQRS",
+  "event_type": "input",
+  "input": { "key": "enter", "buffer": "print(1/0)" },
+  "result": { "error": "guest exception: division by zero", "exited": true, "exit_code": 1 },
+  "duration_ms": 3,
+  "memory_bytes": 65536,
+  "exited": true
+}

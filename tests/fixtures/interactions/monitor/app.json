@@ -1,0 +1,126 @@
+{
+  "example": "top-like simulated process monitor",
+  "artifact": {
+    "app_id": "app_01ARZ3NDEKTSV4RRFFQ69G5FD2",
+    "version_id": "av_01ARZ3NDEKTSV4RRFFQ69G5FD2",
+    "command_names": ["vstat", "vs"],
+    "description": "Shows simulated process and system data, sorted on demand.",
+    "capabilities": ["process.spawn", "time"],
+    "entrypoint": "handle",
+    "version": "1.0.0",
+    "handler": "handler.js"
+  },
+  "interaction": {
+    "view": {
+      "mode": "status",
+      "columns": [
+        { "title": "PID", "align": "right", "sort_key": "pid" },
+        { "title": "COMMAND", "align": "left", "sort_key": "command" },
+        { "title": "%CPU", "align": "right", "sort_key": "cpu" },
+        { "title": "%MEM", "align": "right", "sort_key": "mem" },
+        { "title": "STATE", "align": "left", "sort_key": "state" }
+      ],
+      "footer": "2 running, 1 sleeping -- simulated values, no host counters",
+      "status_line": "sort {sort} -- row {line}/{lines} -- {status}"
+    },
+    "mode": "browse",
+    "default_mode": "browse",
+    "modes": [
+      {
+        "name": "browse",
+        "column_policy": "within_line",
+        "bindings": [
+          { "keys": "j", "action": "move_cursor", "params": { "move": { "target": "down" } } },
+          { "keys": "k", "action": "move_cursor", "params": { "move": { "target": "up" } } },
+          { "keys": "down", "action": "move_cursor", "params": { "move": { "target": "down" } } },
+          { "keys": "up", "action": "move_cursor", "params": { "move": { "target": "up" } } },
+          { "keys": "l", "action": "move_cursor", "params": { "move": { "target": "right" } } },
+          { "keys": "right", "action": "move_cursor", "params": { "move": { "target": "right" } } },
+          { "keys": "h", "action": "move_cursor", "params": { "move": { "target": "left" } } },
+          { "keys": "left", "action": "move_cursor", "params": { "move": { "target": "left" } } },
+          { "keys": "space", "action": "scroll", "params": { "scroll": { "unit": "page_down" } } },
+          { "keys": "b", "action": "scroll", "params": { "scroll": { "unit": "page_up" } } },
+          { "keys": "g", "action": "scroll", "params": { "scroll": { "unit": "first_line" } } },
+          { "keys": "G", "action": "scroll", "params": { "scroll": { "unit": "last_line" } } },
+          { "keys": "home", "action": "scroll", "params": { "scroll": { "unit": "first_line" } } },
+          { "keys": "end", "action": "scroll", "params": { "scroll": { "unit": "last_line" } } },
+          { "keys": "P", "action": "emit_event", "params": { "event": { "name": "sort", "fields": { "column": "cpu", "order": "descending" } } } },
+          { "keys": "M", "action": "emit_event", "params": { "event": { "name": "sort", "fields": { "column": "mem", "order": "descending" } } } },
+          { "keys": "T", "action": "emit_event", "params": { "event": { "name": "sort", "fields": { "column": "pid", "order": "ascending" } } } },
+          { "keys": "r", "action": "emit_event", "params": { "event": { "name": "refresh" } } },
+          { "keys": "x", "action": "select_range", "params": { "select": { "from": "none", "to": "none" } } },
+          { "keys": "v", "action": "select_range", "params": { "select": { "from": "cursor", "to": "cursor" } } },
+          { "keys": "q", "action": "emit_event", "params": { "event": { "name": "quit" } } }
+        ]
+      }
+    ]
+  },
+  "state": {
+    "table": {
+      "rows": [
+        ["101", "session-supervisor", "0.4", "1.2", "sleeping"],
+        ["102", "app-registry", "1.8", "3.4", "running"],
+        ["103", "research-store", "0.9", "8.1", "running"]
+      ],
+      "cursor": { "line": 1, "column": 2 }
+    },
+    "status": "refresh every 3s while visible"
+  },
+  "screen": { "rows": 9, "columns": 52 },
+  "handler": {
+    "rules": [
+      {
+        "event": "sort",
+        "fields": { "column": "cpu" },
+        "result": {
+          "sort": { "column": "cpu", "order": "descending" },
+          "table_rows": [
+            ["102", "app-registry", "1.8", "3.4", "running"],
+            ["103", "research-store", "0.9", "8.1", "running"],
+            ["101", "session-supervisor", "0.4", "1.2", "sleeping"]
+          ],
+          "table_cursor": { "line": 0, "column": 2 },
+          "status": "sorted by cpu descending"
+        }
+      },
+      {
+        "event": "sort",
+        "fields": { "column": "mem" },
+        "result": {
+          "sort": { "column": "mem", "order": "descending" },
+          "table_rows": [
+            ["103", "research-store", "0.9", "8.1", "running"],
+            ["102", "app-registry", "1.8", "3.4", "running"],
+            ["101", "session-supervisor", "0.4", "1.2", "sleeping"]
+          ],
+          "table_cursor": { "line": 0, "column": 3 },
+          "status": "sorted by mem descending"
+        }
+      },
+      {
+        "event": "sort",
+        "fields": { "column": "pid" },
+        "result": {
+          "sort": { "column": "pid", "order": "ascending" },
+          "status": "sorted by pid ascending"
+        }
+      },
+      {
+        "event": "refresh",
+        "result": {
+          "status": "refreshed simulated sample",
+          "table_rows": [
+            ["101", "session-supervisor", "0.4", "1.2", "sleeping"],
+            ["102", "app-registry", "2.1", "3.4", "running"],
+            ["103", "research-store", "1.3", "8.1", "running"]
+          ]
+        }
+      },
+      {
+        "event": "quit",
+        "result": { "clear_status": true, "exited": true, "exit_code": 0 }
+      }
+    ],
+    "text_rules": []
+  }
+}

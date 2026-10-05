@@ -1,0 +1,24 @@
+{
+  "mutations": [
+    {
+      "type": "create",
+      "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "path": "/home/alice/archive.tar.zst",
+      "kind": "file",
+      "metadata": { "mode": 420, "uid": 1000, "gid": 1000, "mod_time": 1798732800000, "access_time": 1798732800000, "change_time": 1798732800000 },
+      "content": { "hash": "cnt_AFJ9KQ2M4XP7DBTVZC6HJFRSNW", "size": 10485760, "media_type": "application/zstd" }
+    }
+  ],
+  "read_dependencies": [
+    {
+      "node_id": "nod_8FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "revision": 12,
+      "kind": "dir",
+      "is_absence": false,
+      "dir_member_of": "nod_7FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+    }
+  ],
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "attempt_id": "att_5FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "timestamp": 1798732800000
+}

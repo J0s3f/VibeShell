@@ -1,0 +1,55 @@
+VibeShell real-service SIGTERM qualification (rootless Podman)
+started (UTC) : 2026-10-03T23:03:11Z
+worktree      : D:/code/vibeshell/.worktrees/runtime-real
+branch/commit : agent/runtime-real c3b9d55
+image         : localhost/vibeshell-runtime:real
+rootless      : true
+
+=== build ===
+image id      : a54e5b20f0f5aa94393a55d2946909f4c13d72cf7b53e818f130998c33197bf0
+image Stopsignal: SIGTERM
+
+=== start real service under hardened flags ===
+podman run -d --name vibeshell-real-590365403 --user 10001 --read-only --tmpfs /tmp --cap-drop=ALL --security-opt no-new-privileges --memory=512m --pids-limit=100 --publish 127.0.0.1::2222 -v C:\Users\micro\AppData\Local\Temp\vibeshell-real-sigterm-590365403\vibeshell.json:/etc/vibeshell/vibeshell.json:ro,Z -v vibeshell-real-state-590365403:/var/lib/vibeshell localhost/vibeshell-runtime:real -config /etc/vibeshell/vibeshell.json
+[1] real service starts and reaches readiness under the hardened flags
+     command : podman logs vibeshell-real-590365403
+     observed: ready=True; published 127.0.0.1:46245 -> 2222/tcp; logs: {"time":"2026-10-03T23:03:15.064202265Z","level":"WARN","msg":"MOTD presentation is degraded","operation":"motd","error":"configuration has no prompts.motd file"} | {"time":"2026-10-03T23:03:15.086304923Z","level":"INFO","msg":"vibeshell ready","component":"ssh","operation":"startup","result":"success","service":"vibeshell"} | {"time":"2026-10-03T23:03:15.086343947Z","level":"WARN","msg":"service is not fully ready","operation":"startup","health_status":"degraded","result":"degraded subsystems: [provider]"} |
+     expected: the "vibeshell ready" log line appears and the SSH port is published on loopback
+     verdict : PASS
+
+=== open a real SSH session ===
+session job state: Running
+[2] an open SSH session is recorded before shutdown
+     command : podman run --rm ... localhost/vibeshell-runtime:real admin sessions list
+     observed: session                            started    last       turns  interrupted  ended  recovered | ses_XQE05KC224YPJAC332RBARB9WC     1791068596464 1791068596592 1      0            false  false |
+     expected: one session row with ended=false
+     verdict : PASS
+
+=== SIGTERM via podman stop ===
+[3] the real binary handles SIGTERM and exits cleanly (not SIGKILL 137)
+     command : podman stop --time 5 vibeshell-real-590365403; podman inspect vibeshell-real-590365403 --format '{{.State.ExitCode}}'
+     observed: exit code 0; stop returned in 1.26s; logs: {"time":"2026-10-03T23:03:15.064202265Z","level":"WARN","msg":"MOTD presentation is degraded","operation":"motd","error":"configuration has no prompts.motd file"} | {"time":"2026-10-03T23:03:15.086304923Z","level":"INFO","msg":"vibeshell ready","component":"ssh","operation":"startup","result":"success","service":"vibeshell"} | {"time":"2026-10-03T23:03:15.086343947Z","level":"WARN","msg":"service is not fully ready","operation":"startup","health_status":"degraded","result":"degraded subsystems: [provider]"} | {"time":"2026-10-03T23:03:21.804255353Z","level":"INFO","msg":"shutting down","operation":"shutdown","shutdown":"begin"} | {"time":"2026-10-03T23:03:21.858843006Z","level":"INFO","msg":"shutdown complete","operation":"shutdown","shutdown":"complete"} |
+     expected: exit code 0 and both "shutdown":"begin" and "shutdown":"complete" in the log; 137 would mean SIGTERM was ignored and the 5 s timeout escalated to SIGKILL
+     verdict : PASS
+
+=== durable session end ===
+[4] the session open at SIGTERM is durably ended (session.end recorded)
+     command : podman run --rm ... localhost/vibeshell-runtime:real admin sessions list
+     observed: session                            started    last       turns  interrupted  ended  recovered | ses_XQE05KC224YPJAC332RBARB9WC     1791068596464 1791068601840 1      0            true   false |
+     expected: every listed session has ended=true
+     verdict : PASS
+
+=== observations (no verdict) ===
+- entrypoint and STOPSIGNAL
+     observed: image Stopsignal=SIGTERM; the real process installs signal.NotifyContext(SIGINT,SIGTERM), so the kernel default action does not apply to PID 1
+     note    : check 3 is the attributable test: a handler-less PID 1 is SIGKILLed (137) after the timeout.
+
+=== summary ===
+PASS : 4
+FAIL : 0
+finished (UTC): 2026-10-03T23:03:25Z
+result: all 4 verdict-bearing checks passed.
+
+=== cleanup ===
+removed container vibeshell-real-590365403, volume vibeshell-real-state-590365403, and staging dir
+

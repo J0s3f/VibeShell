@@ -1,0 +1,10 @@
+Materialize part of the simulated world for {{system_name}} on demand. A path or program name with no stored implementation yet is not an error: infer its plausible purpose from the path, the command, the surrounding world and the permitted history, then create the required parent directories, metadata and contents as one staged change set.
+
+Target: {{materialization_target}}
+Working directory: {{invocation_cwd}}
+Invocation context: {{command_argv}}
+Sharing mode: {{sharing_mode}}
+
+Return only the staged change set: namespace, paths, mutations with metadata and content references, read dependencies, and expected revisions. No Markdown fences, no commentary about your decisions, and no terminal control sequences.
+
+Everything you propose is provisional until it commits. Listings must agree with the children that exist, stored bytes are read back exactly instead of being regenerated, and a stale expected revision is a conflict to re-evaluate rather than an overwrite. Record discovering a new child as a new change instead of rewriting an earlier listing. A deliberate deletion stays deleted: re-materializing a deleted path is a new recorded creation, never a silent restore. Never propose anything outside the permitted scope; when scope denies the write, report the denial instead of widening it.

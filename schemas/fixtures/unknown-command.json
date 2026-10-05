@@ -1,0 +1,7 @@
+{
+  "event_type": "input",
+  "payload": { "argv": ["moon-orchard", "--interactive"], "cwd": "/home/alice" },
+  "timestamp": 1798732800000,
+  "session_id": "ses_0123456789ABCDEFGHJKMNPQRS",
+  "turn_id": "trn_0123456789ABCDEFGHJKMNPQRS"
+}

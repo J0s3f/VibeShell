@@ -1,0 +1,26 @@
+{
+  "mutations": [
+    {
+      "type": "update",
+      "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "path": "/home/alice/notes.txt",
+      "node_id": "nod_9FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "expected_rev": 4,
+      "kind": "file",
+      "metadata": { "mode": 420, "uid": 1000, "gid": 1000, "mod_time": 1798732810000, "access_time": 1798732810000, "change_time": 1798732810000 },
+      "content": { "hash": "cnt_BFJ9KQ2M4XP7DBTVZC6HJFRSNW", "size": 5, "media_type": "text/plain; charset=utf-8" }
+    }
+  ],
+  "read_dependencies": [
+    {
+      "node_id": "nod_9FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "revision": 4,
+      "kind": "file",
+      "is_absence": false,
+      "dir_member_of": "nod_8FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+    }
+  ],
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "attempt_id": "att_A5FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "timestamp": 1798732810000
+}

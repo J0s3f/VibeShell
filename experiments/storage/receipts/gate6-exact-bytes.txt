@@ -1,0 +1,18 @@
+Gate 6a: content bytes survive a round trip exactly
+===================================================
+database                   /state/spike/TestContentBytesSurviveExactly/exact-bytes.db
+empty stored               0 bytes, e3b0c44298fc
+one-byte-nul stored        1 bytes, 6e340b9cffb3
+single-0xff stored         1 bytes, a8100ae6aa19
+damage-pattern stored      26 bytes, 4cf27541b6e3
+utf8-text stored           29 bytes, a9eda3e1022d
+pseudo-random-256KiB stored 262144 bytes, 63f2b519d34a
+empty                  0 bytes, identical=true, typeof=blob, length=0
+one-byte-nul           1 bytes, identical=true, typeof=blob, length=1
+single-0xff            1 bytes, identical=true, typeof=blob, length=1
+damage-pattern         26 bytes, identical=true, typeof=blob, length=26
+utf8-text              29 bytes, identical=true, typeof=blob, length=29
+pseudo-random-256KiB   262144 bytes, identical=true, typeof=blob, length=262144
+identical after checkpoint true
+storage classes            blob (no text column is involved)
+conclusion                 NUL bytes, invalid UTF-8, and page-crossing payloads return byte-identical; size and length() agree with the stored length

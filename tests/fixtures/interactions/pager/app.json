@@ -1,0 +1,111 @@
+{
+  "example": "less-like pager",
+  "artifact": {
+    "app_id": "app_01ARZ3NDEKTSV4RRFFQ69G5FB0",
+    "version_id": "av_01ARZ3NDEKTSV4RRFFQ69G5FB1",
+    "command_names": ["vpage", "vp"],
+    "description": "Pages through the exact content of a simulated file.",
+    "capabilities": ["file.read"],
+    "entrypoint": "handle",
+    "version": "1.0.0",
+    "handler": "handler.js"
+  },
+  "interaction": {
+    "view": {
+      "mode": "pager",
+      "status_line": "/var/log/vibes.log -- line {line}/{lines} {percent} -- {status}"
+    },
+    "mode": "browse",
+    "default_mode": "browse",
+    "modes": [
+      {
+        "name": "browse",
+        "column_policy": "within_line",
+        "mode_targets": ["search"],
+        "bindings": [
+          { "keys": "space", "action": "scroll", "params": { "scroll": { "unit": "page_down" } } },
+          { "keys": "f", "action": "scroll", "params": { "scroll": { "unit": "page_down" } } },
+          { "keys": "b", "action": "scroll", "params": { "scroll": { "unit": "page_up" } } },
+          { "keys": "j", "action": "scroll", "params": { "scroll": { "unit": "line_down" } } },
+          { "keys": "k", "action": "scroll", "params": { "scroll": { "unit": "line_up" } } },
+          { "keys": "down", "action": "scroll", "params": { "scroll": { "unit": "line_down" } } },
+          { "keys": "up", "action": "scroll", "params": { "scroll": { "unit": "line_up" } } },
+          { "keys": "page-down", "action": "scroll", "params": { "scroll": { "unit": "page_down" } } },
+          { "keys": "page-up", "action": "scroll", "params": { "scroll": { "unit": "page_up" } } },
+          { "keys": "d", "action": "scroll", "params": { "scroll": { "unit": "half_page_down" } } },
+          { "keys": "u", "action": "scroll", "params": { "scroll": { "unit": "half_page_up" } } },
+          { "keys": "g", "action": "scroll", "params": { "scroll": { "unit": "first_line" } } },
+          { "keys": "G", "action": "scroll", "params": { "scroll": { "unit": "last_line" } } },
+          { "keys": "home", "action": "scroll", "params": { "scroll": { "unit": "first_line" } } },
+          { "keys": "end", "action": "scroll", "params": { "scroll": { "unit": "last_line" } } },
+          { "keys": "=", "action": "update_status", "params": { "status": { "text": "/var/log/vibes.log (END)" } } },
+          { "keys": "/", "action": "emit_event", "params": { "event": { "name": "open_search" } } },
+          { "keys": "n", "action": "search_buffer", "params": { "search": { "query": "last", "direction": "forward_wrap", "case": "insensitive" } } },
+          { "keys": "N", "action": "search_buffer", "params": { "search": { "query": "last", "direction": "backward_wrap", "case": "insensitive" } } },
+          { "keys": "q", "action": "emit_event", "params": { "event": { "name": "quit" } } },
+          { "keys": "escape", "action": "emit_event", "params": { "event": { "name": "quit" } } }
+        ]
+      },
+      {
+        "name": "search",
+        "inherit": false,
+        "column_policy": "within_line",
+        "mode_targets": ["browse"],
+        "bindings": [
+          { "keys": "enter", "action": "search_buffer", "params": { "search": { "query": "prompt", "direction": "forward_wrap", "case": "insensitive" } } },
+          { "keys": "escape", "action": "emit_event", "params": { "event": { "name": "cancel_search" } } }
+        ]
+      }
+    ]
+  },
+  "state": {
+    "buffer": {
+      "ref": {
+        "hash": "cnt_01ARZ3NDEKTSV4RRFFQ69G5FC1",
+        "size": 412,
+        "media_type": "text/plain; charset=utf-8"
+      },
+      "lines": [
+        "boot: simulated kernel 4.19.0-vibe",
+        "init: starting session supervisor",
+        "user: accepted password for micro",
+        "shell: vsh 1.0 interactive",
+        "app: notes editor opened /home/micro/notes.txt",
+        "app: pager opened /var/log/vibes.log",
+        "net: simulated link up (no real interface)",
+        "task: 2 processes, 0 real children",
+        "warn: simulated clock differs from host",
+        "trace: enter handler app_01ARZ3NDEKTSV4RRFFQ69G5FB0",
+        "shell: pipeline accepted, 2 stages",
+        "shell: redirect wrote 3 records",
+        "shell: history entry recorded",
+        "quit: session ended cleanly",
+        "shutdown: supervisor stopped"
+      ],
+      "cursor": { "line": 0, "column": 0 }
+    }
+  },
+  "screen": { "rows": 8, "columns": 44 },
+  "handler": {
+    "rules": [
+      {
+        "event": "open_search",
+        "result": { "mode": "search", "clear_prompt": true }
+      },
+      {
+        "event": "cancel_search",
+        "result": { "mode": "browse", "clear_prompt": true, "clear_status": true }
+      },
+      {
+        "event": "quit",
+        "result": { "mode": "browse", "clear_status": true, "exited": true, "exit_code": 0 }
+      }
+    ],
+    "text_rules": [
+      { "keys": "backspace", "modes": ["search"], "result": { "backspace_prompt": true } },
+      { "keys": "delete", "modes": ["search"], "result": { "backspace_prompt": true } },
+      { "printable": true, "modes": ["search"], "result": { "append_prompt": "$text" } }
+    ],
+    "echo_prompts": { "search": "/" }
+  }
+}

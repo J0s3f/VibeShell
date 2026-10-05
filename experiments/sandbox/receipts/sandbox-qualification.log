@@ -1,0 +1,53 @@
+=== VibeShell A04 sandbox qualification receipt ===
+date(UTC): 2026-10-03T14:38:12Z
+engine: 88fcbeead33cca3ec8394feb0fb3eec8047ec9ac5062aba7a63799cee11989b7  qjs.wasm
+go version go1.27.1 linux/amd64
+
+=== RUN   TestBasicEval
+--- PASS: TestBasicEval (0.63s)
+=== RUN   TestInfiniteLoopDeadline
+    sandbox_test.go:90: infinite loop terminated after 501ms with: execution interrupted (module closed, exit code 4026531839): context deadline exceeded
+--- PASS: TestInfiniteLoopDeadline (1.06s)
+=== RUN   TestAllocationExhaustion
+    sandbox_test.go:125: allocation exhaustion bounded: guest exception: InternalError: out of memory
+--- PASS: TestAllocationExhaustion (0.76s)
+=== RUN   TestWasmMemoryCap
+    sandbox_test.go:158: wasm memory cap bounded allocation: guest exception: InternalError: out of memory
+--- PASS: TestWasmMemoryCap (0.58s)
+=== RUN   TestDeepRecursion
+    sandbox_test.go:181: deep recursion bounded after 6ms: wasm error: out of bounds memory access
+--- PASS: TestDeepRecursion (0.53s)
+=== RUN   TestMalformedJSON
+    sandbox_test.go:218: ParseJSON("{\"a\": }") rejected: guest exception: SyntaxError: unexpected token: '}'
+    sandbox_test.go:218: ParseJSON("[1, 2,") rejected: guest exception: SyntaxError: Unexpected end of JSON input
+    sandbox_test.go:218: ParseJSON("{\"a\": 1} extra") rejected: guest exception: SyntaxError: unexpected data at the end
+    sandbox_test.go:218: ParseJSON("{unquoted: 1}") rejected: guest exception: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    sandbox_test.go:218: ParseJSON("") rejected: guest exception: SyntaxError: Unexpected end of JSON input
+    sandbox_test.go:229: circular structure rejected: guest exception: TypeError: circular reference
+    sandbox_test.go:237: valid JSON parsed to: {"a":1,"b":[2,3]}
+--- PASS: TestMalformedJSON (0.53s)
+=== RUN   TestForbiddenCapabilities
+    sandbox_test.go:261: import audit: 24 imports, none from network symbols
+    sandbox_test.go:288: fs attempt "os.open(\"/etc/passwd\", 0)" denied: guest exited with code 71 (instance closed)
+    sandbox_test.go:288: fs attempt "std.loadFile(\"/etc/passwd\")" denied: guest exited with code 71 (instance closed)
+    sandbox_test.go:288: fs attempt "std.loadFile(\"/workspace/experiments/sandbox/qjs.wasm\")" denied: guest exited with code 71 (instance closed)
+    sandbox_test.go:288: fs attempt "os.read(0, new Uint8Array(16))" denied: guest exception: TypeError: ArrayBuffer object expected
+    sandbox_test.go:288: fs attempt "os.stat(\"/\")" denied: guest exited with code 71 (instance closed)
+    sandbox_test.go:300: env attempt "JSON.stringify(os.environ())" errored (acceptable): guest exception: TypeError: not a function
+    sandbox_test.go:300: env attempt "os.getenviron().length" errored (acceptable): guest exception: TypeError: not a function
+--- PASS: TestForbiddenCapabilities (0.54s)
+=== RUN   TestInstanceIsolation
+--- PASS: TestInstanceIsolation (0.89s)
+=== RUN   TestColdWarmLatency
+    sandbox_test.go:391: engine compile (one-time): 529ms
+    sandbox_test.go:401: cold instance (first): 2ms
+    sandbox_test.go:413: warm instances: 100 in 210ms (avg 2.103ms)
+    sandbox_test.go:420: guest memory after small alloc: 327680 bytes
+--- PASS: TestColdWarmLatency (0.74s)
+=== RUN   TestConcurrency
+    sandbox_test.go:468: concurrency: 100 instances in 64ms, 0 errors
+    sandbox_test.go:469: host heap alloc: 3 MiB before, 30 MiB after (delta 26 MiB)
+    sandbox_test.go:471: host total alloc: 877 MiB, sys: 150 MiB
+--- PASS: TestConcurrency (0.65s)
+PASS
+ok  	j0s.at/vibeshell/experiments/sandbox	6.928s

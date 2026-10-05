@@ -1,0 +1,8 @@
+Gate 6c: the content key separates distinct bytes
+=================================================
+probe blob                 64 bytes
+base hash                  8b8caaf95c975905f04bf4e5079a98d022544947ba4a7d1f12d8730ef926dbee
+single-bit mutations tried 128
+collisions                 0
+empty blob hash            e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+single NUL hash            6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d

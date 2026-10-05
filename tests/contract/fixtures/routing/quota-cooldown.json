@@ -1,0 +1,49 @@
+{
+  "policy": {
+    "tiers": [
+      {
+        "name": "tier1-named-free",
+        "route_ids": ["rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW"],
+        "enabled": true,
+        "min_healthy": 1
+      },
+      {
+        "name": "tier2-auto-free",
+        "auto_free": true,
+        "account_pool": "free-pool",
+        "enabled": true
+      },
+      {
+        "name": "tier3-go",
+        "route_ids": ["rte_EFJ9KQ2M4XP7DBTVZC6HJFRSNW"],
+        "enabled": true
+      }
+    ],
+    "account_pools": {
+      "free-pool": ["acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW"]
+    },
+    "max_attempts": 4,
+    "turn_deadline_ms": 120000,
+    "probe_budget": {
+      "max_concurrent_probes": 2,
+      "probe_interval_ms": 300000,
+      "max_probes_per_hour": 12
+    }
+  },
+  "health": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "scope": "account",
+    "state": "cooling_down",
+    "failure_class": "quota_exhausted",
+    "failure_message": "account quota exhausted for product console until reset",
+    "consecutive_failures": 1,
+    "last_failure": 1798732800000,
+    "last_success": 1798732700000,
+    "next_probe_at": 1798733400000,
+    "cooldown_until": 1798733400000,
+    "retry_after": 600000,
+    "probe_count": 0,
+    "updated_at": 1798732800000
+  }
+}

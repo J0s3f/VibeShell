@@ -1,0 +1,25 @@
+Gate 7a: subtree lookup is boundary aware
+=========================================
+fixtures recorded          15
+lookup                     path_key >= PathKey(prefix) AND path_key < SubtreeRange(prefix) upper bound
+/some          range ["/some/", "/some0")
+/some          4 paths [/some/file.txt /some/place /some/place/deep/file.txt /some/place/file.txt]
+/some/place    range ["/some/place/", "/some/place0")
+/some/place    3 paths [/some/place /some/place/deep/file.txt /some/place/file.txt]
+/some/         range ["/some/", "/some0")
+/some/         4 paths [/some/file.txt /some/place /some/place/deep/file.txt /some/place/file.txt]
+/somewhere     range ["/somewhere/", "/somewhere0")
+/somewhere     1 paths [/somewhere/file.txt]
+/some_thing    range ["/some_thing/", "/some_thing0")
+/some_thing    1 paths [/some_thing/file.txt]
+/100%          range ["/100%/", "/100%0")
+/100%          1 paths [/100%/report.txt]
+/100%file      range ["/100%file/", "/100%file0")
+/100%file      1 paths [/100%file]
+/a_b           range ["/a_b/", "/a_b0")
+/a_b           1 paths [/a_b/file.txt]
+/x.txt         range ["/x.txt/", "/x.txt0")
+/x.txt         1 paths [/x.txt]
+/              range ["/", "0")
+/              15 paths [/ /100%/report.txt /100%file /a_b/file.txt /plain%dir /some-else/file.txt /some/file.txt /some/place /some/place/deep/file.txt /some/place/file.txt /some_thing/file.txt /sometext /somewhere/file.txt /under_score /x.txt]
+sibling paths excluded     /somewhere, /some-else, /sometext, /some_thing, /100%file, /under_score

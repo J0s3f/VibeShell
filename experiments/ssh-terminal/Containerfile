@@ -1,0 +1,48 @@
+# Real-OpenSSH client image for the SSH and terminal qualification spike.
+#
+# It exists so the spike can be driven by the ssh(1) that a person would use,
+# not only by a Go client. The base is the pinned Go image from
+# containers/versions.env, so the toolchain that builds the spike and the client
+# that exercises it come from the same recorded pins.
+#
+# openssh-client is installed explicitly rather than assumed. The pinned base
+# image already ships it, which this Containerfile proves by recording the
+# version at build time; the explicit install keeps the image self-contained if
+# a future base pin drops it. python3 is needed for ptyclient.py, which drives
+# ssh on a real pseudo-terminal so that a resize and a Ctrl-C byte are produced
+# by the client rather than simulated.
+#
+# Compatibility: Podman and Docker.
+
+ARG GO_IMAGE=docker.io/library/golang:1.27.1-bookworm@sha256:69a7b9788769bec032d238959b61854e9ae87f57be9029ec04e9885fabf99195
+
+FROM ${GO_IMAGE}
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends openssh-client python3; \
+    rm -rf /var/lib/apt/lists/*; \
+    ssh -V 2>&1 | tee /out-ssh-version.txt; \
+    grep -q '^OpenSSH_' /out-ssh-version.txt; \
+    rm -f /out-ssh-version.txt; \
+    python3 --version
+
+WORKDIR /workspace
+
+# The build context is the experiments/ssh-terminal directory, which is its own
+# Go module. Copying the module and building here keeps every spike dependency
+# out of the repository's root module.
+COPY . /workspace
+
+RUN set -eux; \
+    go build -trimpath -o /out/spike-server ./cmd/spike-server; \
+    go build -trimpath -o /out/terminal-primitives ./cmd/terminal-primitives; \
+    go build -trimpath -o /out/transport-probe ./cmd/transport-probe; \
+    go vet ./...
+
+# /out holds the spike binaries, /tmp/spike holds the per-run server log and the
+# persistent host key. The container only ever listens on its loopback
+# interface, so no port has to be published.
+WORKDIR /workspace
+EXPOSE 2222
+CMD ["sleep", "infinity"]

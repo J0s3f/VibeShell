@@ -1,0 +1,1 @@
+events=100000 elapsed=13.718027557s heap_alloc_before=691320 heap_alloc_after=483352 total_alloc_delta=559200376 bytes_written=71433788

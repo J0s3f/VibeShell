@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://j0s.at/vibeshell/schemas/v1/event-envelope.schema.json",
+  "title": "VibeShell research event envelope",
+  "description": "Immutable envelope for every permanent research event (PLAN 10.1). Payload bodies travel inline when small or by content reference when large. Contract version 1.",
+  "version": 1,
+  "type": "object",
+  "required": ["schema_version", "event_id", "session_id", "sequence", "timestamp", "monotonic_offset", "kind", "payload", "provenance"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "event_id": { "$ref": "#/$defs/identity" },
+    "session_id": { "$ref": "#/$defs/identity" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "integer", "minimum": 0, "description": "UTC unix milliseconds." },
+    "monotonic_offset": { "type": "integer", "minimum": 0, "description": "Nanoseconds since process start; orders events within a recording." },
+    "kind": { "$ref": "#/$defs/eventKind" },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "content_id": { "$ref": "#/$defs/identity" },
+        "inline": { "description": "Small payload body (<=1KB), kind-specific shape." },
+        "truncated": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": { "enum": ["ssh", "model", "tool", "sandbox", "admin", "system"] },
+        "actor": { "type": "string" },
+        "prompt_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "catalogue_version": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "turn_id": { "$ref": "#/$defs/identity" },
+    "attempt_id": { "$ref": "#/$defs/identity" },
+    "app_version_id": { "$ref": "#/$defs/identity" },
+    "node_revision": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "eventKind": {
+      "type": "string",
+      "enum": [
+        "session.start", "session.end", "session.recovered", "turn.transition",
+        "input.raw", "input.decoded", "input.accepted",
+        "terminal.frame", "terminal.prompt", "terminal.mode", "terminal.write",
+        "model.request", "model.response", "model.error", "model.usage",
+        "tool.request", "tool.result", "tool.error",
+        "route.candidate", "route.selected", "route.failure", "route.cooldown", "route.probe", "route.recovery",
+        "world.read", "world.stage", "world.commit", "world.conflict", "world.materialize",
+        "app.created", "app.extended", "app.validated", "app.activated", "app.rolled_back", "app.sandbox_run",
+        "context.summary", "context.retrieval",
+        "config.change", "shutdown", "export", "backup"
+      ]
+    }
+  }
+}

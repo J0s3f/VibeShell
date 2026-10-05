@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://j0s.at/vibeshell/schemas/v1/route-policy.schema.json",
+  "title": "VibeShell route policy and health record",
+  "description": "Ordered routing tiers with eligible candidates, account grouping, attempt history, and health transitions (healthy/cooling_down/probe_eligible/probing/quarantined) per PLAN 8.4 and 9.2. Random selection inside a tier uses an injected source; session affinity pins the route until failure. Contract version 1.",
+  "version": 1,
+  "type": "object",
+  "required": ["policy", "health"],
+  "properties": {
+    "policy": {
+      "type": "object",
+      "required": ["tiers", "max_attempts", "turn_deadline_ms", "probe_budget"],
+      "properties": {
+        "tiers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": ["name", "enabled"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "route_ids": { "type": "array", "items": { "$ref": "#/$defs/identity" } },
+              "auto_free": { "type": "boolean" },
+              "account_pool": { "type": "string" },
+              "enabled": { "type": "boolean" },
+              "min_healthy": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "account_pools": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/identity" }
+          }
+        },
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "turn_deadline_ms": { "type": "integer", "minimum": 1 },
+        "probe_budget": {
+          "type": "object",
+          "required": ["max_concurrent_probes", "probe_interval_ms", "max_probes_per_hour"],
+          "properties": {
+            "max_concurrent_probes": { "type": "integer", "minimum": 1, "maximum": 16 },
+            "probe_interval_ms": { "type": "integer", "minimum": 1000 },
+            "max_probes_per_hour": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "health": {
+      "type": "object",
+      "required": ["route_id", "scope", "state", "consecutive_failures", "last_failure", "updated_at"],
+      "properties": {
+        "route_id": { "$ref": "#/$defs/identity" },
+        "account_id": { "$ref": "#/$defs/identity" },
+        "scope": { "enum": ["credential", "account", "route", "product", "provider"] },
+        "state": { "enum": ["healthy", "cooling_down", "probe_eligible", "probing", "quarantined"] },
+        "failure_class": {
+          "enum": ["invalid_credential", "quota_exhausted", "rate_limited", "model_not_found", "provider_outage", "network_timeout", "context_too_long", "invalid_arguments", "invalid_response", "content_rejected", "user_cancelled", "world_conflict", "unknown"]
+        },
+        "failure_message": { "type": "string" },
+        "consecutive_failures": { "type": "integer", "minimum": 0 },
+        "last_failure": { "type": "integer", "minimum": 0 },
+        "last_success": { "type": "integer", "minimum": 0 },
+        "next_probe_at": { "type": "integer", "minimum": 0 },
+        "cooldown_until": { "type": "integer", "minimum": 0 },
+        "retry_after": { "type": "integer", "minimum": 0 },
+        "probe_count": { "type": "integer", "minimum": 0 },
+        "updated_at": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$"
+    }
+  }
+}

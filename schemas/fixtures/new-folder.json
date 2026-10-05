@@ -1,0 +1,24 @@
+{
+  "mutations": [
+    {
+      "type": "create",
+      "namespace_id": "nsp_0123456789ABCDEFGHJKMNPQRS",
+      "path": "/home/alice/projects/garden",
+      "kind": "dir",
+      "metadata": { "mode": 493, "uid": 1000, "gid": 1000, "mod_time": 1798732800000, "access_time": 1798732800000, "change_time": 1798732800000 },
+      "content": { "hash": "cnt_1123456789ABCDEFGHJKMNPQRS", "size": 0, "media_type": "application/octet-stream" }
+    }
+  ],
+  "read_dependencies": [
+    {
+      "node_id": "nod_1123456789ABCDEFGHJKMNPQRS",
+      "revision": 1,
+      "kind": "dir",
+      "is_absence": true,
+      "dir_member_of": "nod_2123456789ABCDEFGHJKMNPQRS"
+    }
+  ],
+  "turn_id": "trn_0123456789ABCDEFGHJKMNPQRS",
+  "attempt_id": "att_0123456789ABCDEFGHJKMNPQRS",
+  "timestamp": 1798732800000
+}

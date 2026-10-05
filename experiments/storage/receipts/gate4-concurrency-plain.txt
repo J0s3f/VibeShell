@@ -1,0 +1,29 @@
+Gate 4c: readers beside one writer (run plain)
+==============================================
+captured (UTC)             2026-10-03T14:59:35Z
+readers                    8
+submitters                 4
+queue capacity             8
+commits submitted          120
+commits refused (backpressure) 0
+commits completed          120
+commit failures            0
+queue max depth            8
+elapsed                    440.53517ms
+writer throughput 272.4 commits/sec
+longest commit             22.56136ms
+mean commit                3.826958ms
+submit-to-accepted samples 120
+submit-to-accepted p50     7.506675ms
+submit-to-accepted p95     88.077055ms
+submit-to-accepted p99     88.86686ms
+submit-to-accepted max     88.869156ms
+reader query samples       73644
+reader query p50           31.029µs
+reader query p95           128.404µs
+reader query p99           298.414µs
+reader query max           1.551113ms
+reader failures            0
+highest revision seen      1
+rows written               162
+queue error                <nil>

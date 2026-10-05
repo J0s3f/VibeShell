@@ -1,0 +1,47 @@
+{
+  "runLabel": "race",
+  "results": [
+    {
+      "setting": "synchronous-FULL",
+      "turns": 240,
+      "submitters": 4,
+      "queueCapacity": 8,
+      "payloadBytes": 4096,
+      "wallSeconds": 2.479915316,
+      "turnsPerSecond": 96.77749818776473,
+      "completed": 240,
+      "failures": 0,
+      "rejected": 0,
+      "maxQueueDepth": 8,
+      "meanCommitMillis": 10.294795191666667,
+      "maxCommitMillis": 27.762,
+      "bodyP50Millis": 5.221,
+      "bodyP95Millis": 8.78,
+      "bodyP99Millis": 12.274,
+      "databaseBytes": 1531904,
+      "pageSize": 4096,
+      "pageCount": 366
+    },
+    {
+      "setting": "synchronous-NORMAL",
+      "turns": 240,
+      "submitters": 4,
+      "queueCapacity": 8,
+      "payloadBytes": 4096,
+      "wallSeconds": 2.160211468,
+      "turnsPerSecond": 111.1002341924425,
+      "completed": 240,
+      "failures": 0,
+      "rejected": 0,
+      "maxQueueDepth": 8,
+      "meanCommitMillis": 8.959595866666668,
+      "maxCommitMillis": 29.48,
+      "bodyP50Millis": 5.508,
+      "bodyP95Millis": 8.575,
+      "bodyP99Millis": 10.96,
+      "databaseBytes": 1531904,
+      "pageSize": 4096,
+      "pageCount": 366
+    }
+  ]
+}

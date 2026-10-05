@@ -1,0 +1,20 @@
+Gate 8a: a backup taken with VACUUM INTO
+========================================
+phase                      backup-write
+live database              /state/spike/backup/live.db
+backup copy                /state/spike/backup/backup.db
+checkpoint pages           0
+checkpoint remaining log pages 0
+live bytes                 159744
+backup bytes               159744
+fingerprints equal         true
+live integrity             2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+copy integrity             2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+event rows                 3
+content rows               3
+full-text hits             3
+subtree hits               3

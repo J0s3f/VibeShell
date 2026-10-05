@@ -1,0 +1,70 @@
+{
+  "artifact": {
+    "app_id": "app_GHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "version_id": "av_JHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "manifest": {
+      "abi_version": 1,
+      "command_names": ["moon-orchard", "mo"],
+      "description": "Line-based orchard session: each submitted line is an app turn and the state persists until the app exits.",
+      "state_schema": {
+        "type": "object",
+        "properties": {
+          "session_state": {
+            "type": "object",
+            "properties": {
+              "turns": { "type": "integer" },
+              "last": { "type": "string" }
+            }
+          },
+          "user_state": { "type": "object" },
+          "shared_state": { "type": "object" }
+        }
+      },
+      "capabilities": ["time"],
+      "entrypoint": "onEvent",
+      "version": "0.3.7"
+    },
+    "source": "// Generated artifact: a line-based interactive session. Bounded guest only.\nexport function onEvent(state, event) {\n  const base = state.session_state || { turns: 0 };\n  const line = (event.line || '').trim();\n  const turns = base.turns + 1;\n  const done = line === 'quit' || line === 'exit';\n  return {\n    newState: { session_state: { turns: turns, last: line } },\n    view: { mode: 'text', status_line: turns + ' turns' },\n    effects: [],\n    worldReads: [],\n    awaiting_input: !done,\n    prompt: done ? '' : 'grove> ',\n    exited: done\n  };\n}\n",
+    "source_hash": "cnt_MHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "owner": "usr_KHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "scope": "user",
+    "created_at": 1798732800000,
+    "provenance": {
+      "prompt_id": "app-generation",
+      "prompt_version": "v1",
+      "route_id": "rte_QHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "turn_id": "trn_PHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "generated_from": "unknown_command_invocation"
+    },
+    "validation": {
+      "passed": true,
+      "issues": [],
+      "validated_at": 1798732802000,
+      "validator_version": "abi-1.0"
+    },
+    "activated_at": 1798732803000
+  },
+  "event": {
+    "event_type": "input",
+    "payload": { "line": "look", "args": ["look"] },
+    "timestamp": 1798732804000,
+    "session_id": "ses_LHJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "turn_id": "trn_PHJ9KQ2M4XP7DBTVZC6HJFRSNW"
+  },
+  "result": {
+    "new_state": {
+      "session_state": { "turns": 1, "last": "look" },
+      "user_state": {},
+      "shared_state": {}
+    },
+    "view": {
+      "mode": "text",
+      "status_line": "1 turn"
+    },
+    "effects": [],
+    "world_reads": [],
+    "exited": false,
+    "awaiting_input": true,
+    "prompt": "grove> "
+  }
+}

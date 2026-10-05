@@ -1,0 +1,8 @@
+Gate 7b: the key range agrees with escaped LIKE
+===============================================
+prefixes compared          10
+identical result sets      10
+differing result sets      0
+LIKE form                  path_key LIKE EscapeLikePrefix(PathKey(prefix)) || '%' ESCAPE '\'
+wildcard prefix escaped    /100% -> /100\%/
+underscore prefix escaped  /a_b -> /a\_b/

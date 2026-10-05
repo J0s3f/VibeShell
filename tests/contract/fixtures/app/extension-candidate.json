@@ -1,0 +1,69 @@
+{
+  "artifact": {
+    "app_id": "app_EFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "version_id": "av_2FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "parent_version": "av_FFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "manifest": {
+      "abi_version": 1,
+      "command_names": ["moon-orchard", "mo"],
+      "description": "Curated orchard task list with an interactive row selector and a due-date column.",
+      "state_schema": {
+        "type": "object",
+        "properties": {
+          "session_state": {
+            "type": "object",
+            "properties": {
+              "rows": { "type": "array" },
+              "selected": { "type": "integer" },
+              "due_column": { "type": "boolean" }
+            }
+          },
+          "user_state": { "type": "object" },
+          "shared_state": { "type": "object" }
+        }
+      },
+      "capabilities": ["file.read", "file.list", "time"],
+      "entrypoint": "onEvent",
+      "version": "1.1.0"
+    },
+    "source": "// Candidate version produced for an unsupported option. Not activated.\nexport function onEvent(state, event) {\n  const base = state.session_state || {};\n  const rows = event.arg === '--due' ? base.rows : (event.rows || base.rows || []);\n  return {\n    newState: { session_state: { rows: rows, selected: base.selected || 0, due_column: true } },\n    view: { mode: 'table', status_line: rows.length + ' tasks' },\n    effects: [],\n    worldReads: []\n  };\n}\n",
+    "source_hash": "cnt_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "owner": "usr_GFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "scope": "user",
+    "created_at": 1798732900000,
+    "provenance": {
+      "prompt_id": "app-extension",
+      "prompt_version": "v1",
+      "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "generated_from": "unsupported_option"
+    },
+    "validation": {
+      "passed": false,
+      "issues": [
+        "state key due_column is written but absent from the accepted schema",
+        "view cursor is omitted while the view mode is table"
+      ],
+      "validated_at": 1798732902000,
+      "validator_version": "abi-1.0"
+    }
+  },
+  "event": {
+    "event_type": "input",
+    "payload": { "argv": ["moon-orchard", "--due"], "cwd": "/home/alice" },
+    "timestamp": 1798732904000,
+    "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+  },
+  "result": {
+    "new_state": {
+      "session_state": { "rows": [], "selected": 0, "due_column": true }
+    },
+    "view": {
+      "mode": "table",
+      "status_line": "candidate not activated",
+      "key_bindings": [{ "key": "q", "action": "emit_event" }]
+    },
+    "exited": false
+  }
+}

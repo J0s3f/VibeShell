@@ -1,0 +1,212 @@
+=== VibeShell PLAN 11 configuration qualification receipt ===
+date(UTC): 2026-10-03T15:22:59Z
+module: j0s.at/vibeshell/experiments/config-validation (stdlib only, no dependencies)
+go version go1.27.1 linux/amd64
+command: go test -race -count=1 -v ./...
+
+=== RUN   TestParseConfigAcceptsTheExampleDocument
+--- PASS: TestParseConfigAcceptsTheExampleDocument (0.00s)
+=== RUN   TestParseConfigRejectsInvalidDocuments
+=== RUN   TestParseConfigRejectsInvalidDocuments/unknown_top-level_field
+=== RUN   TestParseConfigRejectsInvalidDocuments/unknown_nested_field
+=== RUN   TestParseConfigRejectsInvalidDocuments/unknown_deeply_nested_field
+=== RUN   TestParseConfigRejectsInvalidDocuments/wrong_type_for_version
+=== RUN   TestParseConfigRejectsInvalidDocuments/wrong_type_for_listen_port
+=== RUN   TestParseConfigRejectsInvalidDocuments/wrong_type_for_tiers
+=== RUN   TestParseConfigRejectsInvalidDocuments/wrong_type_for_sharing.enabled
+=== RUN   TestParseConfigRejectsInvalidDocuments/wrong_type_for_a_route_entry
+=== RUN   TestParseConfigRejectsInvalidDocuments/trailing_content
+=== RUN   TestParseConfigRejectsInvalidDocuments/trailing_garbage
+=== RUN   TestParseConfigRejectsInvalidDocuments/array_root
+=== RUN   TestParseConfigRejectsInvalidDocuments/scalar_root
+=== RUN   TestParseConfigRejectsInvalidDocuments/empty_document
+=== RUN   TestParseConfigRejectsInvalidDocuments/malformed_JSON
+=== RUN   TestParseConfigRejectsInvalidDocuments/unmatched_closing_delimiter
+=== RUN   TestParseConfigRejectsInvalidDocuments/duplicate_top-level_key
+=== RUN   TestParseConfigRejectsInvalidDocuments/duplicate_identity_key
+=== RUN   TestParseConfigRejectsInvalidDocuments/duplicate_nested_key
+=== RUN   TestParseConfigRejectsInvalidDocuments/duplicate_key_in_a_tier
+=== RUN   TestParseConfigRejectsInvalidDocuments/duplicate_account_key
+--- PASS: TestParseConfigRejectsInvalidDocuments (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/unknown_top-level_field (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/unknown_nested_field (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/unknown_deeply_nested_field (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/wrong_type_for_version (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/wrong_type_for_listen_port (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/wrong_type_for_tiers (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/wrong_type_for_sharing.enabled (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/wrong_type_for_a_route_entry (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/trailing_content (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/trailing_garbage (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/array_root (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/scalar_root (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/empty_document (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/malformed_JSON (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/unmatched_closing_delimiter (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/duplicate_top-level_key (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/duplicate_identity_key (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/duplicate_nested_key (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/duplicate_key_in_a_tier (0.00s)
+    --- PASS: TestParseConfigRejectsInvalidDocuments/duplicate_account_key (0.00s)
+=== RUN   TestParseConfigRequiresDocumentedFields
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_version
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_identity
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_ssh
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_auth_mode
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_sharing_enabled
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_tiers
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_persistence_database_path
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_prompts_group_field
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_provider_enabled
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_discovery_refresh
+=== RUN   TestParseConfigRequiresDocumentedFields/missing_inference_bounds
+--- PASS: TestParseConfigRequiresDocumentedFields (0.04s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_version (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_identity (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_ssh (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_auth_mode (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_sharing_enabled (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_tiers (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_persistence_database_path (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_prompts_group_field (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_provider_enabled (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_discovery_refresh (0.00s)
+    --- PASS: TestParseConfigRequiresDocumentedFields/missing_inference_bounds (0.00s)
+=== RUN   TestValidateAcceptsTheExampleConfiguration
+--- PASS: TestValidateAcceptsTheExampleConfiguration (0.00s)
+=== RUN   TestValidateAcceptsContractVersionOneDocument
+--- PASS: TestValidateAcceptsContractVersionOneDocument (0.00s)
+=== RUN   TestValidateRejectsSemanticViolations
+=== RUN   TestValidateRejectsSemanticViolations/wrong_system_name
+=== RUN   TestValidateRejectsSemanticViolations/wrong_shell_name
+=== RUN   TestValidateRejectsSemanticViolations/hostname_too_long
+=== RUN   TestValidateRejectsSemanticViolations/listen_port_too_low
+=== RUN   TestValidateRejectsSemanticViolations/listen_port_too_high
+=== RUN   TestValidateRejectsSemanticViolations/too_many_connections
+=== RUN   TestValidateRejectsSemanticViolations/unknown_auth_mode
+=== RUN   TestValidateRejectsSemanticViolations/public_mode_with_password_file
+=== RUN   TestValidateRejectsSemanticViolations/secure_mode_without_password_file
+=== RUN   TestValidateRejectsSemanticViolations/too_many_auth_attempts
+=== RUN   TestValidateRejectsSemanticViolations/sharing_without_policy_revision
+=== RUN   TestValidateRejectsSemanticViolations/duplicate_account_ID
+=== RUN   TestValidateRejectsSemanticViolations/duplicate_tier_name
+=== RUN   TestValidateRejectsSemanticViolations/discovery_tier_first
+=== RUN   TestValidateRejectsSemanticViolations/two_discovery_tiers
+=== RUN   TestValidateRejectsSemanticViolations/discovery_tier_with_account_pool
+=== RUN   TestValidateRejectsSemanticViolations/unknown_model_route
+=== RUN   TestValidateRejectsSemanticViolations/discovery_pattern_in_a_plain_tier
+=== RUN   TestValidateRejectsSemanticViolations/discovery_pattern_matches_nothing
+=== RUN   TestValidateRejectsSemanticViolations/explicit_route_in_a_discovery_tier
+=== RUN   TestValidateRejectsSemanticViolations/tier_name_too_long
+=== RUN   TestValidateRejectsSemanticViolations/too_many_tiers
+=== RUN   TestValidateRejectsSemanticViolations/too_many_routes_in_a_tier
+=== RUN   TestValidateRejectsSemanticViolations/disabled_provider_breaks_protocol_support
+=== RUN   TestValidateRejectsSemanticViolations/provider_protocol_mismatch
+=== RUN   TestValidateRejectsSemanticViolations/provider_missing_enabled
+=== RUN   TestValidateRejectsSemanticViolations/enabled_provider_without_endpoint
+=== RUN   TestValidateRejectsSemanticViolations/provider_without_protocols
+=== RUN   TestValidateRejectsSemanticViolations/persistence_full_without_backup_dir
+=== RUN   TestValidateRejectsSemanticViolations/invalid_durability
+=== RUN   TestValidateRejectsSemanticViolations/negative_turn_deadline
+=== RUN   TestValidateRejectsSemanticViolations/too_many_attempts
+=== RUN   TestValidateRejectsSemanticViolations/negative_output_bytes
+=== RUN   TestValidateRejectsSemanticViolations/discovery_refresh_too_fast
+=== RUN   TestValidateRejectsSemanticViolations/stale_age_below_refresh
+=== RUN   TestValidateRejectsSemanticViolations/inference_timeout_out_of_range
+=== RUN   TestValidateRejectsSemanticViolations/inference_token_limit_out_of_range
+=== RUN   TestValidateRejectsSemanticViolations/inference_concurrency_out_of_range
+=== RUN   TestValidateRejectsSemanticViolations/inference_queue_depth_out_of_range
+=== RUN   TestValidateRejectsSemanticViolations/unknown_log_level
+=== RUN   TestValidateRejectsSemanticViolations/shutdown_grace_out_of_range
+=== RUN   TestValidateRejectsSemanticViolations/inline_secret_value
+=== RUN   TestValidateRejectsSemanticViolations/malformed_secret_reference
+=== RUN   TestValidateRejectsSemanticViolations/empty_secret_reference_target
+=== RUN   TestValidateRejectsSemanticViolations/dot_target_secret_reference
+=== RUN   TestValidateRejectsSemanticViolations/unknown_secret_reference_kind
+=== RUN   TestValidateRejectsSemanticViolations/empty_permitted_product
+--- PASS: TestValidateRejectsSemanticViolations (0.01s)
+    --- PASS: TestValidateRejectsSemanticViolations/wrong_system_name (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/wrong_shell_name (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/hostname_too_long (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/listen_port_too_low (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/listen_port_too_high (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/too_many_connections (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/unknown_auth_mode (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/public_mode_with_password_file (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/secure_mode_without_password_file (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/too_many_auth_attempts (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/sharing_without_policy_revision (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/duplicate_account_ID (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/duplicate_tier_name (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/discovery_tier_first (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/two_discovery_tiers (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/discovery_tier_with_account_pool (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/unknown_model_route (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/discovery_pattern_in_a_plain_tier (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/discovery_pattern_matches_nothing (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/explicit_route_in_a_discovery_tier (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/tier_name_too_long (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/too_many_tiers (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/too_many_routes_in_a_tier (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/disabled_provider_breaks_protocol_support (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/provider_protocol_mismatch (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/provider_missing_enabled (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/enabled_provider_without_endpoint (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/provider_without_protocols (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/persistence_full_without_backup_dir (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/invalid_durability (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/negative_turn_deadline (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/too_many_attempts (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/negative_output_bytes (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/discovery_refresh_too_fast (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/stale_age_below_refresh (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/inference_timeout_out_of_range (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/inference_token_limit_out_of_range (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/inference_concurrency_out_of_range (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/inference_queue_depth_out_of_range (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/unknown_log_level (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/shutdown_grace_out_of_range (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/inline_secret_value (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/malformed_secret_reference (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/empty_secret_reference_target (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/dot_target_secret_reference (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/unknown_secret_reference_kind (0.00s)
+    --- PASS: TestValidateRejectsSemanticViolations/empty_permitted_product (0.00s)
+=== RUN   TestShippedExampleLoads
+--- PASS: TestShippedExampleLoads (0.07s)
+=== RUN   TestShippedExampleRejectsTampering
+--- PASS: TestShippedExampleRejectsTampering (0.01s)
+=== RUN   TestShippedExampleRejectsMissingPromptFile
+--- PASS: TestShippedExampleRejectsMissingPromptFile (0.08s)
+=== RUN   TestShippedExampleRejectsPromptOutsideConfigDir
+--- PASS: TestShippedExampleRejectsPromptOutsideConfigDir (0.08s)
+=== RUN   TestParseSecretRef
+=== RUN   TestParseSecretRef/file_reference
+=== RUN   TestParseSecretRef/env_reference
+=== RUN   TestParseSecretRef/absolute_file_reference
+--- PASS: TestParseSecretRef (0.00s)
+    --- PASS: TestParseSecretRef/file_reference (0.00s)
+    --- PASS: TestParseSecretRef/env_reference (0.00s)
+    --- PASS: TestParseSecretRef/absolute_file_reference (0.00s)
+=== RUN   TestSecretRedaction
+--- PASS: TestSecretRedaction (0.00s)
+=== RUN   TestResolvedSecretNeverAppearsInErrors
+--- PASS: TestResolvedSecretNeverAppearsInErrors (0.01s)
+=== RUN   TestStoreActiveIsNilBeforeFirstPublication
+--- PASS: TestStoreActiveIsNilBeforeFirstPublication (0.00s)
+=== RUN   TestStorePublishesAValidCandidate
+--- PASS: TestStorePublishesAValidCandidate (0.01s)
+=== RUN   TestStoreRejectsInvalidCandidateWithoutReplacingActive
+--- PASS: TestStoreRejectsInvalidCandidateWithoutReplacingActive (0.01s)
+=== RUN   TestTurnPinsItsSnapshot
+--- PASS: TestTurnPinsItsSnapshot (0.01s)
+=== RUN   TestStoreConcurrentReadersDuringReload
+--- PASS: TestStoreConcurrentReadersDuringReload (0.07s)
+=== RUN   TestSnapshotRedactsSecretsInFormatting
+--- PASS: TestSnapshotRedactsSecretsInFormatting (0.01s)
+PASS
+ok  	j0s.at/vibeshell/experiments/config-validation	1.444s
+
+=== gofmt -l . (empty means formatted) ===
+=== go vet ./... ===
+vet: clean

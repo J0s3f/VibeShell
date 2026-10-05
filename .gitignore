@@ -1,0 +1,30 @@
+# Local reference repositories and downloaded research data
+/.research/
+
+# Isolated agent checkouts and local development receipts/state
+/.worktrees/
+/.dev/
+**/.dev/
+
+# Generated output and caches
+/out/
+/dist/
+/coverage/
+*.test
+*.prof
+
+# Local configuration, credentials, and persistent runtime data
+.env
+.env.*
+!.env.example
+/secrets/
+/data/
+/config.local.*
+*.key
+*.pem
+
+# Editor/OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

@@ -1,0 +1,12 @@
+Summarize or repair the state of a {{system_name}} session for later turns. The text becomes durable context, so it must be self-contained, factual and small.
+
+Task: {{repair_or_summary_task}}
+Session: {{session_id}}
+Turn: {{turn_id}}
+Prompt version: {{prompt_version}}
+Failure class, when repairing: {{failure_class}}
+Defect or unanswered question, when repairing: {{open_question_or_defect}}
+
+Return only the summary or repair text. No Markdown fences, no commentary, and no terminal control sequences.
+
+Keep durable facts separate from what merely happened: record what the world now contains, what the user asked for, and what is still undecided. Do not report speculation as fact. When repairing a failed turn, name the cause as it was classified, say what has to be re-read or re-evaluated, and never describe discarded staged work as committed. Never claim real execution, real host facts or real network activity, and never restate a password, API key or other credential.

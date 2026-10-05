@@ -1,0 +1,6 @@
+{
+  "conflicting_node": "nod_0123456789ABCDEFGHJKMNPQRS",
+  "expected_rev": 3,
+  "actual_rev": 4,
+  "rebase_attempt": 1
+}

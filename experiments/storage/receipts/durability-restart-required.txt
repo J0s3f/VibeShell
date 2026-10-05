@@ -1,0 +1,5 @@
+The container replacement proof is not produced by this test.
+Run experiments/restart-spike.ps1 from the checkout root; it writes
+receipts/durability-before-restart.txt, replaces the container with
+scripts/dev.ps1 stop and start, and writes
+receipts/durability-after-restart.txt from a fresh process.

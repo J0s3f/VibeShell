@@ -1,0 +1,20 @@
+Gate 2b: FTS5 retrieval, ranking, and Unicode
+=============================================
+bare term            "ls"             [ev-grep-ls ev-ls-alpha ev-ls-alpha-lower ev-ls-home]
+column filter        "command:grep"   [ev-grep-ls]
+column and term      "path:report"    [ev-percent]
+path conjunction     "path:notes"     [ev-emoji ev-grep-ls]
+phrase               "\"ls -la\""     [ev-ls-alpha ev-ls-alpha-lower ev-ls-home]
+prefix token         "ca*"            [ev-cat-unicode ev-emoji ev-percent ev-underscore]
+diacritics folded    "zoe"            [ev-cat-unicode]
+CJK token            "文件"             [ev-cat-unicode]
+punctuation term     "100"            [ev-percent]
+emoji is not a token "🌍"              []
+ranked (grep AND zzz)      [ev-rank-many ev-rank-few]
+snippet                    /home/100%/<report>.txt
+
+query plans
+fts match                  1 entries
+  SCAN transcript_fts VIRTUAL TABLE INDEX 0:M2
+content lookup             1 entries
+  SEARCH search_docs USING COVERING INDEX sqlite_autoindex_search_docs_1 (event_id=?)

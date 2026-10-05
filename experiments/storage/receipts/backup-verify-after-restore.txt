@@ -1,0 +1,18 @@
+Gate 8c: the restored database in a fresh container
+===================================================
+phase                      restore-verify
+captured (UTC)             2026-10-03T14:56:36Z
+live database              /state/spike/backup/live.db
+matches the restore fingerprint true
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+event rows                 3
+content rows               3
+full-text hits             3
+subtree hits               3
+state directory            3 entries
+  live.db                  126976 bytes
+  live.db-shm              32768 bytes
+  live.db-wal              0 bytes
+live bytes                 159744

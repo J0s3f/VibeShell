@@ -1,0 +1,28 @@
+=== RUN   TestDeterminism
+--- PASS: TestDeterminism (0.00s)
+=== RUN   TestOverlayPrecedenceUserOverSharedOverBaseline
+--- PASS: TestOverlayPrecedenceUserOverSharedOverBaseline (0.00s)
+=== RUN   TestUserDeleteHidesWithoutErasingAndRematerializesAsNew
+--- PASS: TestUserDeleteHidesWithoutErasingAndRematerializesAsNew (0.00s)
+=== RUN   TestSharedTombstoneHidesBaseline
+--- PASS: TestSharedTombstoneHidesBaseline (0.00s)
+=== RUN   TestUnixPermissionTable
+--- PASS: TestUnixPermissionTable (0.00s)
+=== RUN   TestSharingOffRejectsRegardlessOfBits
+--- PASS: TestSharingOffRejectsRegardlessOfBits (0.00s)
+=== RUN   TestResolveAbsoluteAndRelative
+--- PASS: TestResolveAbsoluteAndRelative (0.00s)
+=== RUN   TestResolveNeverEscapesRoot
+--- PASS: TestResolveNeverEscapesRoot (0.00s)
+=== RUN   TestResolveSymlinkLoopAndDepth
+--- PASS: TestResolveSymlinkLoopAndDepth (0.00s)
+=== RUN   TestRejectBadInputs
+--- PASS: TestRejectBadInputs (0.00s)
+=== RUN   TestUnicodeNamesDeterministic
+--- PASS: TestUnicodeNamesDeterministic (0.00s)
+=== RUN   TestConcurrentFirstMaterialization
+--- PASS: TestConcurrentFirstMaterialization (0.00s)
+=== RUN   TestStaleListingCannotValidateWrite
+--- PASS: TestStaleListingCannotValidateWrite (0.00s)
+PASS
+ok  	j0s.at/vibeshell/experiments/world-paths	1.021s

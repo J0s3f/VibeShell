@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://j0s.at/vibeshell/schemas/v1/configuration.schema.json",
+  "title": "VibeShell strict service configuration",
+  "description": "Versioned strict JSON configuration (PLAN 11). Unknown fields fail validation; secrets travel as file/env references, never values. Shipped example tiers (free routes, automatic -free discovery, Go routes, cheap pay-as-you-go) are an operator-editable example, not an enforced preference. Contract version 1.",
+  "version": 1,
+  "type": "object",
+  "required": ["version", "identity", "ssh", "auth", "sharing", "tiers", "persistence"],
+  "properties": {
+    "version": { "const": 1 },
+    "identity": {
+      "type": "object",
+      "required": ["system_name", "shell_name", "hostname"],
+      "properties": {
+        "system_name": { "const": "VibeOS" },
+        "shell_name": { "const": "VibeShell" },
+        "hostname": { "type": "string", "minLength": 1, "maxLength": 64 }
+      },
+      "additionalProperties": false
+    },
+    "ssh": {
+      "type": "object",
+      "required": ["listen_port", "host_key_file"],
+      "properties": {
+        "listen_port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "host_key_file": { "type": "string", "minLength": 1 },
+        "max_connections": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "idle_timeout_ms": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "auth": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["public", "secure"] },
+        "password_file": { "type": "string" },
+        "max_attempts_per_connection": { "type": "integer", "minimum": 1, "maximum": 10 }
+      },
+      "additionalProperties": false
+    },
+    "sharing": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "policy_revision": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tiers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["name", "routes"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "routes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "auto_free": { "type": "boolean" },
+          "account_pool": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "accounts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "quota_group", "secret_ref"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "quota_group": { "type": "string", "minLength": 1 },
+          "permitted_products": { "type": "array", "items": { "type": "string" } },
+          "secret_ref": { "type": "string", "minLength": 1, "description": "Mounted file path or env name; the secret value never appears here." }
+        },
+        "additionalProperties": false
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "turn_deadline_ms": { "type": "integer", "minimum": 1 },
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "max_output_bytes": { "type": "integer", "minimum": 1 },
+        "max_content_bytes": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "persistence": {
+      "type": "object",
+      "required": ["database_path"],
+      "properties": {
+        "database_path": { "type": "string", "minLength": 1 },
+        "durability": { "enum": ["FULL", "NORMAL"], "default": "FULL" },
+        "backup_dir": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

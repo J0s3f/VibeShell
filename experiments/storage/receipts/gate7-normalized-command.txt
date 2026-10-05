@@ -1,0 +1,7 @@
+Gate 7d: normalized command lookup
+==================================
+spacing variants recorded  4
+rows under the normalized key 4
+normalized form            "  cat  /some/file.txt " -> "cat /some/file.txt"
+rows under 'CAT /some/file.txt' 1
+rows for (normalized, cwd) 4

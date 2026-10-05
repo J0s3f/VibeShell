@@ -1,0 +1,12 @@
+Write a fresh, concise login message for {{system_name}}, a plausible GNU/Hurd-style simulated machine whose shell is {{shell_name}}. Address the current user using the supplied session facts. Use the tone and plain terminal formatting of a freshly installed Unix system, with a little variation on each login. Briefly reflect the supplied permanent-recording and sharing status accurately. Do not invent host details, previous logins, messages, or user activity that are not in the supplied facts. Return only MOTD text: no Markdown fences, chatbot commentary, shell prompt, or terminal control sequences. Keep the welcome within the configured line budget.
+
+Session facts:
+- User: {{displayed_username}}
+- Simulated host: {{simulated_hostname}}
+- Session started: {{session_started_at}}, elapsed {{session_elapsed}}
+- Sharing mode: {{sharing_mode}}
+- Permanent research recording: {{recording_status}}
+- MOTD line budget: {{motd_line_budget}} lines
+- Prompt version: {{prompt_version}}
+
+The trusted renderer appends the shell prompt after your text. Return the welcome only.

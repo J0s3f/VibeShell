@@ -1,0 +1,218 @@
+{
+  "example": "vi-like text editor",
+  "artifact": {
+    "app_id": "app_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "version_id": "av_01ARZ3NDEKTSV4RRFFQ69G5FAW",
+    "command_names": ["vnotes", "vn"],
+    "description": "Opens a simulated text file and edits it with mode-based keys.",
+    "capabilities": ["file.read", "file.write"],
+    "entrypoint": "handle",
+    "version": "1.0.0",
+    "handler": "handler.js"
+  },
+  "interaction": {
+    "view": {
+      "mode": "editor",
+      "gutter": true,
+      "status_line": "notes.txt {dirty} -- {mode} -- {line}/{lines} col {column}"
+    },
+    "mode": "normal",
+    "default_mode": "normal",
+    "modes": [
+      {
+        "name": "normal",
+        "column_policy": "within_line",
+        "mode_targets": ["insert", "command", "search"],
+        "bindings": [
+          { "keys": "h", "action": "move_cursor", "params": { "move": { "target": "left" } } },
+          { "keys": "j", "action": "move_cursor", "params": { "move": { "target": "down" } } },
+          { "keys": "k", "action": "move_cursor", "params": { "move": { "target": "up" } } },
+          { "keys": "l", "action": "move_cursor", "params": { "move": { "target": "right" } } },
+          { "keys": "left", "action": "move_cursor", "params": { "move": { "target": "left" } } },
+          { "keys": "right", "action": "move_cursor", "params": { "move": { "target": "right" } } },
+          { "keys": "up", "action": "move_cursor", "params": { "move": { "target": "up" } } },
+          { "keys": "down", "action": "move_cursor", "params": { "move": { "target": "down" } } },
+          { "keys": "w", "action": "move_cursor", "params": { "move": { "target": "word_forward" } } },
+          { "keys": "b", "action": "move_cursor", "params": { "move": { "target": "word_backward" } } },
+          { "keys": "0", "action": "move_cursor", "params": { "move": { "target": "line_start" } } },
+          { "keys": "$", "action": "move_cursor", "params": { "move": { "target": "line_end" } } },
+          { "keys": "g g", "action": "move_cursor", "params": { "move": { "target": "doc_start" } } },
+          { "keys": "G", "action": "move_cursor", "params": { "move": { "target": "doc_end" } } },
+          { "keys": "3 G", "action": "move_cursor", "params": { "move": { "target": "line_number", "count": 3 } } },
+          { "keys": "page-up", "action": "move_cursor", "params": { "move": { "target": "page_up" } } },
+          { "keys": "page-down", "action": "move_cursor", "params": { "move": { "target": "page_down" } } },
+          { "keys": "x", "action": "edit_buffer", "params": { "edit": { "op": "delete_after" } } },
+          { "keys": "X", "action": "edit_buffer", "params": { "edit": { "op": "delete_before" } } },
+          { "keys": "D", "action": "edit_buffer", "params": { "edit": { "op": "delete_to_line_end" } } },
+          { "keys": "d d", "action": "edit_buffer", "params": { "edit": { "op": "delete_line" } } },
+          { "keys": "d w", "action": "edit_buffer", "params": { "edit": { "op": "delete_word_before" } } },
+          { "keys": "J", "action": "edit_buffer", "params": { "edit": { "op": "join_line" } } },
+          { "keys": "u", "action": "edit_buffer", "params": { "edit": { "op": "undo" } } },
+          { "keys": "ctrl-r", "action": "edit_buffer", "params": { "edit": { "op": "redo" } } },
+          { "keys": "i", "action": "mode_switch", "params": { "mode": { "mode": "insert" } } },
+          { "keys": "a", "action": "emit_event", "params": { "event": { "name": "enter_append" } } },
+          { "keys": "v", "action": "select_range", "params": { "select": { "from": "cursor", "to": "cursor" } } },
+          { "keys": "escape", "action": "select_range", "params": { "select": { "from": "none", "to": "none" } } },
+          { "keys": "y", "action": "emit_event", "params": { "event": { "name": "copy_selection", "snapshot": "selection_text" } } },
+          { "keys": "/", "action": "emit_event", "params": { "event": { "name": "open_search" } } },
+          { "keys": "n", "action": "search_buffer", "params": { "search": { "query": "last", "direction": "forward_wrap", "case": "insensitive" } } },
+          { "keys": "N", "action": "search_buffer", "params": { "search": { "query": "last", "direction": "backward_wrap", "case": "insensitive" } } },
+          { "keys": ":", "action": "emit_event", "params": { "event": { "name": "open_command" } } }
+        ]
+      },
+      {
+        "name": "insert",
+        "inherit": false,
+        "column_policy": "allow_end",
+        "mode_targets": ["normal"],
+        "bindings": [
+          { "keys": "text", "action": "edit_buffer", "params": { "edit": { "op": "insert", "text": "input_text" } } },
+          { "keys": "enter", "action": "edit_buffer", "params": { "edit": { "op": "newline" } } },
+          { "keys": "backspace", "action": "edit_buffer", "params": { "edit": { "op": "delete_before" } } },
+          { "keys": "delete", "action": "edit_buffer", "params": { "edit": { "op": "delete_after" } } },
+          { "keys": "left", "action": "move_cursor", "params": { "move": { "target": "left" } } },
+          { "keys": "right", "action": "move_cursor", "params": { "move": { "target": "right" } } },
+          { "keys": "up", "action": "move_cursor", "params": { "move": { "target": "up" } } },
+          { "keys": "down", "action": "move_cursor", "params": { "move": { "target": "down" } } },
+          { "keys": "home", "action": "move_cursor", "params": { "move": { "target": "line_start" } } },
+          { "keys": "end", "action": "move_cursor", "params": { "move": { "target": "line_end" } } },
+          { "keys": "escape", "action": "mode_switch", "params": { "mode": { "mode": "normal" } } }
+        ]
+      },
+      {
+        "name": "command",
+        "inherit": false,
+        "column_policy": "within_line",
+        "mode_targets": ["normal"],
+        "bindings": [
+          { "keys": "enter", "action": "emit_event", "params": { "event": { "name": "run_command", "snapshot": "prompt_text" } } },
+          { "keys": "escape", "action": "emit_event", "params": { "event": { "name": "cancel_command" } } }
+        ]
+      },
+      {
+        "name": "search",
+        "inherit": false,
+        "column_policy": "within_line",
+        "mode_targets": ["normal", "command"],
+        "bindings": [
+          { "keys": "enter", "action": "search_buffer", "params": { "search": { "query": "prompt", "direction": "forward_wrap", "case": "insensitive" } } },
+          { "keys": "escape", "action": "emit_event", "params": { "event": { "name": "cancel_search" } } }
+        ]
+      }
+    ]
+  },
+  "state": {
+    "buffer": {
+      "lines": ["alpha bravo", "charlie delta", "echo foxtrot"],
+      "cursor": { "line": 0, "column": 0 }
+    }
+  },
+  "screen": { "rows": 10, "columns": 40 },
+  "handler": {
+    "rules": [
+      {
+        "event": "enter_append",
+        "result": { "mode": "insert", "cursor": { "line": 0, "column": 1 } }
+      },
+      {
+        "event": "open_search",
+        "result": { "mode": "search", "clear_prompt": true }
+      },
+      {
+        "event": "open_command",
+        "result": { "mode": "command", "clear_prompt": true }
+      },
+      {
+        "event": "cancel_command",
+        "result": { "mode": "normal", "clear_prompt": true, "clear_status": true }
+      },
+      {
+        "event": "cancel_search",
+        "result": { "mode": "normal", "clear_prompt": true, "clear_status": true }
+      },
+      {
+        "event": "copy_selection",
+        "result": { "status": "selection copied" }
+      },
+      {
+        "event": "run_command",
+        "command": "w",
+        "result": {
+          "mode": "normal",
+          "clear_prompt": true,
+          "dirty": false,
+          "clear_status": true,
+          "effects": [
+            {
+              "sync": true,
+              "mutation": {
+                "type": "update",
+                "namespace_id": "nsp_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+                "path": "/home/micro/notes.txt",
+                "node_id": "nod_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+                "expected_rev": 4,
+                "kind": "file"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "run_command",
+        "command": "q",
+        "dirty": true,
+        "result": { "mode": "normal", "clear_prompt": true, "status": "E37: No write since last change (add ! to override)" }
+      },
+      {
+        "event": "run_command",
+        "command": "q",
+        "result": { "mode": "normal", "clear_prompt": true, "clear_status": true, "exited": true, "exit_code": 0 }
+      },
+      {
+        "event": "run_command",
+        "command": "q!",
+        "result": { "mode": "normal", "clear_prompt": true, "clear_status": true, "exited": true, "exit_code": 0 }
+      },
+      {
+        "event": "run_command",
+        "command": "wq",
+        "result": {
+          "mode": "normal",
+          "clear_prompt": true,
+          "dirty": false,
+          "clear_status": true,
+          "exited": true,
+          "exit_code": 0,
+          "effects": [
+            {
+              "sync": true,
+              "mutation": {
+                "type": "update",
+                "namespace_id": "nsp_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+                "path": "/home/micro/notes.txt",
+                "node_id": "nod_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+                "expected_rev": 4,
+                "kind": "file"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "event": "run_command",
+        "command": "set",
+        "result": { "status": "E518: Unknown option" }
+      },
+      {
+        "event": "run_command",
+        "result": { "status": "E492: Not an editor command" }
+      }
+    ],
+    "text_rules": [
+      { "keys": "backspace", "modes": ["command", "search"], "result": { "backspace_prompt": true } },
+      { "keys": "delete", "modes": ["command", "search"], "result": { "backspace_prompt": true } },
+      { "printable": true, "modes": ["command", "search"], "result": { "append_prompt": "$text" } }
+    ],
+    "echo_prompts": { "command": ":", "search": "/" }
+  }
+}

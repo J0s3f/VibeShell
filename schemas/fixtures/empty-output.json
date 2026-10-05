@@ -1,0 +1,10 @@
+{
+  "request_id": "req-empty-001",
+  "route_id": "rte_0123456789ABCDEFGHJKMNPQRS",
+  "account_id": "acc_0123456789ABCDEFGHJKMNPQRS",
+  "message": { "role": "assistant" },
+  "finish_reason": "stop",
+  "usage": { "prompt_tokens": 12, "completion_tokens": 0, "total_tokens": 12 },
+  "latency_ms": 12,
+  "timestamp": 1798732800000
+}

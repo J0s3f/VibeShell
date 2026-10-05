@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "description": "Contract fixtures for PLAN 14. Each contract names the shipped schema it binds to (or states that no schema has shipped yet), the representative Go structure a fixture must decode into, and its fixtures. Edge cases list the PLAN 14 coverage and reference both the fixtures owned here and the earlier fragments under schemas/fixtures, so nothing is duplicated blindly.",
+  "contracts": [
+    {
+      "contract": "model-request-result",
+      "plan_reference": "PLAN 14, PLAN 9.1",
+      "schema_status": "shipped",
+      "schema": "schemas/model-request-result.schema.json",
+      "representative_type": "ModelExchange",
+      "fixtures": [
+        "model/empty-output.json",
+        "model/unicode-text.json",
+        "model/binary-content-reference.json",
+        "model/unknown-command-tool-call.json",
+        "model/quota-error.json",
+        "model/cancelled-generation.json",
+        "model/world-conflict-error.json"
+      ]
+    },
+    {
+      "contract": "world-changeset",
+      "plan_reference": "PLAN 14, PLAN 5.3",
+      "schema_status": "shipped",
+      "schema": "schemas/world-changeset.schema.json",
+      "representative_type": "ChangeSet",
+      "fixtures": [
+        "world/new-folder.json",
+        "world/binary-file-write.json",
+        "world/concurrent-conflict-rebase.json"
+      ]
+    },
+    {
+      "contract": "event-envelope",
+      "plan_reference": "PLAN 14, PLAN 10.1",
+      "schema_status": "shipped",
+      "schema": "schemas/event-envelope.schema.json",
+      "representative_type": "EventEnvelope",
+      "fixtures": [
+        "app/sandbox-exception-run.json",
+        "session/shared-scope-denial.json",
+        "session/incomplete-transcript-delivery.json"
+      ]
+    },
+    {
+      "contract": "app-abi",
+      "plan_reference": "PLAN 14, PLAN 5.6, PLAN 6.2",
+      "schema_status": "shipped",
+      "schema": "schemas/app-abi.schema.json",
+      "representative_type": "AppExchange",
+      "fixtures": [
+        "app/generated-unknown-command.json",
+        "app/extension-candidate.json",
+        "app/interactive-session.json"
+      ]
+    },
+    {
+      "contract": "route-policy",
+      "plan_reference": "PLAN 14, PLAN 8.4, PLAN 9.2",
+      "schema_status": "shipped",
+      "schema": "schemas/route-policy.schema.json",
+      "representative_type": "RoutePolicy",
+      "fixtures": ["routing/quota-cooldown.json"]
+    },
+    {
+      "contract": "session-input-output",
+      "plan_reference": "PLAN 14, PLAN 4.3",
+      "schema_status": "proposed",
+      "schema": null,
+      "representative_type": "SessionInputOutput",
+      "fixtures": ["proposed/session-input-output.json"],
+      "note": "No session input or session output schema has shipped. This fixture proposes the shape an SSH adapter and a terminal renderer could share."
+    },
+    {
+      "contract": "agent-tool",
+      "plan_reference": "PLAN 14, PLAN 7.2",
+      "schema_status": "proposed",
+      "schema": null,
+      "representative_type": "AgentToolCall",
+      "fixtures": ["proposed/agent-tool-unknown-command.json"],
+      "note": "PLAN 7.2 fixes tool capabilities, not names or envelopes, and no agent-tool schema has shipped. Tool names in this fixture are placeholders."
+    },
+    {
+      "contract": "retrieval",
+      "plan_reference": "PLAN 14, PLAN 10.4",
+      "schema_status": "proposed",
+      "schema": null,
+      "representative_type": "RetrievalPage",
+      "fixtures": ["proposed/retrieval-incomplete-delivery.json"],
+      "note": "PLAN 10 requires scope, stable event ids, pagination, provenance and truncation for retrieval, but no retrieval schema has shipped. The events here are event-envelope documents, which do validate."
+    },
+    {
+      "contract": "configuration",
+      "plan_reference": "PLAN 14, PLAN 11",
+      "schema_status": "proposed",
+      "schema": "schemas/configuration.schema.json",
+      "representative_type": "ServiceConfiguration",
+      "fixtures": ["proposed/config-prompts-group.json"],
+      "note": "Intentionally not valid against configuration.schema.json version 1: that schema has no prompts group although PLAN 11 requires one. The fixture is a contract-change proposal for the main agent, which owns the shared schema baseline."
+    }
+  ],
+  "edge_cases": [
+    {
+      "case": "empty output",
+      "owned_fixtures": ["model/empty-output.json"],
+      "existing_fixtures": ["schemas/fixtures/empty-output.json"],
+      "note": "The earlier fixture is a bare result fragment; this one is a complete request/result exchange with a zero-token completion that still has a well-formed assistant message."
+    },
+    {
+      "case": "Unicode",
+      "owned_fixtures": ["model/unicode-text.json"],
+      "existing_fixtures": ["schemas/fixtures/unicode.json"],
+      "note": "The earlier fixture is a session input fragment. This one carries non-ASCII text, an emoji and a combining-friendly filename through a whole exchange."
+    },
+    {
+      "case": "binary content reference",
+      "owned_fixtures": ["model/binary-content-reference.json", "world/binary-file-write.json"],
+      "existing_fixtures": ["schemas/fixtures/binary-content-ref.json"],
+      "note": "The earlier fixture is a bare content reference. These two show exact bytes travelling by reference through a model tool call and then through a committed world change set, never regenerated as text."
+    },
+    {
+      "case": "unknown command",
+      "owned_fixtures": ["model/unknown-command-tool-call.json", "app/generated-unknown-command.json", "proposed/agent-tool-unknown-command.json"],
+      "existing_fixtures": ["schemas/fixtures/unknown-command.json"],
+      "note": "The earlier fixture is a single input event. These show the full path: materialization and app-candidate tool calls, then the validated artifact that is activated for the invented program."
+    },
+    {
+      "case": "new folder",
+      "owned_fixtures": ["world/new-folder.json"],
+      "existing_fixtures": ["schemas/fixtures/new-folder.json"],
+      "note": "The earlier fixture creates one directory. This one creates both missing parents in one change set and records the absence check plus directory membership revision that make the create valid."
+    },
+    {
+      "case": "shared-scope denial",
+      "owned_fixtures": ["session/shared-scope-denial.json"],
+      "existing_fixtures": ["schemas/fixtures/shared-scope-denial.json"],
+      "note": "The earlier fixture is a bare domain error. This one is the permanent research record of the denial: a typed tool error envelope with policy revision, requested path, and the fact that nothing was written."
+    },
+    {
+      "case": "concurrent conflict",
+      "owned_fixtures": ["model/world-conflict-error.json", "world/concurrent-conflict-rebase.json"],
+      "existing_fixtures": ["schemas/fixtures/concurrent-conflict.json"],
+      "note": "The earlier fixture reports expected/actual revisions. These add both halves that are otherwise missing: the typed world_conflict failure and the re-staged change set the losing attempt commits after re-reading the winning version."
+    },
+    {
+      "case": "quota error",
+      "owned_fixtures": ["model/quota-error.json", "routing/quota-cooldown.json"],
+      "existing_fixtures": ["schemas/fixtures/quota-error.json"],
+      "note": "The earlier fixture is a bare error envelope. These show the error as a result of a real exchange, and the resulting route health transition to cooling_down with a probe schedule."
+    },
+    {
+      "case": "cancelled generation",
+      "owned_fixtures": ["model/cancelled-generation.json"],
+      "existing_fixtures": ["schemas/fixtures/cancelled-generation.json"],
+      "note": "The earlier fixture is a bare error envelope. This one shows the cancelled result itself, including the partial content already streamed and the classification that the staged work was discarded rather than committed."
+    },
+    {
+      "case": "sandbox exception",
+      "owned_fixtures": ["app/sandbox-exception-run.json"],
+      "existing_fixtures": ["schemas/fixtures/sandbox-exception.json"],
+      "note": "The earlier fixture is a bare run payload. This one is the same outcome as a persisted app.sandbox_run event envelope, and records that no state was written while the view was retained."
+    },
+    {
+      "case": "incomplete transcript delivery",
+      "owned_fixtures": ["session/incomplete-transcript-delivery.json", "proposed/retrieval-incomplete-delivery.json"],
+      "existing_fixtures": ["schemas/fixtures/incomplete-delivery.json"],
+      "note": "The earlier fixture is a retrieval-shaped fragment. These show the truncated frame stored by content reference, and a retrieval page that ends mid-turn with a usable next cursor."
+    }
+  ]
+}

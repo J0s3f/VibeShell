@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://j0s.at/vibeshell/schemas/v1/model-request-result.schema.json",
+  "title": "VibeShell canonical model request / result",
+  "description": "Provider-neutral model request and normalized result plus the failure-classification envelope (PLAN 9.1, contract 14). Route and account travel as opaque references; no secret values appear. Contract version 1.",
+  "version": 1,
+  "type": "object",
+  "required": ["request", "result"],
+  "properties": {
+    "request": { "$ref": "#/$defs/modelRequest" },
+    "result": { "$ref": "#/$defs/modelResult" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "modelRequest": {
+      "type": "object",
+      "required": ["route_id", "account_id", "messages", "max_tokens", "deadline_ms", "request_id"],
+      "properties": {
+        "route_id": { "$ref": "#/$defs/identity" },
+        "account_id": { "$ref": "#/$defs/identity" },
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": {
+            "type": "object",
+            "required": ["role"],
+            "properties": {
+              "role": { "enum": ["system", "user", "assistant", "tool"] },
+              "content": { "type": "string" },
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "name", "arguments"],
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "arguments": { "type": "object" }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "tool_call_id": { "type": "string" },
+              "name": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "tools": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "required": ["name", "description", "parameters"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "parameters": { "type": "object" },
+              "strict": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "temperature": { "type": "number", "minimum": 0, "maximum": 2 },
+        "deadline_ms": { "type": "integer", "minimum": 1 },
+        "request_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "modelResult": {
+      "type": "object",
+      "required": ["request_id", "route_id", "account_id", "finish_reason", "usage", "latency_ms", "timestamp"],
+      "properties": {
+        "request_id": { "type": "string" },
+        "route_id": { "$ref": "#/$defs/identity" },
+        "account_id": { "$ref": "#/$defs/identity" },
+        "message": { "type": "object" },
+        "finish_reason": { "enum": ["stop", "length", "tool_calls", "content_filter", "error", "cancelled"] },
+        "usage": {
+          "type": "object",
+          "required": ["prompt_tokens", "completion_tokens", "total_tokens"],
+          "properties": {
+            "prompt_tokens": { "type": "integer", "minimum": 0 },
+            "completion_tokens": { "type": "integer", "minimum": 0 },
+            "total_tokens": { "type": "integer", "minimum": 0 },
+            "estimated_cost_usd": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "error": { "$ref": "#/$defs/errorEnvelope" },
+        "latency_ms": { "type": "integer", "minimum": 0 },
+        "timestamp": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "errorEnvelope": {
+      "type": "object",
+      "required": ["class", "message", "timestamp"],
+      "properties": {
+        "class": {
+          "enum": ["invalid_credential", "quota_exhausted", "rate_limited", "model_not_found", "provider_outage", "network_timeout", "context_too_long", "invalid_arguments", "invalid_response", "content_rejected", "user_cancelled", "world_conflict", "unknown"]
+        },
+        "message": { "type": "string" },
+        "route_id": { "$ref": "#/$defs/identity" },
+        "account_id": { "$ref": "#/$defs/identity" },
+        "retry_after_ms": { "type": "integer", "minimum": 0 },
+        "status_code": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "raw_error": { "type": "string", "description": "Redacted provider error text; never carries secrets." },
+        "timestamp": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

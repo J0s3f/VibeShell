@@ -1,0 +1,10 @@
+CGO_ENABLED=0 go build ./... and go test, proving the pure-Go driver needs no cgo toolchain
+# go version
+go version go1.27.1 linux/amd64
+
+$ CGO_ENABLED=0 go build ./...
+exit=0
+
+$ CGO_ENABLED=0 go test -count=1 ./...
+ok  	j0s.at/vibeshell/experiments/storage	4.003s
+exit=0

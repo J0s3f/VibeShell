@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "prompt_set": "v1",
+  "description": "Default presentation and behaviour prompts for VibeOS/VibeShell. Administrators select one file per prompt slot through the prompts configuration group (PLAN 11); the selected paths are administrator-controlled and validated before reload. Prompt text can change presentation only: it never grants a tool, widens a scope, or enables real execution.",
+  "placeholder_syntax": "{{variable_name}}",
+  "placeholder_rules": [
+    "Every placeholder must appear in the variables list of the prompt that uses it; tests/contract rejects undocumented placeholders.",
+    "Every documented variable has a defined empty rendering, so a prompt never reaches the model with an unresolved placeholder.",
+    "Placeholders are substituted by the trusted renderer before the prompt is sent; the model never receives the raw file.",
+    "Variable values are session facts only. Credentials, password hashes and API keys are never prompt variables."
+  ],
+  "hard_constraints": [
+    "No Markdown fences and no backtick characters in any prompt file.",
+    "No model commentary: the prompt asks for the deliverable only, without reasoning or self-description.",
+    "No terminal control sequences, no colour codes and no cursor movement; plain text lines only.",
+    "No real host, kernel, container, process or network facts may be requested or invented.",
+    "The renderer owns the shell prompt, screen state and any control characters; prompt text supplies presentation content only.",
+    "An edited prompt file is validated before reload; a turn pins its prompt snapshot and the next turn or session uses the updated permitted version.",
+    "A prompt may not expand hard tool permissions, scope permissions, or the simulated-execution boundary, whatever it says."
+  ],
+  "prompts": [
+    {
+      "id": "motd",
+      "file": "v1/motd.txt",
+      "plan_reference": "PLAN 7.4",
+      "max_lines": 12,
+      "purpose": "Generates one fresh login message per accepted shell session. The trusted renderer appends the VibeShell prompt afterwards.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "shell_name", "description": "Shell name presented to the user.", "source": "configuration identity.shell_name (VibeShell)", "empty_rendering": "VibeShell" },
+        { "name": "simulated_hostname", "description": "Simulated host name; never the real container host name.", "source": "configuration identity.hostname", "empty_rendering": "vibeshell" },
+        { "name": "displayed_username", "description": "User name shown at login.", "source": "accepted session principal", "empty_rendering": "user" },
+        { "name": "session_started_at", "description": "Session start time as an ISO-8601 UTC timestamp.", "source": "session clock", "empty_rendering": "an unrecorded time" },
+        { "name": "session_elapsed", "description": "Elapsed session time as a short human-readable duration.", "source": "session clock", "empty_rendering": "less than a minute" },
+        { "name": "sharing_mode", "description": "Enabled sharing mode as a short token.", "source": "effective sharing policy", "empty_rendering": "sharing off" },
+        { "name": "recording_status", "description": "Permanent research-recording status as a short token.", "source": "effective persistence and retention policy", "empty_rendering": "recording off" },
+        { "name": "motd_line_budget", "description": "Maximum number of lines the welcome may use.", "source": "administrator line budget for this prompt", "empty_rendering": "12" },
+        { "name": "prompt_version", "description": "Label of the selected prompt file, recorded with the generated MOTD.", "source": "prompt selection", "empty_rendering": "unversioned" }
+      ]
+    },
+    {
+      "id": "shell-behavior",
+      "file": "v1/shell-behavior.txt",
+      "plan_reference": "PLAN 5.4, PLAN 5.5, PLAN 6.1, PLAN 7.4",
+      "purpose": "Baseline behaviour of the simulated shell: simulated-only effects, committed world as the only truth, plain terminal presentation.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "shell_name", "description": "Shell name presented to the user.", "source": "configuration identity.shell_name (VibeShell)", "empty_rendering": "VibeShell" },
+        { "name": "displayed_username", "description": "User name of the session principal.", "source": "accepted session principal", "empty_rendering": "user" },
+        { "name": "simulated_hostname", "description": "Simulated host name; never the real container host name.", "source": "configuration identity.hostname", "empty_rendering": "vibeshell" },
+        { "name": "session_cwd", "description": "Current session working directory; cd never changes a durable namespace.", "source": "accepted session state", "empty_rendering": "the user's home directory" },
+        { "name": "sharing_mode", "description": "Enabled sharing mode as a short token.", "source": "effective sharing policy", "empty_rendering": "sharing off" },
+        { "name": "recording_status", "description": "Permanent research-recording status as a short token.", "source": "effective persistence and retention policy", "empty_rendering": "recording off" },
+        { "name": "world_baseline_version", "description": "Version of the shipped initial world skeleton.", "source": "configuration world baseline version", "empty_rendering": "an unversioned baseline" },
+        { "name": "prompt_version", "description": "Label of the selected prompt file.", "source": "prompt selection", "empty_rendering": "unversioned" }
+      ]
+    },
+    {
+      "id": "app-generation",
+      "file": "v1/app-generation.txt",
+      "plan_reference": "PLAN 5.5, PLAN 5.6",
+      "purpose": "Generates a plausible artifact for a program the simulated world has not implemented yet.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "command_name", "description": "Program name that was invoked.", "source": "accepted session input", "empty_rendering": "an unnamed program" },
+        { "name": "command_argv", "description": "Full argument vector as the user typed it, including options.", "source": "accepted session input", "empty_rendering": "no arguments" },
+        { "name": "invocation_cwd", "description": "Working directory the program was invoked from.", "source": "accepted session state", "empty_rendering": "the user's home directory" },
+        { "name": "requested_capabilities", "description": "Simulated capabilities the invocation implies, as a comma-separated list.", "source": "requested scope context", "empty_rendering": "no capabilities beyond the defaults granted to every app" },
+        { "name": "parent_artifact_summary", "description": "Summary of the existing artifact to extend, when one exists.", "source": "app catalogue", "empty_rendering": "none; this is a new application" }
+      ]
+    },
+    {
+      "id": "app-extension",
+      "file": "v1/app-extension.txt",
+      "plan_reference": "PLAN 5.6, PLAN 6.3",
+      "purpose": "Produces a candidate version of an existing artifact for unsupported options and modes; the previous version is never overwritten.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "parent_version_id", "description": "Immutable identifier of the artifact version being extended.", "source": "app catalogue", "empty_rendering": "an unidentified parent version" },
+        { "name": "parent_artifact_summary", "description": "Command names, description, entrypoint and declared capabilities of the parent version.", "source": "app catalogue", "empty_rendering": "an undocumented parent artifact" },
+        { "name": "parent_state_summary", "description": "Shape of the parent's persisted state, including session, user and shared portions.", "source": "app catalogue", "empty_rendering": "state of unknown shape" },
+        { "name": "command_argv", "description": "New invocation that triggered the extension.", "source": "accepted session input", "empty_rendering": "no arguments" },
+        { "name": "requested_capabilities", "description": "Simulated capabilities newly required by this invocation.", "source": "requested scope context", "empty_rendering": "no capabilities beyond the current grant" }
+      ]
+    },
+    {
+      "id": "world-materialization",
+      "file": "v1/world-materialization.txt",
+      "plan_reference": "PLAN 5.4, PLAN 5.5",
+      "purpose": "Materializes unexplored paths and unknown programs as one staged, scopable change set.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "materialization_target", "description": "Path or program that has no stored implementation yet.", "source": "accepted session input and world snapshot", "empty_rendering": "an unnamed path" },
+        { "name": "invocation_cwd", "description": "Working directory the request was made from.", "source": "accepted session state", "empty_rendering": "the user's home directory" },
+        { "name": "command_argv", "description": "Invocation context that suggested the target.", "source": "accepted session input", "empty_rendering": "no invocation context" },
+        { "name": "sharing_mode", "description": "Enabled sharing mode as a short token.", "source": "effective sharing policy", "empty_rendering": "sharing off" }
+      ]
+    },
+    {
+      "id": "summary-repair",
+      "file": "v1/summary-repair.txt",
+      "plan_reference": "PLAN 7.3, PLAN 9.2",
+      "purpose": "Writes durable session summaries and repair notes for later turns; never records discarded staged work as committed.",
+      "variables": [
+        { "name": "system_name", "description": "Operating system name presented to the user.", "source": "configuration identity.system_name (VibeOS)", "empty_rendering": "VibeOS" },
+        { "name": "repair_or_summary_task", "description": "Whether to summarize the session so far or to explain a failed turn.", "source": "application service", "empty_rendering": "summarize the session so far" },
+        { "name": "session_id", "description": "Session identifier the summary belongs to.", "source": "accepted session principal", "empty_rendering": "an unidentified session" },
+        { "name": "turn_id", "description": "Turn identifier the repair note belongs to.", "source": "turn lifecycle", "empty_rendering": "an unidentified turn" },
+        { "name": "prompt_version", "description": "Label of the selected prompt file.", "source": "prompt selection", "empty_rendering": "unversioned" },
+        { "name": "failure_class", "description": "Classified cause of the failure being repaired.", "source": "failure classification", "empty_rendering": "no failure to repair" },
+        { "name": "open_question_or_defect", "description": "Defect or unanswered question the repair must address.", "source": "application service", "empty_rendering": "no specific defect was reported" }
+      ]
+    }
+  ]
+}

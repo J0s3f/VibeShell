@@ -1,0 +1,12 @@
+=== RUN   TestProjectionsFromCanonicalStream
+--- PASS: TestProjectionsFromCanonicalStream (0.01s)
+=== RUN   TestTamperedBlobFailsChecksum
+--- PASS: TestTamperedBlobFailsChecksum (0.01s)
+=== RUN   TestJSONLEventLinesRoundTrip
+--- PASS: TestJSONLEventLinesRoundTrip (0.02s)
+=== RUN   TestLargeSessionStreaming
+    large_test.go:100: events=100000 elapsed=16.921970648s heap_alloc_before=700024 heap_alloc_after=1375984 total_alloc_delta=555406944 bytes_written=71433788
+        
+--- PASS: TestLargeSessionStreaming (17.84s)
+PASS
+ok  	j0s.at/vibeshell/experiments/export-formats	18.927s

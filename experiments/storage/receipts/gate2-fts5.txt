@@ -1,0 +1,7 @@
+Gate 2: FTS5 availability
+=========================
+ENABLE_FTS5                true
+virtual table              transcript_fts created
+content model              external content over search_docs
+tokenizer                  unicode61 remove_diacritics 2
+triggers                   search_docs_ai, search_docs_ad, search_docs_au

@@ -1,0 +1,7 @@
+{
+  "class": "user_cancelled",
+  "message": "turn interrupted by Ctrl-C; staging discarded",
+  "route_id": "rte_0123456789ABCDEFGHJKMNPQRS",
+  "account_id": "acc_0123456789ABCDEFGHJKMNPQRS",
+  "timestamp": 1798732800000
+}

@@ -1,0 +1,21 @@
+Gate 3a: durable read phase
+===========================
+context                    in-process reopen
+phase                      (unphased run)
+captured (UTC)             2026-10-03T14:59:43Z
+database                   /state/spike/durability/vibeshell.db
+content hash               7c5f3211ad03aca04f1cf21d9acf5b49d6297fc62f74b46b2998798a925be2ba
+bytes identical            true
+size                       18
+namespace root             1
+journal_mode after reopen  wal
+state directory            3 entries
+  vibeshell.db             4096 bytes
+  vibeshell.db-shm         32768 bytes
+  vibeshell.db-wal         201912 bytes
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+database file sha256       97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda
+filesystem                 ext4
+mount point                /state

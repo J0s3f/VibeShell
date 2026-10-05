@@ -1,0 +1,6 @@
+Gate 5c: absence check
+======================
+directory revision         1
+commits accepted           1
+commits refused            1
+nodes named notes.txt      1

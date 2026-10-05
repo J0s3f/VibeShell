@@ -1,0 +1,23 @@
+{
+  "request": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "messages": [
+      { "role": "system", "content": "You are the simulation engine behind VibeShell. Return only terminal presentation." },
+      { "role": "user", "content": "true\n" }
+    ],
+    "max_tokens": 4096,
+    "deadline_ms": 120000,
+    "request_id": "req-empty-001"
+  },
+  "result": {
+    "request_id": "req-empty-001",
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "message": { "role": "assistant", "content": "" },
+    "finish_reason": "stop",
+    "usage": { "prompt_tokens": 428, "completion_tokens": 0, "total_tokens": 428 },
+    "latency_ms": 730,
+    "timestamp": 1798732800000
+  }
+}

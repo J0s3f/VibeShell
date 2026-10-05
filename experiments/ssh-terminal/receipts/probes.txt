@@ -1,0 +1,66 @@
+
+=== environment ===
+TERM="" (empty: the service never has a client terminal)
+stdin mode=Dcrw-rw-rw- charDevice=true
+pid=5089; section 5 proves stdin is not a terminal
+
+=== 1. ultraviolet TerminalReader over an io.Reader ===
+  key h
+  key i
+  key up
+  key ctrl+c
+  key ctrl+d
+  paste-start
+  paste 14 bytes "pasted ├® text"
+  paste-end
+  key shift+left
+verdict: ultraviolet decodes an SSH byte stream one byte at a time; its
+         EscTimeout is 50ms, so an unfinished sequence is resolved by a
+         timer rather than by the end of the stream.
+
+=== 2. local bounded decoder over the same bytes ===
+  key rune h
+  key rune i
+  key up
+  key ctrl+c
+  key ctrl+d
+  paste 14 bytes "pasted ├® text" truncated=false
+  key shift+left
+verdict: the same bytes decode without a timer, with every buffer
+         bounded by Bounds.
+
+=== 3. bounded paste ===
+local decoder (MaxPasteBytes=65536):
+  key paste-overflow
+  paste 65536 bytes "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp...
+ultraviolet TerminalReader: paste 1048576 bytes retained, no limit and no overflow event
+
+=== 4. ultraviolet TerminalScreen over an io.Writer ===
+wrote 16 bytes to an in-memory buffer, no terminal involved:
+  "hello õ©ûþòî\r\x1b[J"
+  display width of "hello õ©ûþòî" = 10 cells
+verdict: the screen and renderer are byte-stream safe; only Terminal is not.
+
+=== 5. ultraviolet Terminal, the process-terminal part ===
+Terminal.Start() with the default console failed: failed to set terminal to raw mode: inappropriate ioctl for device
+verdict: Terminal owns a process terminal: NewTerminal(nil, nil) builds a
+         console over os.Stdin/os.Stdout, Start calls Console.MakeRaw, reads
+         TERM from the process environment, and installs a SIGWINCH handler.
+         A VibeShell session must use TerminalReader or its own screen model.
+
+=== 6. x/ansi as the chosen byte-stream primitive ===
+frame in : "\x1b[2J\x1b[1;1H\x1b[31merror\x1b[0m \x1b]52;c;cGFzc3dvcmQ=\a \x1b]0;title\a"
+frame out: "\x1b[2J\x1b[1;1H\x1b[31merror\x1b[0m  "
+removed  : OSC \x1b]52;c;cGFzc3dvcmQ=\x07
+removed  : OSC \x1b]0;title\x07
+width("\x1b[31mred\x1b[0m") = 3, plain = "red"
+verdict: x/ansi needs no terminal, no environment, and no goroutine, so it
+         fits an SSH byte stream; it is the primitive the spike recommends.
+
+transport probe (loopback, in-process server, Go SSH client)
+address=127.0.0.1:44303 rounds=200 session_starts=50 disconnects=20
+
+keypress round trip                      n=200 min=19.878┬Ás   p50=143.462┬Ás  p95=226.04┬Ás   p99=253.371┬Ás  max=262.529┬Ás 
+session start (channel+pty+shell)        n= 50 min=259.46┬Ás   p50=431.72┬Ás   p95=642.791┬Ás  p99=991.084┬Ás  max=1.553252ms
+disconnect to cancelled session context  n= 20 min=38.659┬Ás   p50=84.611┬Ás   p95=112.158┬Ás  p99=112.158┬Ás  max=207.8┬Ás   
+output back pressure                     wrote=8388608   dropped=8224768   in 833.704┬Ás with a 65536 byte queue

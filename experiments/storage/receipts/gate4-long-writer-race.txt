@@ -1,0 +1,5 @@
+Gate 4b: cost of holding the write lock
+=======================================
+held for                   250ms
+patient write waited       337.200903ms
+conclusion                 every second of lock holding is a second of delay for all other writers, so a turn must not hold a transaction across model work

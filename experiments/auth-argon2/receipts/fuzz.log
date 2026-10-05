@@ -1,0 +1,11 @@
+fuzz: elapsed: 0s, gathering baseline coverage: 0/189 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 189/189 completed, now fuzzing with 16 workers
+fuzz: elapsed: 3s, execs: 296595 (98825/sec), new interesting: 15 (total: 204)
+fuzz: elapsed: 6s, execs: 615305 (106124/sec), new interesting: 30 (total: 219)
+fuzz: elapsed: 9s, execs: 934572 (106452/sec), new interesting: 39 (total: 228)
+fuzz: elapsed: 12s, execs: 1229753 (98391/sec), new interesting: 44 (total: 233)
+fuzz: elapsed: 15s, execs: 1561315 (110630/sec), new interesting: 51 (total: 240)
+fuzz: elapsed: 18s, execs: 1927420 (122036/sec), new interesting: 57 (total: 246)
+fuzz: elapsed: 20s, execs: 2122211 (88562/sec), new interesting: 58 (total: 247)
+PASS
+ok  	j0s.at/vibeshell/experiments/auth-argon2	20.248s

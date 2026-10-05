@@ -1,0 +1,18 @@
+Gate 5d: staged change set and accepted events in one transaction
+=================================================================
+content rows               1
+node rows                  1
+event rows                 1
+command index rows         1
+path index rows            1
+search projection rows     1
+failing commit recorded    rejected: append event ev-lost-b: constraint failed: UNIQUE constraint failed: events.session_id, events.sequence (2067)
+content after rollback     0
+node after rollback        0
+event after rollback       0
+search projection after rollback 0
+directory revision before  2
+directory revision after   2
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0

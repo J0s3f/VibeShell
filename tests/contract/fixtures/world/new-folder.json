@@ -1,0 +1,30 @@
+{
+  "mutations": [
+    {
+      "type": "create",
+      "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "path": "/home/alice/projects",
+      "kind": "dir",
+      "metadata": { "mode": 493, "uid": 1000, "gid": 1000, "mod_time": 1798732800000, "access_time": 1798732800000, "change_time": 1798732800000 }
+    },
+    {
+      "type": "create",
+      "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "path": "/home/alice/projects/garden",
+      "kind": "dir",
+      "metadata": { "mode": 493, "uid": 1000, "gid": 1000, "mod_time": 1798732800000, "access_time": 1798732800000, "change_time": 1798732800000 }
+    }
+  ],
+  "read_dependencies": [
+    {
+      "node_id": "nod_7FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "revision": 1,
+      "kind": "dir",
+      "is_absence": true,
+      "dir_member_of": "nod_8FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+    }
+  ],
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "attempt_id": "att_5FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "timestamp": 1798732800000
+}

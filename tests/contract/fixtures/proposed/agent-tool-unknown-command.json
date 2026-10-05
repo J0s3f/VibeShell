@@ -1,0 +1,34 @@
+{
+  "name": "world.materialize",
+  "version": 1,
+  "input_schema": {
+    "type": "object",
+    "required": ["namespace_id", "path"],
+    "properties": {
+      "namespace_id": { "type": "string" },
+      "path": { "type": "string" },
+      "kind": { "enum": ["file", "dir", "symlink"] },
+      "content_ref": { "type": "object" },
+      "expected_parent_revision": { "type": "integer" }
+    },
+    "additionalProperties": false
+  },
+  "scope_context": {
+    "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "cwd": "/home/alice",
+    "scopes": ["session", "user"],
+    "sharing_enabled": false,
+    "max_mutations": 64,
+    "max_content_bytes": 1048576
+  },
+  "input": { "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW", "path": "/usr/local/bin/moon-orchard", "kind": "file" },
+  "result": {
+    "status": "staged",
+    "mutations": 2,
+    "change_set_id": "att_5FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "conflicts": [],
+    "truncated": false
+  }
+}

@@ -1,0 +1,22 @@
+Gate 3b: durability pragmas on every pooled connection
+======================================================
+conn 0 synchronous          2
+conn 0 busy_timeout         5000
+conn 0 foreign_keys         1
+conn 0 journal_mode         wal
+conn 0 case_sensitive_like  not readable, verified behaviourally
+conn 1 journal_mode         wal
+conn 1 synchronous          2
+conn 1 busy_timeout         5000
+conn 1 foreign_keys         1
+conn 1 case_sensitive_like  not readable, verified behaviourally
+conn 2 journal_mode         wal
+conn 2 synchronous          2
+conn 2 busy_timeout         5000
+conn 2 foreign_keys         1
+conn 2 case_sensitive_like  not readable, verified behaviourally
+conn 3 synchronous          2
+conn 3 busy_timeout         5000
+conn 3 foreign_keys         1
+conn 3 journal_mode         wal
+conn 3 case_sensitive_like  not readable, verified behaviourally

@@ -1,0 +1,12 @@
+=== RUN   TestTimingGapReport
+    measure_test.go:213: params: m=131072,t=3,p=4 (25 rounds, interleaved)
+    measure_test.go:214: known user, correct password : n=25 min=113.814ms median=136.978ms mean=148.500ms max=238.422ms
+    measure_test.go:215: known user, wrong password   : n=25 min=114.396ms median=143.287ms mean=146.394ms max=247.713ms
+    measure_test.go:216: unknown user (dummy verify)  : n=25 min=120.021ms median=146.766ms mean=154.431ms max=247.315ms
+    measure_test.go:217: naive lookup miss (no dummy) : n=25 min=0.000ms median=0.001ms mean=0.001ms max=0.001ms
+    measure_test.go:222: timing gap, unknown vs correct (dummy path) : 5.931ms
+    measure_test.go:223: timing gap, unknown vs wrong   (dummy path) : 8.037ms
+    measure_test.go:224: timing gap, unknown vs correct (naive path) : 148.500ms
+--- PASS: TestTimingGapReport (11.91s)
+PASS
+ok  	j0s.at/vibeshell/experiments/auth-argon2	11.968s

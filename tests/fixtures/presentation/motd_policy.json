@@ -1,0 +1,1 @@
+{"line_budget":20,"max_bytes":4096,"note":"Presentation safety is structural: MOTDGenerationRequest carries no tool definitions, no scope policy, and no execution capability, so no prompt text can expand permissions or enable real execution. ValidatePrompt enforces the reload-time usability half (addressable version, bounded printable text).","prompt_version":"motd-v1"}

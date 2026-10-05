@@ -1,0 +1,29 @@
+{
+  "request": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "messages": [
+      { "role": "user", "content": "make -j4\n" }
+    ],
+    "max_tokens": 8192,
+    "deadline_ms": 180000,
+    "request_id": "req-cancelled-001"
+  },
+  "result": {
+    "request_id": "req-cancelled-001",
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "message": { "role": "assistant", "content": "compiling src/" },
+    "finish_reason": "cancelled",
+    "usage": { "prompt_tokens": 1877, "completion_tokens": 143, "total_tokens": 2020 },
+    "error": {
+      "class": "user_cancelled",
+      "message": "turn interrupted by Ctrl-C; staging discarded",
+      "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "timestamp": 1798732812000
+    },
+    "latency_ms": 12400,
+    "timestamp": 1798732812000
+  }
+}

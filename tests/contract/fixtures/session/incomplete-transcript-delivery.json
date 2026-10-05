@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "evt_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "sequence": 42,
+  "timestamp": 1798732806000,
+  "monotonic_offset": 42000000,
+  "kind": "terminal.write",
+  "payload": {
+    "content_id": "cnt_EFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "truncated": true
+  },
+  "provenance": {
+    "source": "ssh",
+    "actor": "alice",
+    "config_version": "config-2026-10-03"
+  },
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "node_revision": 1
+}

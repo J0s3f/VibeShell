@@ -1,0 +1,17 @@
+Gate 8b: restore from the backup copy in a fresh container
+==========================================================
+phase                      restore
+captured (UTC)             2026-10-03T14:56:20Z
+backup copy                /state/spike/backup/backup.db
+rebuilt database           /state/spike/backup/restored.db
+fingerprints equal         true
+backup integrity           2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+rebuilt integrity          2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+rebuilt bytes              126976
+live checksum before       0a5064b0debcad055ae87024e0748efef068ddb60d301455bff01ee162edea11
+live checksum after        94277b8a885d6162f560cbdfe508468ae96413dc685c1d8f9660a1beeae0db9d
+expected fingerprint written /state/spike/backup/expected-fingerprint.txt

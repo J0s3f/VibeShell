@@ -1,0 +1,125 @@
+# Multi-stage VibeShell image. Compatible with Podman and Docker.
+#
+# Stages:
+#   dev      - pinned Go build/test toolchain, source arrives as a bind mount
+#   build    - compiles the static service binary from the checkout
+#   runtime  - minimal Debian slim image with a non-root service account
+#
+# Image arguments mirror containers/versions.env, which is the recorded source
+# of the pins. ARG defaults exist so a plain `podman build` also works.
+
+ARG GO_IMAGE=docker.io/library/golang:1.27.1-bookworm@sha256:69a7b9788769bec032d238959b61854e9ae87f57be9029ec04e9885fabf99195
+ARG RUNTIME_IMAGE=docker.io/library/debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251
+
+# ---------------------------------------------------------------------------
+# dev: build and test toolchain
+# ---------------------------------------------------------------------------
+FROM ${GO_IMAGE} AS dev
+
+ARG GO_VERSION=1.27.1
+
+LABEL org.opencontainers.image.title="VibeShell development container" \
+      org.opencontainers.image.description="Pinned Go ${GO_VERSION} build and test toolchain for VibeShell" \
+      org.opencontainers.image.source="j0s.at/vibeshell"
+
+# The pinned golang image derives from buildpack-deps, which already ships the
+# compiler, C headers, make, git, and CA roots. No package installation is
+# performed: an apt layer would add a network dependency to every rebuild
+# without adding a tool. This probe fails loudly, naming the missing
+# prerequisite, if a future base pin drops one of them.
+RUN set -eux; \
+    for tool in gcc make git; do command -v "$tool" >/dev/null || { echo "missing build tool: $tool"; exit 1; }; done; \
+    test -f /usr/include/stdio.h || { echo "missing C headers (libc6-dev)"; exit 1; }; \
+    test -f /etc/ssl/certs/ca-certificates.crt || { echo "missing ca-certificates"; exit 1; }; \
+    printf 'int main(void){return 0;}\n' > /tmp/probe.c; \
+    gcc -o /tmp/probe /tmp/probe.c; \
+    /tmp/probe; \
+    rm -f /tmp/probe.c /tmp/probe
+
+# CGO stays enabled so `go test -race` can link the race detector. Module and
+# build caches live on volumes mounted per development agent; GOBIN stays in the
+# container layer because installed tools belong to a pinned image, not a cache.
+ENV CGO_ENABLED=1 \
+    GOPATH=/cache \
+    GOMODCACHE=/cache/gomod \
+    GOCACHE=/cache/gobuild \
+    GOBIN=/usr/local/bin \
+    GOTOOLCHAIN=local \
+    GOFLAGS=-mod=readonly
+
+# /workspace is the checkout bind mount; /out holds generated binaries; /state
+# holds durable simulated-world data. /cache/gomod and /cache/gobuild receive
+# named volumes so agent checkouts never share caches.
+RUN mkdir -p /workspace /out /state /cache/gomod /cache/gobuild \
+    && chmod 0777 /out /state /cache /cache/gomod /cache/gobuild
+
+WORKDIR /workspace
+
+CMD ["sleep", "infinity"]
+
+# ---------------------------------------------------------------------------
+# build: static service binary
+# ---------------------------------------------------------------------------
+FROM ${GO_IMAGE} AS build
+
+ARG VERSION=dev
+ARG REVISION=unknown
+# TARGETOS/TARGETARCH are set by buildx for a multi-platform build and default to
+# the host platform otherwise, so one Containerfile builds both amd64 and arm64.
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+# A CGO-free binary keeps the runtime stage free of a libc dependency. The race
+# detector is a development and test concern that needs CGO, not a runtime one.
+ENV CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOTOOLCHAIN=local
+
+WORKDIR /src
+COPY . .
+RUN go build -trimpath \
+        -ldflags "-s -w \
+            -X j0s.at/vibeshell/internal/buildinfo.version=${VERSION} \
+            -X j0s.at/vibeshell/internal/buildinfo.revision=${REVISION}" \
+        -o /out/vibeshell ./cmd/vibeshell
+
+# ---------------------------------------------------------------------------
+# runtime: minimal non-root service image
+# ---------------------------------------------------------------------------
+FROM ${RUNTIME_IMAGE} AS runtime
+
+ARG GO_VERSION=1.27.1
+
+LABEL org.opencontainers.image.title="VibeShell service" \
+      org.opencontainers.image.description="VibeShell service built with Go ${GO_VERSION}" \
+      org.opencontainers.image.source="j0s.at/vibeshell"
+
+# TLS roots are needed for outbound provider requests; the service is the only
+# process that makes network calls. Generated applications get no such access.
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates; \
+    rm -rf /var/lib/apt/lists/*; \
+    useradd --system --create-home --home-dir /home/vibeshell --shell /usr/sbin/nologin --uid 10001 vibeshell; \
+    mkdir -p /var/lib/vibeshell; \
+    chown vibeshell:vibeshell /var/lib/vibeshell
+
+COPY --from=build /out/vibeshell /usr/local/bin/vibeshell
+
+# Default prompts and a container-ready configuration ship in the image so it
+# runs with only a state volume. Mount a configuration over
+# /etc/vibeshell/vibeshell.json (and prompts over /etc/vibeshell/prompts) to
+# override them; the SSH host key and the SQLite database live in the volume at
+# /var/lib/vibeshell.
+COPY prompts /etc/vibeshell/prompts
+COPY examples/vibeshell.container.json /etc/vibeshell/vibeshell.json
+
+USER vibeshell
+WORKDIR /home/vibeshell
+
+# The SSH port is the only published service port.
+EXPOSE 2222
+
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/usr/local/bin/vibeshell"]

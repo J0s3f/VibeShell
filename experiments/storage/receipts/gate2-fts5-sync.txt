@@ -1,0 +1,15 @@
+Gate 2c: FTS5 projection maintenance
+====================================
+documents seeded           8
+update propagated          true
+delete propagated          true
+index emptied on purpose   true
+hits after rebuild         7
+documents expected         7
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0
+contentless alternative    3 entries
+  plain DELETE: rejected: SQL logic error: cannot DELETE from contentless fts5 table: contentless_fts (1)
+  'delete' command: accepted
+  conclusion: a contentless table cannot be maintained by a simple DELETE trigger, so the external-content form is the one to build

@@ -1,0 +1,152 @@
+VibeShell runtime hardening qualification (rootless Podman)
+started (UTC) : 2026-10-03T17:20:57Z
+worktree      : D:/code/vibeshell/.worktrees/runtime-hardening
+branch/commit : agent/runtime-hardening 4bb438b
+image         : localhost/vibeshell-runtime:hardening
+podman client : 5.8.3
+podman server : 5.8.7
+rootless      : true
+net backend   : netavark
+image id      : 4923b7a157fee86f8f245a6f4647922cdc2dbbe6c1148da6edba8ea60abd2beb
+image digest  : sha256:d5011467a24cd7613e0353a669abf25ba2db14956e1244a4e70adfe147823d98
+image Stopsignal: SIGTERM
+image EXPOSEs : {"2222/tcp":{}}
+
+=== containers ===
+hardened: podman run -d --name vibeshell-hardening-657992716 --user 10001 --read-only --tmpfs /tmp --security-opt no-new-privileges --memory=512m --pids-limit=100 --publish 127.0.0.1::2222 --cap-drop=ALL --entrypoint sleep localhost/vibeshell-runtime:hardening 300
+control : podman run -d --name vibeshell-control-657992716 --user 10001 --read-only --tmpfs /tmp --security-opt no-new-privileges --memory=512m --pids-limit=100 --publish 127.0.0.1::2222 --entrypoint sleep localhost/vibeshell-runtime:hardening 300
+          (identical to the hardened container except --cap-drop=ALL)
+hardened state: running
+control  state: running
+
+=== checks ===
+[1] service process is not root
+     command : podman exec vibeshell-hardening-657992716 sh -c 'id -u'
+     observed: 10001 (exit 0)
+     expected: 10001
+     verdict : PASS
+[2] root filesystem is read-only
+     command : podman exec vibeshell-hardening-657992716 sh -c 'touch /vibeshell-ro-probe'
+     observed: touch: cannot touch '/vibeshell-ro-probe': Read-only file system
+touch_rc=1 | root mount (fstype target first-option): overlay / ro
+     expected: touch_rc=<non-zero> and "overlay / ro"
+     verdict : PASS
+[3] capability set is empty and --cap-drop=ALL is attributable
+     command : podman exec vibeshell-hardening-657992716 sh -c 'grep -E "^(CapInh|CapPrm|CapEff|CapBnd|CapAmb):" /proc/self/status' ; podman exec -u 0 <container> sh -c 'touch /tmp/capprobe 2>/dev/null; chown 1:1 /tmp/capprobe 2>/dev/null && echo CHOWN_OK || echo CHOWN_DENIED'
+     observed: hardened CapEff=0000000000000000 CapBnd=0000000000000000 [<empty>] | control CapEff=00000000800405fb CapBnd=00000000800405fb [CAP_CHOWN,CAP_DAC_OVERRIDE,CAP_FOWNER,CAP_FSETID,CAP_KILL,CAP_SETGID,CAP_SETUID,CAP_SETPCAP,CAP_NET_BIND_SERVICE,CAP_SYS_CHROOT,CAP_SETFCAP] | chown as uid 0: hardened=CHOWN_DENIED control=CHOWN_OK
+     expected: hardened CapEff=0 and CapBnd=0; control CapBnd non-zero; chown allowed in control, denied when hardened
+     verdict : PASS
+[4] PID limit is enforced
+     command : podman exec vibeshell-hardening-657992716 sh -c 'cat /sys/fs/cgroup/pids.max'
+     observed: 100 (exit 0)
+     expected: 100
+     verdict : PASS
+[5] memory limit is enforced
+     command : podman exec vibeshell-hardening-657992716 sh -c 'cat /sys/fs/cgroup/memory.max'
+     observed: 536870912 bytes (exit 0)
+     expected: 536870912 bytes (512 MiB)
+     verdict : PASS
+[6] only the SSH port is published, on loopback
+     command : podman inspect vibeshell-hardening-657992716 --format '{{json .NetworkSettings.Ports}}'
+     observed: {"2222/tcp":[{"HostIp":"127.0.0.1","HostPort":"46267"}]} (image EXPOSEs: {"2222/tcp":{}})
+     expected: one entry 2222/tcp bound to 127.0.0.1; image EXPOSEs only 2222/tcp
+     verdict : PASS
+[7] no-new-privileges is set for the container process
+     command : podman exec vibeshell-hardening-657992716 sh -c 'grep "^NoNewPrivs:" /proc/self/status'
+     observed: NoNewPrivs=1
+     expected: NoNewPrivs=1
+     verdict : PASS
+[8] no host filesystem, directory or engine socket is mounted
+     command : podman exec vibeshell-hardening-657992716 sh -c 'cat /proc/mounts'
+     observed: 0 mount(s) with a filesystem type outside the container-local allowlist (tmpfs,overlay,proc,sysfs,cgroup2,devpts,mqueue,none,shm,devtmpfs); 36 mounts total
+     expected: 0 mounts from a host filesystem
+     verdict : PASS
+[9] SIGTERM is delivered and a handler that installed one runs
+     command : podman exec vibeshell-hardening-657992716 sh -c 'trap "echo HANDLER_RAN; exit 0" TERM; echo READY; kill -TERM $$; wait; echo REACHED_AFTER_SIGNAL'
+     observed: exit 0; output: READY | HANDLER_RAN
+     expected: exit 0, output contains HANDLER_RAN and does not reach REACHED_AFTER_SIGNAL
+     verdict : PASS
+stop-signal container: podman run -d --name vibeshell-stopsignal-657992716 --user 10001 --read-only --tmpfs /tmp --security-opt no-new-privileges --memory=512m --pids-limit=100 --publish 127.0.0.1::2222 --cap-drop=ALL --entrypoint sh localhost/vibeshell-runtime:hardening -c 'trap "echo SIGTERM_HANDLED; exit 0" TERM; echo READY; sleep 300 & wait'
+[10] podman stop delivers STOPSIGNAL and the handler runs before the SIGKILL timeout
+     command : podman stop --time 3 vibeshell-stopsignal-657992716
+     observed: container exit code 0; logs: READY | SIGTERM_HANDLED |
+     expected: exit code 0 and SIGTERM_HANDLED in the log; 137 would mean SIGTERM was ignored and the 3 s timeout escalated to SIGKILL
+     verdict : PASS
+[11] SIGTERM handling of the real vibeshell service binary
+     reason  : containers/Containerfile ENTRYPOINT is the cmd/vibeshell stub, which prints a version line and exits 0; it never installs a signal handler. Observed placeholder behaviour without a handler: exit code 137. image declares STOPSIGNAL=SIGTERM; the kernel ignores default-action signals sent to namespace PID 1 unless it installed a handler, so a handler-less PID 1 is SIGKILLed (137) after the 3s timeout
+     verdict : NOT CHECKED
+
+=== observations (no verdict) ===
+- raw-socket probe is not attributable on this host
+     observed: hardened as uid 10001 (CapEff=0000000000000000): tcp_socket=ok | raw_socket_errno=Protocol not supported; control as uid 0 (CapEff=00000000800405fb, CapBnd includes CAP_NET_RAW): tcp_socket=ok | raw_socket_errno=Protocol not supported
+     note    : The control container has effective capabilities as uid 0 (its chown succeeded in check [3]) and still gets the same "Protocol not supported" errno, so the raw ICMP socket is refused by the network namespace rather than by a capability check. This probe therefore cannot pass or fail the capability check; check [3] uses CapBnd plus CAP_CHOWN instead.
+- seccomp filter state
+     observed: Seccomp=2 Seccomp_filters=2
+     note    : Seccomp=2 is SECCOMP_MODE_FILTER. Which syscalls the filter blocks was not audited.
+- image entrypoint behaviour
+     observed: output 'VibeShell on VibeOS version dev', exit code 0, container exit 0
+     note    : The service stub returns immediately, so nothing about a long-running service could be measured.
+- Docker compatibility
+     observed: docker is not installed on this host; the check could not be run
+     note    : UNVERIFIED. The Containerfile is a plain multi-stage Dockerfile and every flag used is accepted by Docker, but nothing here demonstrates that.
+
+=== in-container inventory (experiments/runtime-hardening/test-hardening.sh) ===
+command: Get-Content test-hardening.sh | podman exec -i vibeshell-hardening-657992716 sh
+  ### identity
+  uid=10001 gid=999 user=vibeshell groups=vibeshell
+  uname=Linux 6.18.33.2-microsoft-standard-WSL2 x86_64
+  pid1_cmdline=sleep 300
+  
+  ### kernel-enforced state (/proc/self/status)
+  CapInh:	0000000000000000
+  CapPrm:	0000000000000000
+  CapEff:	0000000000000000
+  CapBnd:	0000000000000000
+  CapAmb:	0000000000000000
+  NoNewPrivs:	1
+  Seccomp:	2
+  Seccomp_filters:	2
+  
+  ### cgroup limits (cgroup v2 unified)
+  cgroup_fs=cgroup2fs
+  pids.max=100
+  memory.max=536870912
+  cpus.max=unavailable
+  
+  ### root mount options
+  overlay / overlay ro,relatime,lowerdir=/home/user/.local/share/containers/storage/overlay/l/34YMVZHM44SUTACZ42H6WBGHYZ:/home/user/.local/share/containers/storage/overlay/l/PFLOYQWEZWTI5KSA4YM5U6FXQ4:/home/user/.local/share/containers/storage/overlay/l/Z5KILIJUORLN535HVDTV6IIOWY,upperdir=/home/user/.local/share/containers/storage/overlay/c2d92d9354f5f268cb6ce57fe4987a8a1c165846036a6fd8992de4d901f8c7ff/diff,workdir=/home/user/.local/share/containers/storage/overlay/c2d92d9354f5f268cb6ce57fe4987a8a1c165846036a6fd8992de4d901f8c7ff/work,redirect_dir=nofollow,uuid=on,userxattr 0 0
+  
+  ### listening sockets (/proc/net/tcp,tcp6 LISTEN=0A)
+  tcp_listen=0
+  tcp6_listen=0
+  
+  ### present tooling
+  compilers=absent
+  package_managers=PRESENT: apt apt-get dpkg
+  vcs=absent
+  shells=PRESENT: bash sh dash
+  interpreters=PRESENT: perl
+  network=PRESENT: openssl
+  archives=PRESENT: tar gzip
+  
+  ### setuid binaries
+  setuid_count=8
+  setuid_paths=/usr/bin/chfn /usr/bin/umount /usr/bin/newgrp /usr/bin/mount /usr/bin/passwd /usr/bin/su /usr/bin/gpasswd /usr/bin/chsh
+  
+  ### world-writable paths outside /tmp
+  /var/tmp
+  
+  ### file capability xattrs
+  getcap=absent
+  
+
+=== summary ===
+PASS        : 10
+FAIL        : 0
+NOT CHECKED : 1
+finished (UTC): 2026-10-03T17:21:22Z
+result: all 10 verdict-bearing checks passed; 1 check(s) remain unverified.
+
+=== cleanup ===
+removed vibeshell-hardening-657992716 and vibeshell-control-657992716
+

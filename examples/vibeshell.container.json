@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "identity": {
+    "system_name": "VibeOS",
+    "shell_name": "VibeShell",
+    "hostname": "vibeos"
+  },
+  "ssh": {
+    "listen_address": "0.0.0.0",
+    "listen_port": 2222,
+    "host_key_file": "/var/lib/vibeshell/host_key",
+    "max_connections": 256,
+    "idle_timeout_ms": 300000,
+    "handshake_timeout_ms": 10000,
+    "max_terminal_rows": 200,
+    "max_terminal_cols": 512
+  },
+  "auth": {
+    "mode": "public",
+    "max_attempts_per_connection": 6,
+    "max_concurrent_auth": 2,
+    "failed_attempts_per_minute": 30
+  },
+  "sharing": {
+    "enabled": true,
+    "policy_revision": 1
+  },
+  "world": {
+    "baseline_version": "v1",
+    "max_objects": 100000,
+    "max_content_bytes": 268435456,
+    "materialization_budget_bytes": 4194304,
+    "max_staged_changes": 256,
+    "conflict_retries": 3
+  },
+  "apps": {
+    "engine_abi_version": "v1",
+    "max_source_bytes": 65536,
+    "max_state_bytes": 1048576,
+    "heap_limit_bytes": 16777216,
+    "stack_limit_bytes": 1048576,
+    "execution_deadline_ms": 30000,
+    "instance_pool_size": 4,
+    "max_generations": 8,
+    "max_repairs": 2
+  },
+  "terminal": {
+    "scrollback_lines": 2000,
+    "max_paste_bytes": 65536,
+    "redraw_policy": "diff",
+    "refresh_budget_lines": 24,
+    "completion_cache": "session"
+  },
+  "prompts": {
+    "motd": "prompts/v1/motd.txt",
+    "shell_behavior": "prompts/v1/shell-behavior.txt",
+    "app_generation": "prompts/v1/app-generation.txt",
+    "app_extension": "prompts/v1/app-extension.txt",
+    "world_materialization": "prompts/v1/world-materialization.txt",
+    "summary": "prompts/v1/summary-repair.txt",
+    "repair": "prompts/v1/summary-repair.txt"
+  },
+  "providers": [
+    {
+      "name": "opencode",
+      "kind": "cli",
+      "products": [
+        {
+          "name": "console",
+          "protocols": ["chat"],
+          "default_protocol": "chat"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "rte_0123456789ABCDEFGHJKMNPQRS",
+      "provider": "opencode",
+      "product": "console",
+      "model": "mimo-v2.6-flash-free",
+      "protocol": "chat"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "acc_0123456789ABCDEFGHJKMNPQRS",
+      "quota_group": "console",
+      "permitted_products": ["console"]
+    }
+  ],
+  "tiers": [
+    {
+      "name": "default",
+      "routes": ["rte_0123456789ABCDEFGHJKMNPQRS"]
+    }
+  ],
+  "limits": {
+    "turn_deadline_ms": 300000,
+    "max_attempts": 6,
+    "max_output_bytes": 1048576,
+    "max_content_bytes": 4194304
+  },
+  "inference": {
+    "request_deadline_ms": 300000,
+    "max_steps": 16,
+    "max_output_tokens": 65536,
+    "global_concurrency": 2,
+    "max_account_concurrency": 2,
+    "wait_queue_depth": 16
+  },
+  "persistence": {
+    "database_path": "/var/lib/vibeshell/world.db",
+    "durability": "FULL",
+    "backup_dir": "/var/lib/vibeshell/backups",
+    "writer_queue_depth": 64,
+    "backup_interval_ms": 3600000,
+    "event_retention": "permanent"
+  },
+  "exports": {
+    "output_dir": "/var/lib/vibeshell/exports",
+    "formats": ["jsonl", "transcript"],
+    "max_concurrent_jobs": 2,
+    "max_export_bytes": 67108864,
+    "redact_secrets": true
+  },
+  "operations": {
+    "log_level": "info",
+    "health_check_interval_ms": 5000,
+    "shutdown_grace_ms": 5000,
+    "instrumentation": "logs"
+  }
+}

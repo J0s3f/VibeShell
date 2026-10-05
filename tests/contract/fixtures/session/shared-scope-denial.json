@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "event_id": "evt_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "sequence": 61,
+  "timestamp": 1798732805000,
+  "monotonic_offset": 61000000,
+  "kind": "tool.error",
+  "payload": {
+    "inline": {
+      "category": "denied",
+      "code": "sharing_disabled",
+      "message": "shared read denied while sharing is disabled",
+      "details": {
+        "scope": "shared",
+        "policy_revision": 7,
+        "requested_path": "/shared/alice/notes.txt",
+        "written_events": false
+      }
+    }
+  },
+  "provenance": {
+    "source": "tool",
+    "actor": "alice",
+    "prompt_version": "v1",
+    "config_version": "config-2026-10-03"
+  },
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "attempt_id": "att_5FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+}

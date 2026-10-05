@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-05T11:47:00Z",
+  "mode": "live",
+  "redacted": true,
+  "experiment": "line-based-interactive-generated-app",
+  "service": "cmd/vibeshell run (real SSH listener, real OpenCode Go provider)",
+  "route": {
+    "generation": { "provider": "opencode-go", "product": "go", "protocol": "chat", "model": "deepseek-v4.1-flash" },
+    "motd": { "models": ["space-bunny-free", "longcat-2.5-preview-free", "opencode CLI mimo-v2.6-flash-free"] }
+  },
+  "steps": [
+    {
+      "step": "generate-and-enter-interactive-app",
+      "command": "todo --interactive",
+      "observed": "the live generation engine produced a line-based interactive todo app; the shell kept it foreground and rendered its own continuation prompt",
+      "app_prompt": "todo> "
+    },
+    {
+      "step": "help",
+      "line": "help",
+      "observed": "the app listed add/list/done/undone/remove/clear/clearcompleted/quit"
+    },
+    {
+      "step": "state-change",
+      "line": "add write the live test",
+      "observed": "Added todo 1: write the live test"
+    },
+    {
+      "step": "state-persists-across-lines",
+      "line": "list",
+      "observed": "[ ] 1. write the live test (the item added on the previous line is still there)"
+    },
+    {
+      "step": "app-exits-to-the-shell",
+      "line": "quit",
+      "observed": "the app printed 'Goodbye.' and returned the session to the shell"
+    },
+    {
+      "step": "shell-answers-after-the-app",
+      "line": "pwd",
+      "observed": "/home/alice"
+    }
+  ],
+  "transcript_excerpt": [
+    "Welcome to VibeOS, alice.",
+    "vibeshell.live -- GNU/Hurd-style VibeShell environment",
+    "Session started: 2026-10-05 11:43:38 UTC",
+    "Sharing: on",
+    "Permanent research recording: on",
+    "alice@vibeshell.live:~$ todo --interactive",
+    "Unknown command: todo. Type 'help' for commands.",
+    "todo> help",
+    "Commands:",
+    "  add <text>       Add a todo",
+    "  list             List todos",
+    "  done <id>        Mark todo done",
+    "  undone <id>      Mark todo not done",
+    "  remove <id>      Remove todo",
+    "  clear            Clear all todos",
+    "  clearcompleted   Remove completed todos",
+    "  quit / exit      Exit",
+    "todo> add write the live test",
+    "Added todo 1: write the live test",
+    "todo> list",
+    "[ ] 1. write the live test",
+    "todo> quit",
+    "Goodbye.",
+    "alice@vibeshell.live:~$ pwd",
+    "/home/alice"
+  ],
+  "verified": [
+    "an unknown command over real SSH reached the live generation engine and produced a line-based interactive app",
+    "the app stayed foreground across lines with its own continuation prompt",
+    "each submitted line was delivered to the app as an input event (an app turn), not interpreted by the shell",
+    "the app's state persisted across lines: a todo added on one line appeared in the next line's list",
+    "the app's exit returned the session to the shell, and the shell prompt answered the next command",
+    "the shell's own exit words do not end the session while an app is foreground"
+  ],
+  "findings": [
+    {
+      "id": "generation-budget-and-stream-bound",
+      "severity": "model-fit",
+      "detail": "The interactive generation prompt made deepseek-v4.1-flash reason ~17.3k tokens; the 16384-token budget returned empty content and the 32768-token stream exceeded the 4096-frame SSE bound. Raised to 32768 tokens and 65536 frames (ADR 0012 amendment; commits dd85f1c, 5cf7cc6)."
+    },
+    {
+      "id": "app-owns-quit",
+      "severity": "correctness",
+      "detail": "The SSH handler ended the session on exit/quit/logout regardless of the foreground owner, so the app's 'quit' closed the connection. Fixed so those words end the session only while the shell is foreground (commit b5c7705)."
+    },
+    {
+      "id": "state-scope-keys",
+      "severity": "correctness",
+      "detail": "A first live app returned new_state as {session,user,shared}, which domain.AppState does not decode, so its notes were dropped between lines (add succeeded, list was empty). The generation ABI and the operator brief now name session_state/user_state/shared_state, guarded by a contract test (commit af9f7e8); the rerun above shows the todo's state persisting."
+    }
+  ],
+  "limits": [
+    "one provider (OpenCode Go) and the chat protocol were exercised live; the OpenCode CLI free route served the MOTD only",
+    "the generated app treats its own invocation line ('todo --interactive') as the first app input and answers 'Unknown command: todo'; special-casing the invocation is the model's choice, not a wiring requirement",
+    "the raw transcript contains terminal control sequences from the line editor; the excerpt here is redacted and control-stripped"
+  ]
+}

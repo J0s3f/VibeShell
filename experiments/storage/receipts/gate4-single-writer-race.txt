@@ -1,0 +1,10 @@
+Gate 4a: one writer at a time
+=============================
+captured (UTC)             2026-10-03T14:59:40Z
+journal_mode               wal
+contender refused          rejected: database is locked (5) (SQLITE_BUSY)
+driver error type          *sqlite.Error
+driver error code          5
+SQLITE_BUSY                5
+SQLITE_LOCKED              6
+contender accepted after release true

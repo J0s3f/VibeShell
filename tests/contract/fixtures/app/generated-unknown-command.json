@@ -1,0 +1,84 @@
+{
+  "artifact": {
+    "app_id": "app_EFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "version_id": "av_FFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "manifest": {
+      "abi_version": 1,
+      "command_names": ["moon-orchard", "mo"],
+      "description": "Curated orchard task list with an interactive row selector.",
+      "state_schema": {
+        "type": "object",
+        "properties": {
+          "session_state": {
+            "type": "object",
+            "properties": {
+              "rows": { "type": "array" },
+              "selected": { "type": "integer" }
+            }
+          },
+          "user_state": { "type": "object" },
+          "shared_state": { "type": "object" }
+        }
+      },
+      "capabilities": ["file.read", "file.list", "time"],
+      "entrypoint": "onEvent",
+      "version": "1.0.0"
+    },
+    "source": "// Generated artifact for the invoked program. Bounded guest only.\nexport function onEvent(state, event) {\n  const base = state.session_state || { rows: [], selected: 0 };\n  const rows = event.rows || base.rows;\n  const selected = event.key === 'down'\n    ? Math.min(base.selected + 1, Math.max(rows.length - 1, 0))\n    : event.key === 'up'\n      ? Math.max(base.selected - 1, 0)\n      : base.selected;\n  return {\n    newState: { session_state: { rows: rows, selected: selected } },\n    view: {\n      mode: 'table',\n      cursor: { row: selected, col: 0 },\n      status_line: rows.length + ' tasks',\n      key_bindings: [\n        { key: 'up', action: 'move_cursor' },\n        { key: 'down', action: 'move_cursor' },\n        { key: 'q', action: 'emit_event' }\n      ]\n    },\n    effects: [],\n    worldReads: []\n  };\n}\n",
+    "source_hash": "cnt_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "owner": "usr_GFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "scope": "user",
+    "created_at": 1798732800000,
+    "provenance": {
+      "prompt_id": "app-generation",
+      "prompt_version": "v1",
+      "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "generated_from": "unknown_command_invocation"
+    },
+    "validation": {
+      "passed": true,
+      "issues": [],
+      "validated_at": 1798732802000,
+      "validator_version": "abi-1.0"
+    },
+    "activated_at": 1798732803000
+  },
+  "event": {
+    "event_type": "input",
+    "payload": { "argv": ["moon-orchard", "--interactive"], "cwd": "/home/alice" },
+    "timestamp": 1798732804000,
+    "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW"
+  },
+  "result": {
+    "new_state": {
+      "session_state": {
+        "rows": [
+          { "id": "thorn-prune", "done": false },
+          { "id": "espalier-tie", "done": true },
+          { "id": "net-check", "done": false }
+        ],
+        "selected": 0
+      },
+      "user_state": {},
+      "shared_state": {}
+    },
+    "view": {
+      "mode": "table",
+      "cursor": { "row": 0, "col": 0 },
+      "status_line": "3 tasks, 1 done",
+      "key_bindings": [
+        { "key": "up", "action": "move_cursor" },
+        { "key": "down", "action": "move_cursor" },
+        { "key": "enter", "action": "emit_event" },
+        { "key": "q", "action": "emit_event" }
+      ]
+    },
+    "effects": [],
+    "world_reads": [
+      { "request_id": "read-1", "scope": "user", "path": "/home/alice/.orchard/tasks", "max_bytes": 65536 }
+    ],
+    "exited": false
+  }
+}

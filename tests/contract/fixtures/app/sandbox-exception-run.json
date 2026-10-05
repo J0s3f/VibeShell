@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "event_id": "evt_BFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "session_id": "ses_3FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "sequence": 87,
+  "timestamp": 1798732820000,
+  "monotonic_offset": 87000000,
+  "kind": "app.sandbox_run",
+  "payload": {
+    "inline": {
+      "version_id": "av_FFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+      "event_type": "input",
+      "input": { "key": "enter", "buffer": "print(1/0)" },
+      "error": "guest exception: division by zero",
+      "exited": true,
+      "exit_code": 1,
+      "state_written": false,
+      "view_retained": true,
+      "duration_ms": 3,
+      "memory_bytes": 65536
+    }
+  },
+  "provenance": {
+    "source": "sandbox",
+    "actor": "quickjs-wasm",
+    "prompt_version": "v1",
+    "config_version": "config-2026-10-03"
+  },
+  "turn_id": "trn_4FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+  "app_version_id": "av_FFJ9KQ2M4XP7DBTVZC6HJFRSNW"
+}

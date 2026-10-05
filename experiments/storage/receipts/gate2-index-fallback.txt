@@ -1,0 +1,16 @@
+Gate 2d: index-only search fallback (no FTS5)
+=============================================
+exact command              [ev-grep-ls]
+  plan                     1 entries
+  SEARCH command_index USING INDEX command_index_exact (command=?)
+normalized command         []
+  plan                     1 entries
+  SEARCH command_index USING INDEX command_index_normalized (normalized_command=? AND cwd=?)
+subtree of /home/Alpha     [/home/Alpha /home/Alpha/notes.txt]
+  plan                     1 entries
+  SEARCH path_index USING INDEX path_index_key (path_key>? AND path_key<?)
+
+limits of the fallback
+substring scan plan        1 entries
+  SCAN command_index USING COVERING INDEX sqlite_autoindex_command_index_1
+conclusion                 exact, normalized, and subtree path queries stay index-backed; mid-token search degrades to a scan and there is no ranking, stemming, or phrase support

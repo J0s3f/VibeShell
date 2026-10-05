@@ -1,0 +1,9 @@
+Gate 5a: optimistic revision check
+==================================
+captured (UTC)             2026-10-03T14:59:42Z
+node                       seed-0000
+revision both writers read 1
+writers that changed a row 1
+writers that changed nothing 1
+revision afterwards        2
+conclusion                 the guarded UPDATE matches one row for exactly one writer; the other observes zero rows and can refresh

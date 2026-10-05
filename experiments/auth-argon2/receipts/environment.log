@@ -1,0 +1,10 @@
+go version go1.27.1 linux/amd64
+container nproc: 16
+pinned 4 CPUs: 4
+Cpus_allowed_list:	0-15
+               total        used        free      shared  buff/cache   available
+Mem:           15917        1837        7408           5        6918       14079
+Swap:           4096           0        4096
+-mod=readonly
+/cache/gobuild
+/cache/gomod

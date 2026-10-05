@@ -1,0 +1,78 @@
+=== RUN   TestChatDecodesTextToolCallsFinishUsage
+--- PASS: TestChatDecodesTextToolCallsFinishUsage (0.03s)
+=== RUN   TestResponsesDecodesTextFunctionCallsUsage
+--- PASS: TestResponsesDecodesTextFunctionCallsUsage (0.01s)
+=== RUN   TestAnthropicDecodesDeltasToolUseUsage
+--- PASS: TestAnthropicDecodesDeltasToolUseUsage (0.01s)
+=== RUN   TestGeminiDecodesPartsFinishUsage
+--- PASS: TestGeminiDecodesPartsFinishUsage (0.01s)
+=== RUN   TestSSESplitFramesAndMultipleEventsPerRead
+--- PASS: TestSSESplitFramesAndMultipleEventsPerRead (0.01s)
+=== RUN   TestMalformedJSONIsError
+--- PASS: TestMalformedJSONIsError (0.00s)
+=== RUN   TestHTTP200WithErrorBodyIsError
+--- PASS: TestHTTP200WithErrorBodyIsError (0.01s)
+=== RUN   TestStreamInterruptionMidResponse
+--- PASS: TestStreamInterruptionMidResponse (0.00s)
+=== RUN   TestContextCancellationAbortsDecode
+--- PASS: TestContextCancellationAbortsDecode (0.00s)
+=== RUN   TestBoundedResponseBody
+--- PASS: TestBoundedResponseBody (0.00s)
+=== RUN   TestOversizedFrameRejected
+--- PASS: TestOversizedFrameRejected (0.00s)
+=== RUN   TestUnknownEventTypesIgnored
+--- PASS: TestUnknownEventTypesIgnored (0.00s)
+=== RUN   TestEndpointSeparationPerProtocol
+--- PASS: TestEndpointSeparationPerProtocol (0.00s)
+=== RUN   TestStatusErrorMapping
+=== RUN   TestStatusErrorMapping/openai_rate_limit
+=== RUN   TestStatusErrorMapping/anthropic_bad_request
+=== RUN   TestStatusErrorMapping/gemini_auth_failure
+=== RUN   TestStatusErrorMapping/quota_envelope
+--- PASS: TestStatusErrorMapping (0.01s)
+    --- PASS: TestStatusErrorMapping/openai_rate_limit (0.00s)
+    --- PASS: TestStatusErrorMapping/anthropic_bad_request (0.00s)
+    --- PASS: TestStatusErrorMapping/gemini_auth_failure (0.00s)
+    --- PASS: TestStatusErrorMapping/quota_envelope (0.00s)
+=== RUN   TestBareStatusMappingWithoutBody
+--- PASS: TestBareStatusMappingWithoutBody (0.00s)
+=== RUN   TestContextLengthFromFields
+--- PASS: TestContextLengthFromFields (0.00s)
+=== RUN   TestNoCredentialMaterialInErrorsOrLogs
+--- PASS: TestNoCredentialMaterialInErrorsOrLogs (0.01s)
+PASS
+ok  	j0s.at/vibeshell/experiments/opencode-protocol	1.133s
+=== RUN   TestCatalogueObservationShape
+    catalog_test.go:43: console sha256=d280d20e2519cc148b2426cbb5a0c4ea42709343c13e629dea5e944c2031a3ae
+    catalog_test.go:44: go sha256=bd1641f7ecf1930397bc429df9ee8047a9c99fb5a467e6f854ac61443963fb32
+--- PASS: TestCatalogueObservationShape (0.01s)
+=== RUN   TestCatalogueMetadataJoinCounts
+    catalog_test.go:86: console catalogue=82 metadata=116 matched=79 missing=[jev-1.13 jev-1.13-free test]
+--- PASS: TestCatalogueMetadataJoinCounts (0.03s)
+=== RUN   TestSuitabilityCases
+=== RUN   TestSuitabilityCases/big_pickle_explicit_exception
+=== RUN   TestSuitabilityCases/jev_free_structured_decision_excluded
+=== RUN   TestSuitabilityCases/unknown_metadata_needs_operator
+=== RUN   TestSuitabilityCases/known_paid_free-suffix_excluded
+=== RUN   TestSuitabilityCases/unknown_cost_is_explicit_not_zero
+=== RUN   TestSuitabilityCases/tool_support_required
+=== RUN   TestSuitabilityCases/minimum_context_enforced
+=== RUN   TestSuitabilityCases/non-free_suffix_needs_explicit_allow
+--- PASS: TestSuitabilityCases (0.02s)
+    --- PASS: TestSuitabilityCases/big_pickle_explicit_exception (0.00s)
+    --- PASS: TestSuitabilityCases/jev_free_structured_decision_excluded (0.00s)
+    --- PASS: TestSuitabilityCases/unknown_metadata_needs_operator (0.00s)
+    --- PASS: TestSuitabilityCases/known_paid_free-suffix_excluded (0.00s)
+    --- PASS: TestSuitabilityCases/unknown_cost_is_explicit_not_zero (0.00s)
+    --- PASS: TestSuitabilityCases/tool_support_required (0.00s)
+    --- PASS: TestSuitabilityCases/minimum_context_enforced (0.00s)
+    --- PASS: TestSuitabilityCases/non-free_suffix_needs_explicit_allow (0.00s)
+=== RUN   TestProtocolClassification
+--- PASS: TestProtocolClassification (0.02s)
+=== RUN   TestEligibleNonChatNeverHitsChatEndpoint
+    catalog_test.go:231: eligible=10 non-chat=0
+    catalog_test.go:250: synth-claude-free -> https://opencode.ai/inference/v1/messages
+    catalog_test.go:250: synth-gemini-free -> https://opencode.ai/inference/v1/models:streamGenerateContent
+--- PASS: TestEligibleNonChatNeverHitsChatEndpoint (0.02s)
+PASS
+ok  	j0s.at/vibeshell/experiments/opencode-protocol/catalog	1.129s

@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "envelope": {
+        "schema_version": 1,
+        "event_id": "evt_0123456789ABCDEFGHJKMNPQRS",
+        "session_id": "ses_0123456789ABCDEFGHJKMNPQRS",
+        "sequence": 41,
+        "timestamp": 1798732800000,
+        "monotonic_offset": 42000000,
+        "kind": "terminal.write",
+        "payload": { "truncated": true },
+        "provenance": { "source": "ssh", "actor": "alice" },
+        "turn_id": "trn_0123456789ABCDEFGHJKMNPQRS"
+      },
+      "provenance": { "source": "ssh", "actor": "alice" }
+    }
+  ],
+  "next_cursor": "cursor-42",
+  "truncated": true,
+  "scope": { "scopes": ["session"], "include_shared": false },
+  "filter": { "kinds": ["terminal.write"] },
+  "queried_at": 1798732860000
+}

@@ -1,0 +1,15 @@
+Gate 3c: write-ahead log lifecycle
+==================================
+after the seed commit      3 entries
+  wal.db                   4096 bytes
+  wal.db-shm               32768 bytes
+  wal.db-wal               193672 bytes
+checkpoint busy            0
+checkpoint pages           0
+checkpoint remaining wal pages 0
+after TRUNCATE checkpoint  3 entries
+  wal.db                   102400 bytes
+  wal.db-shm               32768 bytes
+  wal.db-wal               0 bytes
+after close                1 entries
+  wal.db                   102400 bytes

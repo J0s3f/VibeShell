@@ -1,0 +1,9 @@
+Gate 1b: STRICT tables and deferred foreign keys
+================================================
+root inserted with self parent 1
+integer into BLOB rejected constraint failed: cannot store INT value in BLOB column contents.bytes (3091)
+text into INTEGER rejected constraint failed: cannot store TEXT value in INTEGER column nodes.revision (3091)
+dangling parent rejected at commit constraint failed: FOREIGN KEY constraint failed (787)
+integrity                  2 entries
+  integrity_check: ok
+  foreign_key_check rows: 0

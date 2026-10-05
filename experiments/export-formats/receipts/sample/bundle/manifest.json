@@ -1,0 +1,36 @@
+{
+  "format": "vibeshell-jsonl-research-bundle",
+  "format_version": 1,
+  "event_schema_version": 1,
+  "session_id": "ses_00000000000000000000000001",
+  "session_status": "incomplete_disconnected",
+  "event_count": 17,
+  "scope": "session",
+  "config_snapshot": "cfg_2026-10-03",
+  "prompt_snapshot": "prmt_2026-10-03",
+  "catalog_snapshot": "cat_2026-10-03",
+  "secrets_excluded": true,
+  "content_blobs_verified": true,
+  "files": [
+    {
+      "path": "contents/cnt_37A96548B3889D833A3F415CA0",
+      "sha256": "37a96548b3889d833a3f415ca07927d473cb1d9f84e5f1f2b916d095b4ddb6ad",
+      "size": 96
+    },
+    {
+      "path": "contents/cnt_B26EA0C4952E40AF33BB39D0E9",
+      "sha256": "b26ea0c4952e40af33bb39d0e94f45d64e9a4d233e6091d13f3cf1a95fdf54c5",
+      "size": 43
+    },
+    {
+      "path": "events.jsonl",
+      "sha256": "52a77a3985b7ec5541130644104e4b63607b6e5f6b93f2b5131f4e174cb46f61",
+      "size": 10731
+    },
+    {
+      "path": "schema.json",
+      "sha256": "86a49fe64ebe8bacb2235458d54ffa2e3c9901b70ecd8dfbabf46c12cd6bdf7c",
+      "size": 1294
+    }
+  ]
+}

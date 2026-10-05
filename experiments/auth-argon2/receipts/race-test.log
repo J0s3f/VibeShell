@@ -1,0 +1,205 @@
+=== RUN   TestAdmissionRejectsWhenQueueFull
+--- PASS: TestAdmissionRejectsWhenQueueFull (0.00s)
+=== RUN   TestAdmissionHonorsContextWhileWaiting
+--- PASS: TestAdmissionHonorsContextWhileWaiting (0.00s)
+=== RUN   TestAdmissionRejectsInvalidConfig
+--- PASS: TestAdmissionRejectsInvalidConfig (0.00s)
+=== RUN   TestAdmissionBoundsConcurrentWork
+--- PASS: TestAdmissionBoundsConcurrentWork (0.03s)
+=== RUN   TestAuthenticateAcceptsCorrectPassword
+--- PASS: TestAuthenticateAcceptsCorrectPassword (0.09s)
+=== RUN   TestAuthenticateRejectsWrongUnknownAndDisabledUsers
+=== RUN   TestAuthenticateRejectsWrongUnknownAndDisabledUsers/wrong_password
+=== RUN   TestAuthenticateRejectsWrongUnknownAndDisabledUsers/unknown_user
+=== RUN   TestAuthenticateRejectsWrongUnknownAndDisabledUsers/disabled_user_with_correct_password
+--- PASS: TestAuthenticateRejectsWrongUnknownAndDisabledUsers (0.12s)
+    --- PASS: TestAuthenticateRejectsWrongUnknownAndDisabledUsers/wrong_password (0.02s)
+    --- PASS: TestAuthenticateRejectsWrongUnknownAndDisabledUsers/unknown_user (0.02s)
+    --- PASS: TestAuthenticateRejectsWrongUnknownAndDisabledUsers/disabled_user_with_correct_password (0.02s)
+=== RUN   TestAuthenticateFailsClosedWithoutLoadedFile
+--- PASS: TestAuthenticateFailsClosedWithoutLoadedFile (0.05s)
+=== RUN   TestAuthenticateEnforcesConnectionAttemptLimit
+--- PASS: TestAuthenticateEnforcesConnectionAttemptLimit (0.07s)
+=== RUN   TestAuthenticateEnforcesAbuseRateAcrossConnections
+--- PASS: TestAuthenticateEnforcesAbuseRateAcrossConnections (0.10s)
+=== RUN   TestAuthenticateRejectsWhenAdmissionBusy
+--- PASS: TestAuthenticateRejectsWhenAdmissionBusy (0.04s)
+=== RUN   TestAuthenticateBoundedBurst
+--- PASS: TestAuthenticateBoundedBurst (0.25s)
+=== RUN   TestConnectionLimiterEnforcesAttemptBudget
+--- PASS: TestConnectionLimiterEnforcesAttemptBudget (0.00s)
+=== RUN   TestConnectionLimiterRejectsInvalidConfig
+--- PASS: TestConnectionLimiterRejectsInvalidConfig (0.00s)
+=== RUN   TestAbuseGuardPenalizesAbusiveSource
+--- PASS: TestAbuseGuardPenalizesAbusiveSource (0.00s)
+=== RUN   TestAbuseGuardWindowExpiresFailures
+--- PASS: TestAbuseGuardWindowExpiresFailures (0.00s)
+=== RUN   TestAbuseGuardSuccessForgetsSource
+--- PASS: TestAbuseGuardSuccessForgetsSource (0.00s)
+=== RUN   TestAbuseGuardBoundsTrackedSources
+--- PASS: TestAbuseGuardBoundsTrackedSources (0.00s)
+=== RUN   TestAbuseGuardRejectsInvalidConfig
+--- PASS: TestAbuseGuardRejectsInvalidConfig (0.00s)
+=== RUN   TestCalibrationReport
+    measure_test.go:76: set VIBESHELL_AUTH_MEASURE=1 to run measurements
+--- SKIP: TestCalibrationReport (0.00s)
+=== RUN   TestTimingGapReport
+    measure_test.go:133: set VIBESHELL_AUTH_MEASURE=1 to run measurements
+--- SKIP: TestTimingGapReport (0.00s)
+=== RUN   TestBurstThroughputReport
+    measure_test.go:242: set VIBESHELL_AUTH_MEASURE=1 to run measurements
+--- SKIP: TestBurstThroughputReport (0.00s)
+=== RUN   TestPasswordFileRoundTrip
+--- PASS: TestPasswordFileRoundTrip (0.05s)
+=== RUN   TestPasswordFileRejectsDuplicateUsername
+--- PASS: TestPasswordFileRejectsDuplicateUsername (0.03s)
+=== RUN   TestPasswordFileKeepsDistinctUsernamesDistinct
+--- PASS: TestPasswordFileKeepsDistinctUsernamesDistinct (0.04s)
+=== RUN   TestPasswordFileRejectsWrongSchema
+--- PASS: TestPasswordFileRejectsWrongSchema (0.04s)
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape/not_json
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape/unknown_field
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape/trailing_data
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape/trailing_garbage
+=== RUN   TestPasswordFileParseRejectsInvalidJSONShape/missing_schema
+--- PASS: TestPasswordFileParseRejectsInvalidJSONShape (0.04s)
+    --- PASS: TestPasswordFileParseRejectsInvalidJSONShape/not_json (0.00s)
+    --- PASS: TestPasswordFileParseRejectsInvalidJSONShape/unknown_field (0.00s)
+    --- PASS: TestPasswordFileParseRejectsInvalidJSONShape/trailing_data (0.00s)
+    --- PASS: TestPasswordFileParseRejectsInvalidJSONShape/trailing_garbage (0.00s)
+    --- PASS: TestPasswordFileParseRejectsInvalidJSONShape/missing_schema (0.00s)
+=== RUN   TestPasswordFileRejectsInvalidEntries
+=== RUN   TestPasswordFileRejectsInvalidEntries/empty_username
+=== RUN   TestPasswordFileRejectsInvalidEntries/control_character_in_username
+=== RUN   TestPasswordFileRejectsInvalidEntries/username_too_long
+=== RUN   TestPasswordFileRejectsInvalidEntries/empty_identity_ref
+=== RUN   TestPasswordFileRejectsInvalidEntries/control_character_in_identity_ref
+=== RUN   TestPasswordFileRejectsInvalidEntries/malformed_hash
+=== RUN   TestPasswordFileRejectsInvalidEntries/hash_parameters_out_of_bounds
+--- PASS: TestPasswordFileRejectsInvalidEntries (0.03s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/empty_username (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/control_character_in_username (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/username_too_long (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/empty_identity_ref (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/control_character_in_identity_ref (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/malformed_hash (0.00s)
+    --- PASS: TestPasswordFileRejectsInvalidEntries/hash_parameters_out_of_bounds (0.00s)
+=== RUN   TestPasswordFileNeverStoresPlaintext
+--- PASS: TestPasswordFileNeverStoresPlaintext (0.04s)
+=== RUN   TestFileStoreKeepsPreviousSnapshotOnFailedLoad
+--- PASS: TestFileStoreKeepsPreviousSnapshotOnFailedLoad (0.06s)
+=== RUN   TestEncodedHashRoundTrip
+--- PASS: TestEncodedHashRoundTrip (0.02s)
+=== RUN   TestParseEncodedRejectsMalformed
+=== RUN   TestParseEncodedRejectsMalformed/empty
+=== RUN   TestParseEncodedRejectsMalformed/no_leading_dollar
+=== RUN   TestParseEncodedRejectsMalformed/missing_fields
+=== RUN   TestParseEncodedRejectsMalformed/trailing_field
+=== RUN   TestParseEncodedRejectsMalformed/trailing_garbage
+=== RUN   TestParseEncodedRejectsMalformed/wrong_algorithm
+=== RUN   TestParseEncodedRejectsMalformed/wrong_algorithm_d
+=== RUN   TestParseEncodedRejectsMalformed/wrong_version
+=== RUN   TestParseEncodedRejectsMalformed/version_without_v=
+=== RUN   TestParseEncodedRejectsMalformed/missing_m_prefix
+=== RUN   TestParseEncodedRejectsMalformed/reordered_params
+=== RUN   TestParseEncodedRejectsMalformed/missing_param
+=== RUN   TestParseEncodedRejectsMalformed/extra_param
+=== RUN   TestParseEncodedRejectsMalformed/non-digit_memory
+=== RUN   TestParseEncodedRejectsMalformed/negative_memory
+=== RUN   TestParseEncodedRejectsMalformed/empty_value
+=== RUN   TestParseEncodedRejectsMalformed/memory_below_minimum
+=== RUN   TestParseEncodedRejectsMalformed/memory_zero
+=== RUN   TestParseEncodedRejectsMalformed/memory_above_maximum
+=== RUN   TestParseEncodedRejectsMalformed/memory_does_not_fit
+=== RUN   TestParseEncodedRejectsMalformed/iterations_zero
+=== RUN   TestParseEncodedRejectsMalformed/iterations_above_maximum
+=== RUN   TestParseEncodedRejectsMalformed/parallelism_zero
+=== RUN   TestParseEncodedRejectsMalformed/parallelism_above_maximum
+=== RUN   TestParseEncodedRejectsMalformed/parallelism_does_not_fit
+=== RUN   TestParseEncodedRejectsMalformed/salt_too_short
+=== RUN   TestParseEncodedRejectsMalformed/salt_too_long
+=== RUN   TestParseEncodedRejectsMalformed/empty_salt
+=== RUN   TestParseEncodedRejectsMalformed/hash_too_short
+=== RUN   TestParseEncodedRejectsMalformed/hash_too_long
+=== RUN   TestParseEncodedRejectsMalformed/empty_hash
+=== RUN   TestParseEncodedRejectsMalformed/padded_base64_salt
+=== RUN   TestParseEncodedRejectsMalformed/non-canonical_salt
+=== RUN   TestParseEncodedRejectsMalformed/invalid_base64_character
+=== RUN   TestParseEncodedRejectsMalformed/whitespace_inside
+--- PASS: TestParseEncodedRejectsMalformed (0.01s)
+    --- PASS: TestParseEncodedRejectsMalformed/empty (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/no_leading_dollar (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/missing_fields (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/trailing_field (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/trailing_garbage (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/wrong_algorithm (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/wrong_algorithm_d (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/wrong_version (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/version_without_v= (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/missing_m_prefix (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/reordered_params (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/missing_param (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/extra_param (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/non-digit_memory (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/negative_memory (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/empty_value (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/memory_below_minimum (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/memory_zero (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/memory_above_maximum (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/memory_does_not_fit (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/iterations_zero (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/iterations_above_maximum (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/parallelism_zero (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/parallelism_above_maximum (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/parallelism_does_not_fit (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/salt_too_short (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/salt_too_long (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/empty_salt (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/hash_too_short (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/hash_too_long (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/empty_hash (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/padded_base64_salt (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/non-canonical_salt (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/invalid_base64_character (0.00s)
+    --- PASS: TestParseEncodedRejectsMalformed/whitespace_inside (0.00s)
+=== RUN   TestParseEncodedAcceptsValid
+--- PASS: TestParseEncodedAcceptsValid (0.00s)
+=== RUN   TestParamsValidateBounds
+=== RUN   TestParamsValidateBounds/minimums_ok
+=== RUN   TestParamsValidateBounds/maximums_ok
+=== RUN   TestParamsValidateBounds/memory_one_below_minimum
+=== RUN   TestParamsValidateBounds/memory_one_above_maximum
+=== RUN   TestParamsValidateBounds/iterations_one_above_maximum
+=== RUN   TestParamsValidateBounds/parallelism_one_above_maximum
+--- PASS: TestParamsValidateBounds (0.00s)
+    --- PASS: TestParamsValidateBounds/minimums_ok (0.00s)
+    --- PASS: TestParamsValidateBounds/maximums_ok (0.00s)
+    --- PASS: TestParamsValidateBounds/memory_one_below_minimum (0.00s)
+    --- PASS: TestParamsValidateBounds/memory_one_above_maximum (0.00s)
+    --- PASS: TestParamsValidateBounds/iterations_one_above_maximum (0.00s)
+    --- PASS: TestParamsValidateBounds/parallelism_one_above_maximum (0.00s)
+=== RUN   TestNewEncodedHashRejectsOutOfRangeInput
+--- PASS: TestNewEncodedHashRejectsOutOfRangeInput (0.00s)
+=== RUN   FuzzParseEncoded
+=== RUN   FuzzParseEncoded/seed#0
+=== RUN   FuzzParseEncoded/seed#1
+=== RUN   FuzzParseEncoded/seed#2
+=== RUN   FuzzParseEncoded/seed#3
+=== RUN   FuzzParseEncoded/seed#4
+=== RUN   FuzzParseEncoded/seed#5
+=== RUN   FuzzParseEncoded/seed#6
+=== RUN   FuzzParseEncoded/seed#7
+=== RUN   FuzzParseEncoded/seed#8
+--- PASS: FuzzParseEncoded (0.03s)
+    --- PASS: FuzzParseEncoded/seed#0 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#1 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#2 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#3 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#4 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#5 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#6 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#7 (0.00s)
+    --- PASS: FuzzParseEncoded/seed#8 (0.00s)
+PASS
+ok  	j0s.at/vibeshell/experiments/auth-argon2	2.178s

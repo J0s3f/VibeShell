@@ -1,0 +1,35 @@
+### phase write-unclean at 2026-10-03T14:55:43Z in container 25d50a4f0ce5
+=== RUN   TestDurableStateAcrossContainerReplacement
+    durability_test.go:59: receipt /workspace/experiments/storage/receipts/durability-before-restart.txt
+    durability_test.go:60: receipt /workspace/experiments/storage/receipts/durability-phase-exit.txt
+FAIL	j0s.at/vibeshell/experiments/storage	0.070s
+FAIL
+### phase write-unclean exit=1 (expected 1)
+### phase read at 2026-10-03T14:56:00Z in container 802f4a977258
+=== RUN   TestDurableStateAcrossContainerReplacement
+    durability_test.go:76: receipt /workspace/experiments/storage/receipts/durability-after-restart.txt
+--- PASS: TestDurableStateAcrossContainerReplacement (0.01s)
+PASS
+ok  	j0s.at/vibeshell/experiments/storage	0.024s
+### phase read exit=0 (expected 0)
+### phase backup-write at 2026-10-03T14:56:03Z in container 802f4a977258
+=== RUN   TestBackupAndRestore
+    backup_test.go:80: receipt /workspace/experiments/storage/receipts/backup-before-restore.txt
+--- PASS: TestBackupAndRestore (0.15s)
+PASS
+ok  	j0s.at/vibeshell/experiments/storage	0.156s
+### phase backup-write exit=0 (expected 0)
+### phase restore at 2026-10-03T14:56:19Z in container d30296ee1dea
+=== RUN   TestBackupAndRestore
+    backup_test.go:82: receipt /workspace/experiments/storage/receipts/backup-after-restore.txt
+--- PASS: TestBackupAndRestore (0.03s)
+PASS
+ok  	j0s.at/vibeshell/experiments/storage	0.032s
+### phase restore exit=0 (expected 0)
+### phase restore-verify at 2026-10-03T14:56:35Z in container 9524411ec7a9
+=== RUN   TestBackupAndRestore
+    backup_test.go:84: receipt /workspace/experiments/storage/receipts/backup-verify-after-restore.txt
+--- PASS: TestBackupAndRestore (0.01s)
+PASS
+ok  	j0s.at/vibeshell/experiments/storage	0.016s
+### phase restore-verify exit=0 (expected 0)

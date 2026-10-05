@@ -1,0 +1,11 @@
+Gate 4d: bounded writer queue backpressure
+==========================================
+capacity                   4
+accepted                   4
+refused                    9
+depth while full           4
+max depth observed         4
+completed                  5
+failures                   0
+out-of-order applications  0
+rows present               6

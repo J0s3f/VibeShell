@@ -1,0 +1,7 @@
+Gate 5b: directory membership dependency
+========================================
+revision the turn read     1
+revision after the other commit 2
+stale commit               rejected: storage: conflict on dir (directory listing): membership revision is 2, the turn read 1
+rebase after refresh       accepted
+conclusion                 a listing that changed underneath a turn is a conflict, and the rebase is a refresh plus a second commit

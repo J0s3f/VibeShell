@@ -1,0 +1,36 @@
+{
+  "request": {
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "messages": [
+      { "role": "user", "content": "printf '%s\\n' 'Grüße, 世界 🌍 — naïve café' > café.txt\n" }
+    ],
+    "max_tokens": 4096,
+    "deadline_ms": 120000,
+    "request_id": "req-unicode-001"
+  },
+  "result": {
+    "request_id": "req-unicode-001",
+    "route_id": "rte_CFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "account_id": "acc_DFJ9KQ2M4XP7DBTVZC6HJFRSNW",
+    "message": {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "id": "call-unicode-1",
+          "name": "world.stage",
+          "arguments": {
+            "namespace_id": "nsp_6FJ9KQ2M4XP7DBTVZC6HJFRSNW",
+            "path": "/home/alice/café.txt",
+            "content_text": "Grüße, 世界 🌍 — naïve café\n"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_calls",
+    "usage": { "prompt_tokens": 512, "completion_tokens": 96, "total_tokens": 608 },
+    "latency_ms": 1840,
+    "timestamp": 1798732800000
+  }
+}

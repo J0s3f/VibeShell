@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-04T00:53:00Z",
+  "mode": "live",
+  "redacted": true,
+  "experiment": "composed-service-end-to-end",
+  "service": "cmd/vibeshell run (real SSH listener, real OpenCode Go provider)",
+  "route": {
+    "provider": "opencode-go",
+    "product": "go",
+    "protocol": "chat",
+    "models_used": ["deepseek-v4.1-flash", "minimax-m3", "mimo-v2.6-flash"],
+    "base_url": "https://opencode.ai/zen/go/v1"
+  },
+  "steps": [
+    {
+      "step": "generation-end-to-end",
+      "model": "deepseek-v4.1-flash",
+      "commands": ["moon-orchard --interactive", "moon-orchard"],
+      "request_result": "success",
+      "durations_ms": [22474, 19843],
+      "observed": "attempt 1 parsed but failed staging validation (invalid_app_result); attempt 2 parsed, passed staging validation, was activated, and ran in the sandbox",
+      "app_output_first_lines": [
+        "MOON ORCHARD - sector 7",
+        "Location: /home/alice",
+        "Trees: 3 silverleaf, 2 crater pear, 1 whisper fig",
+        "Moon phase: waxing gibbous",
+        "Harvest ready: 14 fruits"
+      ]
+    },
+    {
+      "step": "motd-prompt-rendered",
+      "model": "minimax-m3",
+      "request_result": "success",
+      "duration_ms": 4406,
+      "observed": "the MOTD prompt reached the model with every placeholder substituted from session facts (username, simulated host, session start, sharing/recording status, line budget, prompt version); no unresolved {{...}} was sent"
+    },
+    {
+      "step": "motd-content",
+      "model": "deepseek-v4.1-flash",
+      "request_result": "success",
+      "duration_ms": 8183,
+      "observed": "content was empty because the 256-token MOTD budget was consumed by reasoning_content (finish=length), so the service presented its truthful unavailable fallback"
+    },
+    {
+      "step": "motd-content-reasoning-in-content",
+      "model": "minimax-m3",
+      "observed": "the model emitted its chain of thought inside the content channel (leading brain-emoji marker) rather than reasoning_content, and the MOTD budget truncated it, so the presented text began with reasoning"
+    },
+    {
+      "step": "per-purpose-routing-failover",
+      "model": "space-bunny-free -> longcat-2.5-preview-free; deepseek-v4.1-flash",
+      "observed": "with per-purpose routes, the MOTD tried space-bunny-free (empty content, rejected by the Accept check), failed over to longcat-2.5-preview-free (timed out), then presented the truthful fallback; generation selected the generation-purpose route deepseek-v4.1-flash and returned an artifact (staging validation failed that attempt)"
+    },
+    {
+      "step": "generation-end-to-end-hardened",
+      "model": "deepseek-v4.1-flash",
+      "commands": ["moon-orchard --interactive", "moon-orchard"],
+      "observed": "the hardened generation prompt (explicit view.mode \"text\" and result shape) produced an artifact that passed staging validation, was activated, and ran; the second invocation was served by the stored app without another model call",
+      "app_output_first_lines": [
+        "Moon Orchard 0.3.7 -- a quiet cultivation simulator",
+        "Initializing interactive session...",
+        "You are standing at the edge of a silver grove under a low, bright moon.",
+        "Available actions: look, tend, harvest, status, help, quit"
+      ]
+    }
+  ],
+  "verified": [
+    "unknown shell command reaches the composed generation engine over real SSH",
+    "the composed gateway authenticates and streams from the live Go provider",
+    "a model-proposed artifact is parsed, staging-validated, activated, and executed in the bounded sandbox",
+    "generation candidates now commit (the zero-turn defect is fixed)",
+    "the trusted prompt renderer substitutes documented MOTD variables before sending",
+    "per-purpose routing selects a free model for the MOTD and the authorized deepseek-v4.1-flash for generation, and fails over when a response is empty or unusable",
+    "generation succeeds end-to-end with the hardened prompt and the authorized deepseek-v4.1-flash route"
+  ],
+  "findings": [
+    {
+      "id": "reasoning-token-budget",
+      "severity": "model-fit",
+      "detail": "The Go model set is reasoning-heavy. Generation needed 16384 tokens and a 180s deadline to receive an artifact; 4096 tokens and 60s were consumed by reasoning. The MOTD budget (256 tokens) is consumed by reasoning_content before any content is emitted, so the service falls back."
+    },
+    {
+      "id": "reasoning-in-content",
+      "severity": "model-fit",
+      "detail": "Some models (observed: minimax-m3) emit their chain of thought inside the content channel with a model-specific marker instead of using reasoning_content. The generation parser tolerates this by locating the JSON artifact, but the MOTD sanitizer does not separate reasoning from the welcome."
+    },
+    {
+      "id": "generation-nondeterminism",
+      "severity": "model-fit",
+      "detail": "Generated JavaScript is not guaranteed to pass staging validation. An earlier prompt under-specified the result shape, so the model invented an invalid view mode; the hardened prompt (explicit view.mode \"text\" and the exact result object) passed validation in the latest live run. The configuration carries max_repairs but the composed engine still does not implement a repair loop."
+    }
+  ],
+  "limits": [
+    "one provider (OpenCode Go) and the chat protocol were exercised live; other protocol families were not re-run here",
+    "the Zen free tier rejects non-OpenCode clients, so free Zen models are not usable from this integration",
+    "no single tested model both answered the MOTD within its 20s/256-token budget and produced a generation artifact; deepseek-v4.1-flash generated, mimo-v2.6-flash answered the MOTD, and minimax-m3 did both but with reasoning in content"
+  ]
+}

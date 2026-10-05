@@ -1,0 +1,10 @@
+=== RUN   TestBurstThroughputReport
+    measure_test.go:245: params: m=131072,t=3,p=4
+    measure_test.go:251: maxConcurrent=4: 64 attempts (32 correct, 32 wrong) wall=10850ms throughput=5.9 auth/s
+    measure_test.go:254: maxConcurrent=4: peak in-flight=4 heap before=183KiB peak=1311009KiB after=242KiB sys=1455958KiB
+    measure_test.go:251: maxConcurrent=2: 64 attempts (32 correct, 32 wrong) wall=9040ms throughput=7.1 auth/s
+    measure_test.go:254: maxConcurrent=2: peak in-flight=2 heap before=243KiB peak=524582KiB after=265KiB sys=1455958KiB
+    measure_test.go:258: abusive-rate fast path: 1000 rejections in 0.109ms, mean 0.000109ms per rejection
+--- PASS: TestBurstThroughputReport (22.72s)
+PASS
+ok  	j0s.at/vibeshell/experiments/auth-argon2	22.761s

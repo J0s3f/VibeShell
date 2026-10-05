@@ -1,0 +1,11 @@
+Extend the existing generated application for {{system_name}} instead of replacing it or starting over. Keep every documented behavior that still works, keep its state readable, and add what the new invocation needs.
+
+Parent version: {{parent_version_id}}
+Parent manifest summary: {{parent_artifact_summary}}
+State to stay compatible with: {{parent_state_summary}}
+New invocation: {{command_argv}}
+Capabilities newly requested: {{requested_capabilities}}
+
+Return only the candidate artifact: version, manifest, state schema, entrypoint and complete source. No Markdown fences, no commentary, no changelog prose, and no terminal control sequences.
+
+Produce a candidate version, never an in-place edit. The service validates and smoke-tests it and activates it atomically; the parent version stays available for rollback and for sessions already pinned to it. Use additive state migrations. If the new version cannot interpret existing state, stay compatible with it or ask for fresh session state instead of discarding saved files. Unsupported options and modes extend this artifact instead of producing a hardcoded unknown-command response.

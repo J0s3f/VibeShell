@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://j0s.at/vibeshell/schemas/v1/world-changeset.schema.json",
+  "title": "VibeShell world snapshot / change set",
+  "description": "Staged world mutations with read dependencies and expected revisions for optimistic-concurrency commit (PLAN 5.3, contract 14). A turn reads a versioned snapshot, stages this change set, and commits atomically. Contract version 1.",
+  "version": 1,
+  "type": "object",
+  "required": ["mutations", "read_dependencies", "turn_id", "attempt_id", "timestamp"],
+  "properties": {
+    "mutations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/mutation" }
+    },
+    "read_dependencies": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": { "$ref": "#/$defs/readDependency" }
+    },
+    "turn_id": { "$ref": "#/$defs/identity" },
+    "attempt_id": { "$ref": "#/$defs/identity" },
+    "timestamp": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/(?!.*//$)(?!.*/$)[^\\x00]*$",
+      "maxLength": 4096,
+      "description": "Absolute simulated path; no trailing slash, no empty/./.. components."
+    },
+    "mutation": {
+      "type": "object",
+      "required": ["type", "namespace_id", "path"],
+      "properties": {
+        "type": { "enum": ["create", "update", "delete", "tombstone"] },
+        "namespace_id": { "$ref": "#/$defs/identity" },
+        "path": { "$ref": "#/$defs/path" },
+        "node_id": { "$ref": "#/$defs/identity" },
+        "expected_rev": { "type": "integer", "minimum": 1 },
+        "kind": { "enum": ["file", "dir", "symlink"] },
+        "metadata": {
+          "type": "object",
+          "required": ["mode", "uid", "gid", "mod_time", "access_time", "change_time"],
+          "properties": {
+            "mode": { "type": "integer", "minimum": 0 },
+            "uid": { "type": "integer", "minimum": 0 },
+            "gid": { "type": "integer", "minimum": 0 },
+            "mod_time": { "type": "integer", "minimum": 0 },
+            "access_time": { "type": "integer", "minimum": 0 },
+            "change_time": { "type": "integer", "minimum": 0 },
+            "symlink_target": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "content": { "$ref": "#/$defs/contentRef" },
+        "symlink_target": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "create" } } },
+          "then": { "required": ["kind"] }
+        },
+        {
+          "if": { "properties": { "type": { "enum": ["update", "delete", "tombstone"] } } },
+          "then": { "required": ["node_id", "expected_rev"] }
+        }
+      ]
+    },
+    "readDependency": {
+      "type": "object",
+      "required": ["node_id", "revision", "kind", "is_absence", "dir_member_of"],
+      "properties": {
+        "node_id": { "$ref": "#/$defs/identity" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "kind": { "enum": ["file", "dir", "symlink"] },
+        "is_absence": { "type": "boolean", "description": "True when the turn verified the node did not exist." },
+        "dir_member_of": { "$ref": "#/$defs/identity" }
+      },
+      "additionalProperties": false
+    },
+    "contentRef": {
+      "type": "object",
+      "required": ["hash", "size", "media_type"],
+      "properties": {
+        "hash": { "$ref": "#/$defs/identity" },
+        "size": { "type": "integer", "minimum": 0 },
+        "media_type": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
